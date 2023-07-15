@@ -1,0 +1,24 @@
+package com.imudataprocessor.controller;
+
+import com.imudataprocessor.api.controller.HomeController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class HomeControllerImpl implements HomeController {
+
+    @GetMapping("/")
+    public String home(final Model theModel) {
+        return "home";
+    }
+
+}
+
+
+
+
+
+
+
+
