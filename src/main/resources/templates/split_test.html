@@ -15,7 +15,6 @@
             <div class="col-auto">
                 <button type="button" class="btn btn-dark btn-lg me-4" th:id="${processTestButton}" th:attr="onclick=|processTest('${id}')|">Process Test</button>
                 <button type="button" class="btn btn-success btn-lg" th:id="${downloadTestButton}" th:attr="onclick=|download('${id}')|" style="display: none;">Download Test</button>
-                <iframe th:id="${iframe}" style="display:none;"></iframe>
             </div>
         </div>
         <div class="ms-auto col-1">

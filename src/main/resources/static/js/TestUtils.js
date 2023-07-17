@@ -113,7 +113,12 @@ function generateGraphicsProcessedTest(nameTest) {
 }
 
 function download(id) {
-    document.getElementById(id + 'Iframe').src = '/tests-processed/' + id + 'Processed.csv';
+      var timestamp = new Date().getTime();
+      var url = '/tests-processed/' + id + 'Processed.csv' + '?t=' + timestamp;
+      var link = document.createElement('a');
+      link.href = url;
+      link.download = id + 'Processed.csv';
+      link.click();
 };
 
 function createGraphics(url, form, name) {
