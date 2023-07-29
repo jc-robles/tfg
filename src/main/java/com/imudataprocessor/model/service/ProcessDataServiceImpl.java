@@ -44,7 +44,7 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 
     @Override
     public InternalDataDTO processDataTest(final String nameTest) throws IOException {
-        this.externalProcess.execute(nameTest);
+//        this.externalProcess.execute(nameTest);
         return this.fileService.getDataFromProcessedTest(nameTest);
     }
 

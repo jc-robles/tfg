@@ -4,6 +4,6 @@ import java.io.IOException;
 
 public interface ExternalProcess {
 
-    void execute(String nameTest) throws IOException;
+    void execute(final InternalDataDTO internalDataDTO) throws IOException;
 
 }

@@ -1,0 +1,28 @@
+<div th:id="${dataNameId}" class="col-md-2 mb-2">
+    <div class="toast align-items-center fade show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                [(${dataName})]
+                <div class="form-check">
+                    <input th:id="${radioButtonId1}" class="form-check-input" type="radio" name="flexRadioDefault" th:attr="name=${radioButtonName}" checked>
+                    <label class="form-check-label" th:attr="for=${radioButtonId1}, onclick=|selectDisabled('${selectDataNameId}')|">
+                        Alphanumeric
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input th:id="${radioButtonId2}" class="form-check-input" type="radio" th:attr="name=${radioButtonName}">
+                    <label class="form-check-label" th:attr="for=${radioButtonId2}, onclick=|selectEnabled('${selectDataNameId}')|">
+                        Data Array
+                    </label>
+                </div>
+                <select th:id="${selectDataNameId}" class="form-select form-select-sm" aria-label="Small select example" style="display: none;">
+                    <div th:each="item: ${selectData}">
+                        <option th:if="${itemStat.index == 0}" th:attr="value=${item.value}" selected>[(${item.name})]</option>
+                        <<option th:if="${itemStat.index != 0}" th:attr="value=${item.value}">[(${item.name})]</option>
+                    </div>
+                </select>
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" th:attr="onclick=|deleteDataName('${dataNameId}')|"></button>
+        </div>
+    </div>
+</div>

@@ -10,28 +10,99 @@
 
     <script type="text/javascript" src="/js/GraphicUtils.js"></script>
     <script type="text/javascript" src="/js/TestUtils.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            generateMainTest();
+        });
+
+        function prueba() {
+            $.ajax({
+                url: '/generate-main-test',
+                type: 'GET',
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $("body").append(data);
+                },
+                async: false
+            });
+        }
+
+        function addOutputData() {
+            let outputDataValue = $('#outputData').val();
+            $('#outputData').val('');
+            $.ajax({
+                url: '/create-test/add-output-data?dataName=' + outputDataValue,
+                type: 'GET',
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $("#outputDataRow").append(data);
+                }
+            });
+        }
+
+        function addGrouping() {
+            let groupingValue = $('#grouping').val();
+            $('#grouping').val('');
+            $.ajax({
+                url: '/create-test/add-grouping?groupingName=' + groupingValue,
+                type: 'GET',
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $("#groupingRow").append(data);
+                    $("[id$='SelectDataNameId']").each(function(data, index) {
+                        console.log(data);
+                        console.log(index);
+                    });
+                    $("[id$='SelectDataNameId']").append('<option value="' + groupingValue + '">' + groupingValue + '</option>');
+                }
+            });
+        }
+
+        function deleteDataName(dataNameId) {
+            $("#" + dataNameId).remove();
+        }
+
+        function deleteGrouping(groupingId, groupingValue) {
+            $.ajax({
+                url: '/create-test/remove-grouping?groupingId=' + groupingId,
+                type: 'GET',
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $("#" + groupingId).remove();
+                    $("[id$='SelectDataNameId'] option[value='" + groupingValue + "']").each(function() {
+                        $(this).remove();
+                    });
+                }
+            });
+        }
+
+        function selectDisabled(selectId){
+            $("#" + selectId).hide();
+        }
+
+        function selectEnabled(selectId){
+            $("#" + selectId).show();
+        }
+
+        function init() {
+            $.ajax({
+                url: '/create-test/all-grouping',
+                type: 'GET',
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    $("#groupingRow").append(data);
+                }
+            });
+        }
+    </script>
 </head>
-<body>
-
-<script>
-$(document).ready(function() {
-    generateMainTest();
-});
-
-function prueba() {
-    $.ajax({
-        url: '/generate-main-test',
-        type: 'GET',
-        processData: false,
-        contentType: false,
-        success: function(data) {
-            $("body").append(data);
-        },
-        async: false
-    });
-}
-</script>
-
+<body onload="javascript:init()">
 <div class="container-fluid px-0">
     <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
@@ -42,7 +113,7 @@ function prueba() {
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">Upload file test</a>
-                    <a class="nav-link active" aria-current="page" href="#" id="createTest">Create test</a>
+                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#exampleModalFullscreen" href="#">Create test</a>
                 </div>
             </div>
         </div>
@@ -66,10 +137,74 @@ function prueba() {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUploadModal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUploadModal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Upload</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal -->
+<form method="post" enctype="multipart/form-data" id="formUploadFileCreateTest">
+    <div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header text-bg-dark">
+                    <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Create new test</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="form-floating mb-5">
+                                <input type="text" class="form-control" id="floatingInput" placeholder="Test 1">
+                                <label for="floatingInput">Name Test</label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div id="outputDataRow" class="row">
+                                <div class="col-md-12 mb-2">
+                                    <div class="input-group">
+                                        <button class="btn btn-secondary" type="button" onclick="addOutputData()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                            </svg>
+                                        </button>
+                                        <input id="outputData" type="text" class="form-control" placeholder="Output Data" aria-label="Input group example" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-5"></div>
+                        </li>
+                        <li class="list-group-item">
+                            <div id="groupingRow" class="row">
+                                <div class="col-md-12 mb-2">
+                                    <div class="input-group">
+                                        <button class="btn btn-secondary" type="button" onclick="addGrouping()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                            </svg>
+                                        </button>
+                                        <input id="grouping"  type="text" class="form-control" placeholder="Create grouping" aria-label="Input group example" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-5"></div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <label for="formFileLg" class="form-label"></label>
+                                <input class="form-control form-control-lg" id="formFileTest" type="file" name="file">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
             </div>
         </div>
     </div>
