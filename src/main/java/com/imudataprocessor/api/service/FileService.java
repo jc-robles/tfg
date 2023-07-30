@@ -1,13 +1,11 @@
 package com.imudataprocessor.api.service;
 
-import com.imudataprocessor.api.controller.DataDTO;
-
 import java.io.File;
 import java.io.IOException;
 
 public interface FileService {
 
-    void save(String fileName, byte[] bytes) throws IOException;
+    void save(String path, String fileName, byte[] bytes) throws IOException;
 
     File split(String fileName, Integer start, Integer end) throws IOException;
 

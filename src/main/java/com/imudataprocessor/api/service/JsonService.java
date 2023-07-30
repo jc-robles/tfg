@@ -4,8 +4,10 @@ import java.io.IOException;
 
 public interface JsonService {
 
-    Object read(String path, Class<?> eClass) throws IOException;
+    Object convertToObject(String json, Class<?> eClass) throws IOException;
 
-    void save(String path, Object object) throws IOException;
+    Object readFile(String path, Class<?> eClass) throws IOException;
+
+    void saveFile(String path, Object object) throws IOException;
 
 }

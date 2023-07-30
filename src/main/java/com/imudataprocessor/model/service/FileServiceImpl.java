@@ -40,8 +40,8 @@ public class FileServiceImpl implements FileService {
     private String originFilePath;
 
     @Override
-    public void save(final String fileName, final byte[] bytes) throws IOException {
-        final File file = this.createFile(this.mainFilePath, fileName);
+    public void save(final String path, final String fileName, final byte[] bytes) throws IOException {
+        final File file = this.createFile(path, fileName);
         try (final OutputStream os = new FileOutputStream(file)) {
             os.write(bytes);
         } catch (IOException e) {

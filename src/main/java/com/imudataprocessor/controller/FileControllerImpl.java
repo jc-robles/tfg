@@ -2,6 +2,7 @@ package com.imudataprocessor.controller;
 
 import com.imudataprocessor.api.controller.DataDTO;
 import com.imudataprocessor.api.controller.FileController;
+import com.imudataprocessor.api.service.ExternalProcess;
 import com.imudataprocessor.api.service.InternalDataDTO;
 import com.imudataprocessor.api.service.ProcessDataService;
 import com.imudataprocessor.model.mapper.DataDTOMapper;
@@ -26,10 +27,16 @@ public class FileControllerImpl implements FileController {
     @Autowired
     private DataDTOMapper dataDTOMapper;
 
+    @Autowired
+    private ExternalProcess externalProcess;
+
     @PostMapping("/upload-file")
     public ResponseEntity<DataDTO> uploadFile(final @RequestParam("file") MultipartFile multipartFile,
             final Model model) throws IOException {
         final InternalDataDTO internalDataDTO = this.processDataServiceImpl.processMainTest(multipartFile);
+
+        externalProcess.execute(internalDataDTO);
+
         return ResponseEntity.ok(dataDTOMapper.map(internalDataDTO));
     }
 

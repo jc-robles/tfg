@@ -16,7 +16,7 @@ import java.util.Objects;
 @Service
 public class TestGroupingServiceImpl implements TestGroupingService {
 
-    @Value("${grouping_Configuration}")
+    @Value("${grouping_configuration}")
     private String groupingConfigurationFile;
 
     @Autowired
@@ -24,34 +24,34 @@ public class TestGroupingServiceImpl implements TestGroupingService {
 
     @Override
     public TestGropingConfiguration getAllGrouping() throws IOException {
-        return (TestGropingConfiguration) jsonService.read(groupingConfigurationFile, TestGropingConfiguration.class);
+        return (TestGropingConfiguration) this.jsonService.readFile(this.groupingConfigurationFile, TestGropingConfiguration.class);
     }
 
     @Override
     public GroupingItemConfiguration addGrouping(final String name) throws IOException {
         TestGropingConfiguration testGropingConfiguration =
-                (TestGropingConfiguration) jsonService.read(groupingConfigurationFile, TestGropingConfiguration.class);
+                (TestGropingConfiguration) this.jsonService.readFile(this.groupingConfigurationFile, TestGropingConfiguration.class);
         if (Objects.isNull(testGropingConfiguration.getSelect())) {
             testGropingConfiguration.setSelect(new ArrayList<>());
         }
         final GroupingItemConfiguration groupingItemConfiguration =
                 GroupingItemConfiguration.of(name.toLowerCase().replace(" ", "_") + "_id", name, name);
         testGropingConfiguration.getSelect().add(groupingItemConfiguration);
-        jsonService.save(groupingConfigurationFile, testGropingConfiguration);
+        this.jsonService.saveFile(this.groupingConfigurationFile, testGropingConfiguration);
         return groupingItemConfiguration;
     }
 
     @Override
     public void removeGrouping(String groupingId) throws IOException {
         TestGropingConfiguration testGropingConfiguration =
-                (TestGropingConfiguration) jsonService.read(groupingConfigurationFile, TestGropingConfiguration.class);
+                (TestGropingConfiguration) this.jsonService.readFile(this.groupingConfigurationFile, TestGropingConfiguration.class);
         if (Objects.nonNull(testGropingConfiguration.getSelect())) {
             testGropingConfiguration.getSelect().stream()
                     .filter(groupingItemConfiguration1 -> ObjectUtils.nullSafeEquals(groupingItemConfiguration1.getId(), groupingId))
                     .findAny()
                     .ifPresent(groupingItemConfiguration1 -> testGropingConfiguration.getSelect().remove(groupingItemConfiguration1));
         }
-        jsonService.save(groupingConfigurationFile, testGropingConfiguration);
+        this.jsonService.saveFile(this.groupingConfigurationFile, testGropingConfiguration);
     }
 
 }

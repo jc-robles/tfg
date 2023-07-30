@@ -13,17 +13,23 @@ import java.io.IOException;
 @Service
 public class JsonServiceImpl implements JsonService {
 
-    @Value("${grouping_Configuration}")
+    @Value("${grouping_configuration}")
     private String groupingConfigurationFile;
 
     @Override
-    public Object read(final String path, final Class<?> eClass) throws IOException {
+    public Object convertToObject(String json, Class<?> eClass) throws IOException {
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.fromJson(json, eClass);
+    }
+
+    @Override
+    public Object readFile(final String path, final Class<?> eClass) throws IOException {
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.fromJson(new FileReader(path), eClass);
     }
 
     @Override
-    public void save(final String path, final Object object) throws IOException {
+    public void saveFile(final String path, final Object object) throws IOException {
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         FileWriter myWriter = new FileWriter(path);
         myWriter.write(gson.toJson(object));

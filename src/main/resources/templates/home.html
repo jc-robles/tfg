@@ -100,6 +100,47 @@
                 }
             });
         }
+
+        function createTest() {
+            let fields = [];
+            $("#outputDataRow .toast-body").each(function() {
+                let name = $(this).attr('name');
+                let data_type = $('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val();
+                let grouping;
+                if ($('#' + $(this).attr('name') + 'SelectDataNameId').is(':visible')) {
+                    grouping = $('#' + $(this).attr('name') + 'SelectDataNameId').val();
+                }
+                let field = {
+                    name: name,
+                    dataType: data_type,
+                    grouping: grouping
+                }
+                fields.push(field);
+            });
+            /*var file = $('#formFileTest').prop('files')[0]*/
+            let CreateTestDTO = {
+                nameTest: $('#floatingInput').val(),
+                fields: fields
+            }
+
+            var file = document.getElementById("formFileTest").files[0];
+            var formData = new FormData();
+            formData.append('createTest', JSON.stringify(CreateTestDTO))
+            formData.append('fileTest', file)
+
+            console.log(JSON.stringify(CreateTestDTO))
+
+            $.ajax({
+                url: '/create-test',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    console.log("conseguido")
+                }
+            });
+        }
     </script>
 </head>
 <body onload="javascript:init()">
@@ -147,68 +188,66 @@
 </form>
 
 <!-- Modal -->
-<form method="post" enctype="multipart/form-data" id="formUploadFileCreateTest">
-    <div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-                <div class="modal-header text-bg-dark">
-                    <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Create new test</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="form-floating mb-5">
-                                <input type="text" class="form-control" id="floatingInput" placeholder="Test 1">
-                                <label for="floatingInput">Name Test</label>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div id="outputDataRow" class="row">
-                                <div class="col-md-12 mb-2">
-                                    <div class="input-group">
-                                        <button class="btn btn-secondary" type="button" onclick="addOutputData()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
-                                            </svg>
-                                        </button>
-                                        <input id="outputData" type="text" class="form-control" placeholder="Output Data" aria-label="Input group example" aria-describedby="basic-addon1">
-                                    </div>
+<div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header text-bg-dark">
+                <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Create new test</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="form-floating mb-5">
+                            <input type="text" class="form-control" id="floatingInput" placeholder="Test 1">
+                            <label for="floatingInput">Name Test</label>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div id="outputDataRow" class="row">
+                            <div class="col-md-12 mb-2">
+                                <div class="input-group">
+                                    <button class="btn btn-secondary" type="button" onclick="addOutputData()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                        </svg>
+                                    </button>
+                                    <input id="outputData" type="text" class="form-control" placeholder="Output Data" aria-label="Input group example" aria-describedby="basic-addon1">
                                 </div>
                             </div>
-                            <div class="col-md-12 mb-5"></div>
-                        </li>
-                        <li class="list-group-item">
-                            <div id="groupingRow" class="row">
-                                <div class="col-md-12 mb-2">
-                                    <div class="input-group">
-                                        <button class="btn btn-secondary" type="button" onclick="addGrouping()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
-                                            </svg>
-                                        </button>
-                                        <input id="grouping"  type="text" class="form-control" placeholder="Create grouping" aria-label="Input group example" aria-describedby="basic-addon1">
-                                    </div>
+                        </div>
+                        <div class="col-md-12 mb-5"></div>
+                    </li>
+                    <li class="list-group-item">
+                        <div id="groupingRow" class="row">
+                            <div class="col-md-12 mb-2">
+                                <div class="input-group">
+                                    <button class="btn btn-secondary" type="button" onclick="addGrouping()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                                        </svg>
+                                    </button>
+                                    <input id="grouping"  type="text" class="form-control" placeholder="Create grouping" aria-label="Input group example" aria-describedby="basic-addon1">
                                 </div>
                             </div>
-                            <div class="col-md-12 mb-5"></div>
-                        </li>
-                        <li class="list-group-item">
-                            <div>
-                                <label for="formFileLg" class="form-label"></label>
-                                <input class="form-control form-control-lg" id="formFileTest" type="file" name="file">
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Create</button>
-                </div>
+                        </div>
+                        <div class="col-md-12 mb-5"></div>
+                    </li>
+                    <li class="list-group-item">
+                        <div>
+                            <label for="formFileTest" class="form-label"></label>
+                            <input class="form-control form-control-lg" id="formFileTest" type="file" name="file">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="createTest()">Create</button>
             </div>
         </div>
     </div>
-</form>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>

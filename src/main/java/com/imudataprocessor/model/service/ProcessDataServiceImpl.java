@@ -1,11 +1,11 @@
 package com.imudataprocessor.model.service;
 
-import com.imudataprocessor.api.controller.DataDTO;
 import com.imudataprocessor.api.service.ExternalProcess;
 import com.imudataprocessor.api.service.FileService;
 import com.imudataprocessor.api.service.InternalDataDTO;
 import com.imudataprocessor.api.service.ProcessDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,9 +20,12 @@ public class ProcessDataServiceImpl implements ProcessDataService {
     @Autowired
     private ExternalProcess externalProcess;
 
+    @Value("${main-file-path}")
+    private String mainFilePath;
+
     @Override
     public InternalDataDTO processMainTest(final MultipartFile multipartFile)  throws IOException {
-        this.fileService.save(multipartFile.getOriginalFilename(), multipartFile.getBytes());
+        this.fileService.save(this.mainFilePath, multipartFile.getOriginalFilename(), multipartFile.getBytes());
         return this.fileService.getDataFromMainFile();
     }
 

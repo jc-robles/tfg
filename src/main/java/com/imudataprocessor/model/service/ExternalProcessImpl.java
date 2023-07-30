@@ -1,16 +1,42 @@
 package com.imudataprocessor.model.service;
 
+import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
+import com.imudataprocessor.api.configuration.pyrhonprogram.PythonProgramConfiguration;
 import com.imudataprocessor.api.service.ExternalProcess;
+import com.imudataprocessor.api.service.FileService;
 import com.imudataprocessor.api.service.InternalDataDTO;
-import org.springframework.boot.CommandLineRunner;
+import com.imudataprocessor.api.service.JsonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.io.File;
+import java.io.IOException;
+
 
 @Service
 public class ExternalProcessImpl implements ExternalProcess /*, CommandLineRunner*/ {
+
+    @Autowired
+    private JsonService jsonService;
+
+    @Autowired
+    private FileService fileService;
+
+    @Value("${python_program_configuration}")
+    private String pythonProgramConfigurationPath;
+
+    @Value("${file-python-program}")
+    private String filePythonProgramPath;
+
+    @Override
+    public void createNewProgramToExecute(final ProgramConfiguration programConfiguration, final byte[] programFile) throws IOException {
+        PythonProgramConfiguration pythonProgramConfiguration =
+                (PythonProgramConfiguration) this.jsonService.readFile(this.pythonProgramConfigurationPath, PythonProgramConfiguration.class);
+        pythonProgramConfiguration.getProgramConfigurations().add(programConfiguration);
+        this.jsonService.saveFile(this.pythonProgramConfigurationPath, pythonProgramConfiguration);
+        fileService.save(this.filePythonProgramPath, programConfiguration.getNameFile(), programFile);
+    }
 
     @Override
     public void execute(final InternalDataDTO internalDataDTO) throws IOException {

@@ -1,17 +1,17 @@
 <div th:id="${dataNameId}" class="col-md-2 mb-2">
     <div class="toast align-items-center fade show" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
-            <div class="toast-body">
+            <div class="toast-body" th:attr="name=${dataName}">
                 [(${dataName})]
-                <div class="form-check">
-                    <input th:id="${radioButtonId1}" class="form-check-input" type="radio" name="flexRadioDefault" th:attr="name=${radioButtonName}" checked>
-                    <label class="form-check-label" th:attr="for=${radioButtonId1}, onclick=|selectDisabled('${selectDataNameId}')|">
+                <div class="form-check" th:attr="onclick=|selectDisabled('${selectDataNameId}')|">
+                    <input th:id="${radioButtonId1}" class="form-check-input" type="radio" name="flexRadioDefault" th:attr="name=${radioButtonName}" value="ALPHANUMERIC" checked>
+                    <label class="form-check-label" th:attr="for=${radioButtonId1}">
                         Alphanumeric
                     </label>
                 </div>
-                <div class="form-check">
-                    <input th:id="${radioButtonId2}" class="form-check-input" type="radio" th:attr="name=${radioButtonName}">
-                    <label class="form-check-label" th:attr="for=${radioButtonId2}, onclick=|selectEnabled('${selectDataNameId}')|">
+                <div class="form-check" th:attr="onclick=|selectEnabled('${selectDataNameId}')|">
+                    <input th:id="${radioButtonId2}" class="form-check-input" type="radio" th:attr="name=${radioButtonName}" value="DATA_ARRAY">
+                    <label class="form-check-label" th:attr="for=${radioButtonId2}">
                         Data Array
                     </label>
                 </div>
