@@ -15,7 +15,11 @@ public interface DataDTOMapper {
         if (Objects.isNull(s)){
             return null;
         }
-        return Float.valueOf(s.replace(",", "."));
+        try {
+            return Float.valueOf(s.replace(",", "."));
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
 }

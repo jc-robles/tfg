@@ -2,13 +2,13 @@
     <div class="row mt-2 d-flex" th:id="${inputSplit}">
         <div class="col-2">
             <div class="form-floating">
-                <select id="testTypeSelectId" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                <select id="testTypeSelectId" class="form-select" aria-label="Floating label select example">
                     <div th:each="item: ${nameTests}">
                         <option th:if="${itemStat.index == 0}" th:attr="value=${item}" selected>[(${item})]</option>
                         <<option th:if="${itemStat.index != 0}" th:attr="value=${item}">[(${item})]</option>
                     </div>
                 </select>
-                <label for="floatingSelect">Choose test type</label>
+                <label for="testTypeSelectId">Choose test type</label>
             </div>
         </div>
         <div class="col">

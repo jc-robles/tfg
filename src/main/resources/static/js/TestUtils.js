@@ -122,6 +122,9 @@ function download(id) {
 };
 
 function createGraphics(url, form, name) {
+    console.log('url: ' + url)
+    console.log('form: ' + form)
+    console.log('name: ' + name)
     $.ajax({
         url: url,
         type: 'POST',
@@ -156,7 +159,7 @@ function generateMainTest() {
             processData: false,
             contentType: false,
             success: function(data) {
-                prueba();
+                callGenerateMainTest();
                 $("#spinner").hide();
                 $("#accordionPanelsStayOpenExample").show();
 
@@ -170,7 +173,7 @@ function generateMainTest() {
     });
 }
 
-function prueba() {
+function callGenerateMainTest() {
     $.ajax({
         url: '/generate-main-test',
         type: 'GET',

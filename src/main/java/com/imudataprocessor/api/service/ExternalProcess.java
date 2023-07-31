@@ -11,6 +11,6 @@ public interface ExternalProcess {
 
     List<String> getAllNameTest() throws IOException;
 
-    void execute(final InternalDataDTO internalDataDTO) throws IOException;
+    void execute(final String testTypeName, final String nameTest) throws IOException;
 
 }

@@ -14,5 +14,5 @@ public interface ProcessDataService {
 
     void deleteAllTest() throws IOException;
 
-    InternalDataDTO processDataTest(String nameTest) throws IOException;
+    InternalDataDTO processDataTest(String testTypeName, String nameTest) throws IOException;
 }
