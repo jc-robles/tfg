@@ -1,3 +1,18 @@
 {
-  "programConfigurations": []
+  "programConfigurations": [
+    {
+      "nameFile": "sit.py",
+      "nameTest": "Sit",
+      "dataResult": [
+        {
+          "nameField": "numSit",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "slope",
+          "dataType": "ALPHANUMERIC"
+        }
+      ]
+    }
+  ]
 }

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -36,6 +38,12 @@ public class ExternalProcessImpl implements ExternalProcess /*, CommandLineRunne
         pythonProgramConfiguration.getProgramConfigurations().add(programConfiguration);
         this.jsonService.saveFile(this.pythonProgramConfigurationPath, pythonProgramConfiguration);
         fileService.save(this.filePythonProgramPath, programConfiguration.getNameFile(), programFile);
+    }
+
+    public List<String> getAllNameTest() throws IOException {
+        PythonProgramConfiguration pythonProgramConfiguration =
+                (PythonProgramConfiguration) this.jsonService.readFile(this.pythonProgramConfigurationPath, PythonProgramConfiguration.class);
+        return pythonProgramConfiguration.getProgramConfigurations().stream().map(ProgramConfiguration::getNameTest).collect(Collectors.toList());
     }
 
     @Override

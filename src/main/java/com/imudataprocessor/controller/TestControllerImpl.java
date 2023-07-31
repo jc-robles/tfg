@@ -1,13 +1,21 @@
 package com.imudataprocessor.controller;
 
 import com.imudataprocessor.api.controller.TestController;
+import com.imudataprocessor.api.service.ExternalProcess;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
+import java.util.List;
+
 @Controller
 public class TestControllerImpl implements TestController {
+
+    @Autowired
+    private ExternalProcess externalProcess;
 
     @GetMapping("/generate-main-test")
     public String generateMainTest(final Model model) {
@@ -15,7 +23,9 @@ public class TestControllerImpl implements TestController {
     }
 
     @GetMapping("/generate-split-test")
-    public String generateSplitTest(final Model model, final @RequestParam("idTest") String idTest) {
+    public String generateSplitTest(final Model model, final @RequestParam("idTest") String idTest) throws IOException {
+        final List<String> nameTests = externalProcess.getAllNameTest();
+        model.addAttribute("nameTests", nameTests);
         this.setValues(model, idTest);
         return "split_test";
     }
