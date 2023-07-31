@@ -10,84 +10,12 @@
 
     <script type="text/javascript" src="/js/GraphicUtils.js"></script>
     <script type="text/javascript" src="/js/TestUtils.js"></script>
+    <script type="text/javascript" src="/js/CreateTestUtils.js"></script>
 
     <script>
         $(document).ready(function() {
             generateMainTest();
         });
-
-        function prueba() {
-            $.ajax({
-                url: '/generate-main-test',
-                type: 'GET',
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    $("body").append(data);
-                },
-                async: false
-            });
-        }
-
-        function addOutputData() {
-            let outputDataValue = $('#outputData').val();
-            $('#outputData').val('');
-            $.ajax({
-                url: '/create-test/add-output-data?dataName=' + outputDataValue,
-                type: 'GET',
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    $("#outputDataRow").append(data);
-                }
-            });
-        }
-
-        function addGrouping() {
-            let groupingValue = $('#grouping').val();
-            $('#grouping').val('');
-            $.ajax({
-                url: '/create-test/add-grouping?groupingName=' + groupingValue,
-                type: 'GET',
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    $("#groupingRow").append(data);
-                    $("[id$='SelectDataNameId']").each(function(data, index) {
-                        console.log(data);
-                        console.log(index);
-                    });
-                    $("[id$='SelectDataNameId']").append('<option value="' + groupingValue + '">' + groupingValue + '</option>');
-                }
-            });
-        }
-
-        function deleteDataName(dataNameId) {
-            $("#" + dataNameId).remove();
-        }
-
-        function deleteGrouping(groupingId, groupingValue) {
-            $.ajax({
-                url: '/create-test/remove-grouping?groupingId=' + groupingId,
-                type: 'GET',
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    $("#" + groupingId).remove();
-                    $("[id$='SelectDataNameId'] option[value='" + groupingValue + "']").each(function() {
-                        $(this).remove();
-                    });
-                }
-            });
-        }
-
-        function selectDisabled(selectId){
-            $("#" + selectId).hide();
-        }
-
-        function selectEnabled(selectId){
-            $("#" + selectId).show();
-        }
 
         function init() {
             $.ajax({
@@ -97,47 +25,6 @@
                 contentType: false,
                 success: function(data) {
                     $("#groupingRow").append(data);
-                }
-            });
-        }
-
-        function createTest() {
-            let fields = [];
-            $("#outputDataRow .toast-body").each(function() {
-                let name = $(this).attr('name');
-                let data_type = $('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val();
-                let grouping;
-                if ($('#' + $(this).attr('name') + 'SelectDataNameId').is(':visible')) {
-                    grouping = $('#' + $(this).attr('name') + 'SelectDataNameId').val();
-                }
-                let field = {
-                    name: name,
-                    dataType: data_type,
-                    grouping: grouping
-                }
-                fields.push(field);
-            });
-            /*var file = $('#formFileTest').prop('files')[0]*/
-            let CreateTestDTO = {
-                nameTest: $('#floatingInput').val(),
-                fields: fields
-            }
-
-            var file = document.getElementById("formFileTest").files[0];
-            var formData = new FormData();
-            formData.append('createTest', JSON.stringify(CreateTestDTO))
-            formData.append('fileTest', file)
-
-            console.log(JSON.stringify(CreateTestDTO))
-
-            $.ajax({
-                url: '/create-test',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    console.log("conseguido")
                 }
             });
         }
@@ -197,13 +84,14 @@
             </div>
             <div class="modal-body">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
+                    <li id="createTestNameLiId" class="list-group-item">
                         <div class="form-floating mb-5">
-                            <input type="text" class="form-control" id="floatingInput" placeholder="Test 1">
-                            <label for="floatingInput">Name Test</label>
+                            <input type="text" class="form-control" id="createTestName" placeholder="Test 1" required>
+                            <label for="createTestName">Name Test</label>
+                            <div class="invalid-feedback">Name is required</div>
                         </div>
                     </li>
-                    <li class="list-group-item">
+                    <li id="outputDataRowLiId" class="list-group-item">
                         <div id="outputDataRow" class="row">
                             <div class="col-md-12 mb-2">
                                 <div class="input-group">
@@ -212,7 +100,10 @@
                                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
                                         </svg>
                                     </button>
-                                    <input id="outputData" type="text" class="form-control" placeholder="Output Data" aria-label="Input group example" aria-describedby="basic-addon1">
+                                    <input id="outputData" type="text" class="form-control" placeholder="Output Data" aria-label="Input group example" aria-describedby="basic-addon1" required>
+                                    <div id="invalidFeedbackNameFieldId" class="invalid-feedback">Name field is required</div>
+                                    <div id="invalidFeedbackFieldId" class="invalid-feedback">Field is required</div>
+                                    <div id="invalidFeedbackDataTypeId" class="invalid-feedback">Data type is required</div>
                                 </div>
                             </div>
                         </div>
@@ -233,17 +124,18 @@
                         </div>
                         <div class="col-md-12 mb-5"></div>
                     </li>
-                    <li class="list-group-item">
+                    <li id="fileCreateTestLiId" class="list-group-item">
                         <div>
-                            <label for="formFileTest" class="form-label"></label>
-                            <input class="form-control form-control-lg" id="formFileTest" type="file" name="file">
+                            <label for="createTestFileInput" class="form-label"></label>
+                            <input class="form-control form-control-lg" id="createTestFileInput" type="file" name="file" required>
+                            <div class="invalid-feedback">File is required</div>
                         </div>
                     </li>
                 </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="createTest()">Create</button>
+                <button id="closeCreateTestId" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="createTest()">Create</button>
             </div>
         </div>
     </div>
