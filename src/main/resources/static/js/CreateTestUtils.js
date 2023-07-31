@@ -74,9 +74,22 @@ function selectEnabled(selectId){
     $("#" + selectId).show();
 }
 
+function restoreDefaultValues() {
+    $("#createTestName").val("")
+    $("#grouping").val("")
+    $("#createTestFileInput").val("")
+    $("#outputDataRow").children().each(function(index) {
+        if(index>0){
+            $(this).remove()
+        }
+    })
+
+}
+
 function createTest() {
     let isError = false;
     $("#outputData").val("")
+
     $('#invalidFeedbackNameFieldId').hide()
     $('#invalidFeedbackFieldId').hide()
     $('#invalidFeedbackDataTypeId').hide()
@@ -148,6 +161,7 @@ function createTest() {
             contentType: false,
             success: function(data) {
                 $("#closeCreateTestId").click()
+                restoreDefaultValues()
             }
         });
     }
