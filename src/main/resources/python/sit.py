@@ -1,5 +1,6 @@
 import sys
 import json
+import pandas as pd
 
 import numpy as np
 from scipy import signal
@@ -8,12 +9,14 @@ from sklearn.linear_model import LinearRegression
 
 def sit2stand (gyrx1, gyry1, gyrz1, Fs):
 
-  gyrx = np.array(json.loads(gyrx1))
-  gyrx = gyrx.reshape(len(gyrx),1)
-  gyry = np.array(json.loads(gyry1))
-  gyry = gyry.reshape(len(gyry),1)
-  gyrz = np.array(json.loads(gyrz1))
-  gyrz = gyrz.reshape(len(gyrz),1)
+  #gyrx = np.array(gyrx1)
+  gyrx = gyrx1.reshape(len(gyrx1),1)
+  #gyry = np.array(gyry1)
+  gyry = []
+  gyry = gyry1.reshape(len(gyry1),1)
+  #gyrz = np.array(gyrz1)
+  gyrz = []
+  gyrz = gyrz1.reshape(len(gyrz1),1)
   
   gyr = np.array(gyrx)
   gyr = np.append(gyr, gyry, axis=1)
@@ -26,8 +29,6 @@ def sit2stand (gyrx1, gyry1, gyrz1, Fs):
   
   gyr_giro = np.array(PCA_gyr[:,0])
   gyr_giro = gyr_giro.flatten()
-
-  print(gyr_giro)
 
   gyr_giro = signal.savgol_filter(gyr_giro, 25, 2) #51
   gyr_giro = signal.medfilt(gyr_giro, 7); #13
@@ -69,6 +70,29 @@ def sit2stand (gyrx1, gyry1, gyrz1, Fs):
     slope = 0
 
   return numSit, slope
-  
-print(sit2stand(sys.argv[1], sys.argv[2], sys.argv[3], 100))
-#print(sys.argv[1], sys.argv[2], sys.argv[3])
+
+
+def try_convert_to_float(value):
+    try:
+        return float(value)
+    except ValueError:
+        return np.nan
+
+Fs=100
+#pd.read_csv(sys.argv[1], sep=";", decimal=",")
+df=np.array(pd.read_csv(sys.argv[1], sep=";", decimal=","))
+
+caracter_a_reemplazar = ","
+caracter_reemplazo = "."
+gyrx = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[2:,0]]
+gyry = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[2:,1]]
+gyrz = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[2:,2]]
+gyrx1 = np.vectorize(try_convert_to_float)(gyrx)
+gyry1 = np.vectorize(try_convert_to_float)(gyry)
+gyrz1 = np.vectorize(try_convert_to_float)(gyrz)
+numSit, slope = sit2stand (gyrx1, gyry1, gyrz1, Fs)
+result = {
+  "numSit": str(numSit),
+  "slope": str(slope)
+}
+print(json.dumps(result, indent=4))

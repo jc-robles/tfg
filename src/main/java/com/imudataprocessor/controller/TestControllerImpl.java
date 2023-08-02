@@ -55,6 +55,7 @@ public class TestControllerImpl implements TestController {
         model.addAttribute("processTestButton", id + "ProcessTestButton");
         model.addAttribute("downloadTestButton", id + "DownloadTestButton");
         model.addAttribute("deleteTestButton", id + "DeleteTestButton");
+        model.addAttribute("alphanumericDataId", id + "AlphanumericDataId");
     }
 
 }

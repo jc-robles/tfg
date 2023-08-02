@@ -1,7 +1,10 @@
 package com.imudataprocessor.api.service;
 
+import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 public interface FileService {
 
@@ -14,6 +17,8 @@ public interface FileService {
     InternalDataDTO getDataFromTest(String nameTest) throws IOException;
 
     InternalDataDTO getDataFromProcessedTest(String nameTest) throws IOException;
+
+    OutputDataDTO obtainDataToFileProcessed(Optional<ProgramConfiguration> programConfiguration, String nameTest) throws IOException;
 
     void deleteTest(String nameTest) throws IOException;
 

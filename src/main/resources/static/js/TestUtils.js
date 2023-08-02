@@ -85,8 +85,9 @@ function deleteAllTest(idTest) {
 
 function processTest(nameTest) {
     let name = nameTest + "Processed";
+    let testTypeName = $("#" + nameTest + "testTypeSelectId").val();
     generateHtmlProcessedTest(nameTest);
-    generateGraphicsProcessedTest(name);
+    generateGraphicsProcessedTest(name, testTypeName);
     $("#" + nameTest + "DownloadTestButton").show();
 }
 
@@ -106,10 +107,12 @@ function generateHtmlProcessedTest(nameTest) {
     });
 }
 
-function generateGraphicsProcessedTest(nameTest) {
+function generateGraphicsProcessedTest(nameTest, testTypeName) {
     let form = new FormData()
     form.append('fileName', nameTest)
-    createGraphics('/process-test', form, nameTest);
+    form.append('testTypeName', testTypeName)
+    generateOutput('/process-test', form, nameTest);
+    /*createGraphics('/process-test', form, nameTest);*/
 }
 
 function download(id) {
@@ -121,10 +124,52 @@ function download(id) {
       link.click();
 };
 
+function generateOutput(url, form, name) {
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: form,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            $("#" + name + "Spinner").hide();
+            if (Object.keys(data.alphanumericDataList).length != 0){
+                createAlphanumeric(name, data.alphanumericDataList)
+            }
+            if (Object.keys(data.arrayDataList).length != 0){
+                console.log('arrayDataList empty')
+
+                result = data.arrayDataList.reduce(function (r, a) {
+                    r[a.group] = r[a.group] || [];
+                    r[a.group].push(a);
+                    return r;
+                }, Object.create(null));
+
+                newGraphic(name + 'AccelerometerGraphic',
+                    ['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ],
+                    [data.accelerometerX, data.accelerometerY, data.accelerometerZ]);
+                $("#" + name + "AccordionPanelsStayOpen").show();
+            }
+        },
+        async: false
+    });
+}
+
+function createAlphanumeric(name, alphanumericDataList) {
+    alphanumericDataList.forEach((element) => {
+        let data =
+        "<div class='col-3 mb-2'>" +
+            "<ul class='list-group list-group-horizontal'>" +
+                "<li class='list-group-item'>" + element.name + "</li>" +
+                "<li class='list-group-item'>" + element.value + "</li>" +
+            "</ul>" +
+        "</div>"
+        $("#" + name + "AlphanumericDataId").append(data);
+    });
+    $("#" + name + "AlphanumericDataId").show();
+}
+
 function createGraphics(url, form, name) {
-    console.log('url: ' + url)
-    console.log('form: ' + form)
-    console.log('name: ' + name)
     $.ajax({
         url: url,
         type: 'POST',

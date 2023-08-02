@@ -32,7 +32,7 @@ public class ExternalProcessImpl implements ExternalProcess {
     @Value("${file-python-program}")
     private String filePythonProgramPath;
 
-    @Value("${tests-not-processed-path}")
+    @Value("${split-tests-not-processed-path}")
     private String testsNotProcessedPath;
 
     @Value("${tests-processed-path}")
@@ -64,16 +64,16 @@ public class ExternalProcessImpl implements ExternalProcess {
     @Override
     public void execute(final String testTypeName, final String nameTest) throws IOException {
         this.findByTestName(testTypeName).ifPresent(programConfiguration -> {
-            ProcessBuilder processBuilder = new ProcessBuilder("python",
+            final ProcessBuilder processBuilder = new ProcessBuilder("python",
                     this.filePythonProgramPath + "/" + programConfiguration.getNameFile(),
-                    this.testsNotProcessedPath + "/" + nameTest);
+                    this.testsNotProcessedPath + "/" + nameTest.replace("Processed", "") + ".csv");
             processBuilder.redirectErrorStream(true);
 
-            File file = new File(this.testsProcessedPath + nameTest.replace(".csv$",".json"));
+            final File file = new File(this.testsProcessedPath + "/" + nameTest + ".json");
             processBuilder.redirectOutput(file);
 
             try {
-                Process process = processBuilder.start();
+                final Process process = processBuilder.start();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

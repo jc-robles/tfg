@@ -1,15 +1,14 @@
 package com.imudataprocessor.model.service;
 
-import com.imudataprocessor.api.service.ExternalProcess;
-import com.imudataprocessor.api.service.FileService;
-import com.imudataprocessor.api.service.InternalDataDTO;
-import com.imudataprocessor.api.service.ProcessDataService;
+import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
+import com.imudataprocessor.api.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class ProcessDataServiceImpl implements ProcessDataService {
@@ -46,9 +45,10 @@ public class ProcessDataServiceImpl implements ProcessDataService {
     }
 
     @Override
-    public InternalDataDTO processDataTest(final String testTypeName, final String nameTest) throws IOException {
+    public OutputDataDTO processDataTest(final String testTypeName, final String nameTest) throws IOException {
         this.externalProcess.execute(testTypeName, nameTest);
-        return this.fileService.getDataFromProcessedTest(nameTest);
+        Optional<ProgramConfiguration> programConfiguration = this.externalProcess.findByTestName(testTypeName);
+        return this.fileService.obtainDataToFileProcessed(programConfiguration, nameTest);
     }
 
 }

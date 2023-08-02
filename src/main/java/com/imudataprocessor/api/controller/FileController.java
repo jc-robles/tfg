@@ -1,5 +1,6 @@
 package com.imudataprocessor.api.controller;
 
+import com.imudataprocessor.api.service.OutputDataDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -12,7 +13,7 @@ public interface FileController {
 
     ResponseEntity<DataDTO> splitFile(String fileName, Integer start, Integer end) throws IOException;
 
-    ResponseEntity<DataDTO> processFile(String testTypeName, String fileName) throws IOException;
+    ResponseEntity<OutputDataDTO> processFile(String testTypeName, String fileName) throws IOException;
 
     ResponseEntity<HttpStatus> deleteFile(String fileName) throws IOException;
 

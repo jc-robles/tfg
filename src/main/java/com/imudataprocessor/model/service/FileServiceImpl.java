@@ -1,15 +1,18 @@
 package com.imudataprocessor.model.service;
 
-import com.imudataprocessor.api.service.FileService;
-import com.imudataprocessor.api.service.InternalDataDTO;
+import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
+import com.imudataprocessor.api.controller.createtest.DataTypeEnum;
+import com.imudataprocessor.api.service.*;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -20,6 +23,9 @@ import java.util.stream.IntStream;
 
 @Service
 public class FileServiceImpl implements FileService {
+
+    @Autowired
+    private JsonService jsonService;
 
     @Value("${test_extension}")
     private String testExtension;
@@ -91,6 +97,35 @@ public class FileServiceImpl implements FileService {
         final InternalDataDTO dataDTO = obtainCompleteDataToFile(filePath);
         this.deleteHeaders(dataDTO);
         return dataDTO;
+    }
+
+    public OutputDataDTO obtainDataToFileProcessed(final Optional<ProgramConfiguration> programConfiguration, final @NonNull String filePath) throws IOException {
+        Map<String, Object> map = (Map<String, Object>) jsonService.readFile("src/main/resources/tests-processed/" + filePath + ".json", Map.class);
+        return programConfiguration.map(programConfiguration1 -> {
+            List<OutputAlphanumericDataDTO> dataResultConfigurationAlphanumeric = programConfiguration1.getDataResult().stream()
+                    .filter(dataResultConfiguration1 -> ObjectUtils.nullSafeEquals(dataResultConfiguration1.getDataType(), DataTypeEnum.ALPHANUMERIC.name()))
+                    .map(dataResultConfiguration -> {
+                        final Object o = map.get(dataResultConfiguration.getNameField());
+                        final OutputAlphanumericDataDTO dataDTO1 = new OutputAlphanumericDataDTO();
+                        dataDTO1.setName(dataResultConfiguration.getNameField());
+                        dataDTO1.setValue(String.valueOf(o));
+                        return dataDTO1;
+                    }).toList();
+            List<OutputArrayDataDTO> dataResultConfigurationDataArray = programConfiguration1.getDataResult().stream()
+                    .filter(dataResultConfiguration1 -> ObjectUtils.nullSafeEquals(dataResultConfiguration1.getDataType(), DataTypeEnum.DATA_ARRAY.name()))
+                    .map(dataResultConfiguration -> {
+                        final String value = (String) map.get(dataResultConfiguration.getNameField());
+                        final OutputArrayDataDTO dataDTO1 = new OutputArrayDataDTO();
+                        dataDTO1.setName(dataResultConfiguration.getNameField());
+                        dataDTO1.setValue(Arrays.stream(value.replace("[", "").replace("]", "").split(",")).toList());
+                        return dataDTO1;
+                    }).toList();
+
+            final OutputDataDTO dataDTO2 = new OutputDataDTO();
+            dataDTO2.setAlphanumericDataList(dataResultConfigurationAlphanumeric);
+            dataDTO2.setArrayDataList(dataResultConfigurationDataArray);
+            return dataDTO2;
+        }).orElse(new OutputDataDTO());
     }
 
     private InternalDataDTO obtainCompleteDataToFile(final @NonNull String filePath) throws IOException {

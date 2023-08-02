@@ -3,6 +3,7 @@ package com.imudataprocessor.controller;
 import com.imudataprocessor.api.controller.DataDTO;
 import com.imudataprocessor.api.controller.FileController;
 import com.imudataprocessor.api.service.InternalDataDTO;
+import com.imudataprocessor.api.service.OutputDataDTO;
 import com.imudataprocessor.api.service.ProcessDataService;
 import com.imudataprocessor.model.mapper.DataDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,10 +43,10 @@ public class FileControllerImpl implements FileController {
 
     @Override
     @PostMapping("/process-test")
-    public ResponseEntity<DataDTO> processFile(final @RequestParam("testTypeName") String testTypeName,
+    public ResponseEntity<OutputDataDTO> processFile(final @RequestParam("testTypeName") String testTypeName,
                                                final @RequestParam("fileName") String fileName) throws IOException {
-        final InternalDataDTO internalDataDTO = this.processDataServiceImpl.processDataTest(testTypeName, fileName);
-        return ResponseEntity.ok(dataDTOMapper.map(internalDataDTO));
+        final OutputDataDTO internalDataDTO = this.processDataServiceImpl.processDataTest(testTypeName, fileName);
+        return ResponseEntity.ok(internalDataDTO);
     }
 
     @DeleteMapping("/delete-file")
