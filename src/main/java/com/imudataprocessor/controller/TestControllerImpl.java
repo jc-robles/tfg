@@ -19,7 +19,7 @@ public class TestControllerImpl implements TestController {
 
     @GetMapping("/generate-main-test")
     public String generateMainTest(final Model model) {
-        return "main_test";
+        return "test/main/main_test";
     }
 
     @GetMapping("/generate-split-test")

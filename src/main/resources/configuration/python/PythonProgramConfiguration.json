@@ -13,6 +13,94 @@
           "dataType": "ALPHANUMERIC"
         }
       ]
+    },
+    {
+      "nameFile": "walk.py",
+      "nameTest": "Walk",
+      "dataResult": [
+        {
+          "nameField": "numSteps",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "gait_sym",
+          "dataType": "ALPHANUMERIC"
+        }
+      ]
+    },
+    {
+      "nameFile": "romberg.py",
+      "nameTest": "Romberg",
+      "dataResult": [
+        {
+          "nameField": "NPL_ML",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "NPL_AP",
+          "dataType": "ALPHANUMERIC"
+        }
+      ]
+    },
+    {
+      "nameFile": "climb.py",
+      "nameTest": "Climb",
+      "dataResult": [
+        {
+          "nameField": "numSteps",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "gait_sym",
+          "dataType": "ALPHANUMERIC"
+        }
+      ]
+    },
+    {
+      "nameFile": "2_min_walk.py",
+      "nameTest": "2 min walk",
+      "dataResult": [
+        {
+          "nameField": "JerkSw",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "gait_sym",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "step_reg_even",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "step_reg_odd",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "step_reg",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "St_tv",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "Cadence",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "numSteps",
+          "dataType": "ALPHANUMERIC"
+        },
+        {
+          "nameField": "HR_AP",
+          "dataType": "DATA_ARRAY"
+        },
+        {
+          "nameField": "HR_ML",
+          "dataType": "DATA_ARRAY"
+        }
+      ]
     }
   ]
 }

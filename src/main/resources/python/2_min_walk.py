@@ -1,7 +1,5 @@
-import os
 import json
 import sys
-
 
 import math as mt
 import numpy as np
@@ -329,35 +327,37 @@ def two_min_walk (accx, accy, accz, Fs):
 
   return JerkSw, gait_sym, step_reg_even, step_reg_odd, step_reg, St_tv,  Cadence, numSteps, HR_AP, HR_ML
 
+def try_convert_to_float(value):
+  try:
+    return float(value)
+  except ValueError:
+    return np.nan
 
-
-# Execution Example
 Fs=100
-df=np.array(pd.read_csv('src/main/resources/python/walk3.csv', decimal=","))
-accx = df[0:,0].astype(float)
-accy = df[0:,1].astype(float)
-accz = df[0:,2].astype(float)
-JerkSw, gait_sym, step_reg_even, step_reg_odd, step_reg, St_tv,  Cadence, numSteps, HR_AP, HR_ML = two_min_walk (accx, accy, accz, Fs)
-#print(two_min_walk (accx, accy, accz, Fs))
-#print(JerkSw)
-#print(gait_sym)
-#print(step_reg_even)
-#print(step_reg_odd)
-#print(step_reg)
-#print(St_tv)
-#print(Cadence)
-#print(numSteps)
-#print(HR_AP)
-#print(HR_ML)
+df=np.array(pd.read_csv(sys.argv[1], sep=";", decimal=","))
+caracter_a_reemplazar = ","
+caracter_reemplazo = "."
+accx = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[1:,1]]
+accy = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[1:,2]]
+accz = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[1:,3]]
+accx1 = np.vectorize(try_convert_to_float)(accx)
+accy1 = np.vectorize(try_convert_to_float)(accy)
+accz1 = np.vectorize(try_convert_to_float)(accz)
 
-dictionary = {
-    "name": "sathiyajith",
-    "rollno": 56,
-    "cgpa": 8.6,
-    "phonenumber": "9976770500"
+for i in range(0, len(accx1)):
+  print(accx1[i]),
+
+JerkSw, gait_sym, step_reg_even, step_reg_odd, step_reg, St_tv,  Cadence, numSteps, HR_AP, HR_ML = two_min_walk (accx1, accy1, accz1, Fs)
+result = {
+  "JerkSw": str(JerkSw),
+  "gait_sym": str(gait_sym),
+  "step_reg_even": str(step_reg_even),
+  "step_reg_odd": str(step_reg_odd),
+  "step_reg": str(step_reg),
+  "St_tv": str(St_tv),
+  "Cadence": str(Cadence),
+  "numSteps": str(numSteps),
+  "HR_AP": str(HR_AP),
+  "HR_ML": str(HR_ML)
 }
-
-print(sys.argv[1])
-
-# Serializing json
-print(json.dumps(dictionary, indent=4))
+print(json.dumps(result, indent=4))
