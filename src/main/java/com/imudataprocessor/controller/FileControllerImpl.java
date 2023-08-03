@@ -37,6 +37,7 @@ public class FileControllerImpl implements FileController {
     @Value("${split-tests-not-processed-path}")
     private String splitTestsNotProcessedPath;
 
+    @Override
     @PostMapping("/upload-file")
     public ResponseEntity<DataDTO> uploadFile(final @RequestParam("file") MultipartFile multipartFile,
             final Model model) throws IOException {
@@ -44,6 +45,7 @@ public class FileControllerImpl implements FileController {
         return ResponseEntity.ok(dataDTOMapper.map(internalDataDTO));
     }
 
+    @Override
     @PostMapping("/split-file")
     public ResponseEntity<DataDTO> splitFile(final @RequestParam("fileName") String fileName,
             final @RequestParam("start") Integer start, final @RequestParam("end") Integer end) throws IOException {
@@ -59,18 +61,21 @@ public class FileControllerImpl implements FileController {
         return ResponseEntity.ok(internalDataDTO);
     }
 
+    @Override
     @DeleteMapping("/delete-file")
     public ResponseEntity<HttpStatus> deleteFile(final @RequestParam("fileName") String fileName) throws IOException {
         this.processDataServiceImpl.deleteTest(fileName);
         return ResponseEntity.ok().build();
     }
 
+    @Override
     @DeleteMapping("/delete-all-file")
     public ResponseEntity<HttpStatus> deleteAllFile() throws IOException {
         this.processDataServiceImpl.deleteAllTest();
         return ResponseEntity.ok().build();
     }
 
+    @Override
     @GetMapping("/download-processed-test")
     public ResponseEntity<FileSystemResource> downloadProcessedTest(final @RequestParam("nameTest") String nameTest) {
         String pathFile = this.testsProcessedPath + "/" + nameTest + ".json";
@@ -79,6 +84,7 @@ public class FileControllerImpl implements FileController {
         return ResponseEntity.ok().headers(headers).body(new FileSystemResource(pathFile));
     }
 
+    @Override
     @GetMapping("/download-raw-test")
     public ResponseEntity<FileSystemResource> downloadRawTest(final @RequestParam("nameTest") String nameTest) {
         String pathFile = this.splitTestsNotProcessedPath + "/" + nameTest + ".csv";
