@@ -12,31 +12,61 @@
     <div class="row" id="mainTestTableGraphic">
         <div class="row mt-2 mb-2 d-flex" id="inputSplitTest">
             <div class="col-2">
-                <div class="input-group">
+                <div class="input-group has-validation" id="inputNameId">
                     <span class="input-group-text">Name</span>
                     <input for="fileName" id="inputNameSplit" type="text" aria-label="Name test" class="form-control" required>
                     <div class="invalid-feedback">Invalid name value</div>
                 </div>
             </div>
             <div class="col-2">
-                <div class="input-group">
+                <div class="input-group has-validation" id="inputStartId">
                     <span class="input-group-text">Start test</span>
-                    <input id="inputStartSplit" type="number" aria-label="Start test" class="form-control" required>
+                    <input id="inputStartSplit" type="number" aria-label="Start test" class="form-control" min="0" required>
                     <div class="invalid-feedback">Invalid start value</div>
                 </div>
             </div>
             <div class="col-2">
-                <div class="input-group">
+                <div class="input-group has-validation" id="inputEndId">
                     <span class="input-group-text">End test</span>
-                    <input id="inputEndSplit" type="number" aria-label="End test" class="form-control" required>
+                    <input id="inputEndSplit" type="number" aria-label="End test" class="form-control" min="1" required>
                     <div class="invalid-feedback">Invalid end value</div>
                 </div>
             </div>
             <div class="col-2">
                 <div class="col-auto">
                     <button type="button" class="btn btn-dark btn-lg" id="splitTest" onclick="sendSplit()">Split Test</button>
+                    <button type="button" id="splitTestSuccess" style="display: none;"></button>
+                    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+                        <div id="liveToast1" class="toast text-bg-success fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body"></div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
+                        <div id="liveToast2" class="toast text-bg-danger fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body"></div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
+            <script>
+                const toastTrigger = document.getElementById('splitTestSuccess')
+                const toastLiveExample = document.getElementById('liveToast1')
+                if (toastTrigger) {
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                        toastTrigger.addEventListener('click', () => {
+                        toastBootstrap.show()
+                    })
+                }
+            </script>
+
             <div class="ms-auto col-1">
                 <div class="col-auto">
                     <button type="button" class="btn btn-outline-danger btn-lg" id="deleteTest" onclick="deleteAllTest('deleteTest')">Delete</button>
@@ -44,7 +74,7 @@
             </div>
         </div>
 
-        <div class="row mt-5 justify-content-center" style="display: none;" id="spinner">
+        <div class="row mt-5 justify-content-center" id="spinner">
             <div class="col-2">
                 <div class="spinner-border text-secondary" role="status">
                     <span class="visually-hidden">Loading...</span>

@@ -1,20 +1,51 @@
 
 function sendSplit() {
     /* validate */
-    let isValid = false;
+    let checkName = false;
+    let checkStart = false;
+    let checkEnd = false;
+
     let start = $('#inputStartSplit').val();
     let end = $('#inputEndSplit').val();
     let name = $('#inputNameSplit').val();
 
-    if (start >=0 && start<end && name) {
-        isValid = true;
+    $('#inputNameSplit').removeClass("is-invalid")
+    $('#inputStartSplit').removeClass("is-invalid")
+    $('#inputEndSplit').removeClass("is-invalid")
+
+    if (name) {
+        checkName = true;
     }
 
-    if (isValid) {
+    if (start >= 0 && start!='') {
+        checkStart = true;
+    }
+
+    if (end == -1 || end>start) {
+        checkEnd = true;
+    }
+
+    if (checkName && checkStart && checkEnd) {
+        $('#inputNameSplit').val("")
+        $('#inputStartSplit').val("")
+        $('#inputEndSplit').val("")
+
         generateHtmlSplit(name);
-        generateGraphicsSplit();
+        generateGraphicsSplit(name, start, end);
+
+        $("#splitTestSuccess").click()
+        $("#liveToast1 .toast-body").empty()
+        $("#liveToast1 .toast-body").append("The " + name + " test was created successfully.")
     } else {
-        $('#inputSplitTest').addClass("was-validated")
+        if (!checkName) {
+            $('#inputNameSplit').addClass("is-invalid")
+        }
+        if (!checkStart) {
+            $('#inputStartSplit').addClass("is-invalid")
+        }
+        if (!checkEnd) {
+            $('#inputEndSplit').addClass("is-invalid")
+        }
     }
 }
 
@@ -34,11 +65,10 @@ function generateHtmlSplit(name) {
     });
 }
 
-function generateGraphicsSplit() {
-    let name = $('#inputNameSplit').val();
+function generateGraphicsSplit(name, start, end) {
     let f = $('#formSplitId')[0];
-    f.start.value = $('#inputStartSplit').val();
-    f.end.value = $('#inputEndSplit').val();
+    f.start.value = start;
+    f.end.value = end;
     f.fileName.value = name;
     createGraphics('/split-file', new FormData(f), name);
 }
@@ -84,11 +114,11 @@ function deleteAllTest(idTest) {
 }
 
 function processTest(nameTest) {
+    $("#" + nameTest + "ProcessTestButton").attr('disabled', 'disabled');
     let name = nameTest + "Processed";
     let testTypeName = $("#" + nameTest + "testTypeSelectId").val();
     generateHtmlProcessedTest(nameTest);
-    generateGraphicsProcessedTest(name, testTypeName);
-    $("#" + nameTest + "DownloadTestButton").show();
+    generateGraphicsProcessedTest(nameTest, name, testTypeName);
 }
 
 function generateHtmlProcessedTest(nameTest) {
@@ -100,31 +130,56 @@ function generateHtmlProcessedTest(nameTest) {
         processData: false,
         contentType: false,
         success: function(data) {
+            console.log("test de prueba: " + data)
             $('#' + nameTest + 'TableGraphic').append(data);
-            $("#" + name + "Spinner").show();
         },
         async: false
     });
 }
 
-function generateGraphicsProcessedTest(nameTest, testTypeName) {
+function generateGraphicsProcessedTest(nameTest, nameTestProcessed, testTypeName) {
     let form = new FormData()
-    form.append('fileName', nameTest)
+    form.append('fileName', nameTestProcessed)
     form.append('testTypeName', testTypeName)
-    generateOutput('/process-test', form, nameTest);
+    generateOutput('/process-test', form, nameTest, nameTestProcessed);
     /*createGraphics('/process-test', form, nameTest);*/
 }
 
 function download(id) {
-      var timestamp = new Date().getTime();
-      var url = '/tests-processed/' + id + 'Processed.csv' + '?t=' + timestamp;
-      var link = document.createElement('a');
-      link.href = url;
-      link.download = id + 'Processed.csv';
-      link.click();
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/download-processed-test?nameTest=' + id + 'Processed', true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const fileContent = xhr.response;
+            const url = URL.createObjectURL(new Blob([fileContent]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = id + 'Processed.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+    };
+    xhr.send();
 };
 
-function generateOutput(url, form, name) {
+function downloadRawTest(id) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/download-raw-test?nameTest=' + id, true);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            const fileContent = xhr.response;
+            const url = URL.createObjectURL(new Blob([fileContent]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = id + '.csv';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+    };
+    xhr.send();
+};
+
+function generateOutput(url, form, nameTest, nameTestProcessed) {
     $.ajax({
         url: url,
         type: 'POST',
@@ -132,9 +187,9 @@ function generateOutput(url, form, name) {
         processData: false,
         contentType: false,
         success: function(data) {
-            $("#" + name + "Spinner").hide();
+            $("#" + nameTestProcessed + "Spinner").hide();
             if (Object.keys(data.alphanumericDataList).length != 0){
-                createAlphanumeric(name, data.alphanumericDataList)
+                createAlphanumeric(nameTestProcessed, data.alphanumericDataList)
             }
             if (Object.keys(data.arrayDataList).length != 0){
                 console.log('arrayDataList empty')
@@ -145,13 +200,16 @@ function generateOutput(url, form, name) {
                     return r;
                 }, Object.create(null));
 
-                newGraphic(name + 'AccelerometerGraphic',
+                newGraphic(nameTestProcessed + 'AccelerometerGraphic',
                     ['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ],
                     [data.accelerometerX, data.accelerometerY, data.accelerometerZ]);
                 $("#" + name + "AccordionPanelsStayOpen").show();
             }
-        },
-        async: false
+
+            console.log('name: ' + nameTest)
+            $("#" + nameTest + "ProcessTestButton").hide();
+            $("#" + nameTest + "DownloadTestButton").show();
+        }
     });
 }
 
@@ -183,8 +241,7 @@ function createGraphics(url, form, name) {
             reload();
             $("#" + name + "Spinner").hide();
             $("#" + name + "AccordionPanelsStayOpen").show();
-        },
-        async: false
+        }
     });
 }
 
@@ -196,6 +253,9 @@ function generateMainTest() {
         $("#spinner").show();
         $("#closeUploadModal").click();
         event.preventDefault();
+
+        callGenerateMainTest();
+
         var formData = new FormData(this);
         $.ajax({
             url: '/upload-file',
@@ -204,7 +264,6 @@ function generateMainTest() {
             processData: false,
             contentType: false,
             success: function(data) {
-                callGenerateMainTest();
                 $("#spinner").hide();
                 $("#accordionPanelsStayOpenExample").show();
 

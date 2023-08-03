@@ -100,7 +100,7 @@ public class FileServiceImpl implements FileService {
     }
 
     public OutputDataDTO obtainDataToFileProcessed(final Optional<ProgramConfiguration> programConfiguration, final @NonNull String filePath) throws IOException {
-        Map<String, Object> map = (Map<String, Object>) jsonService.readFile("src/main/resources/tests-processed/" + filePath + ".json", Map.class);
+        Map<String, Object> map = (Map<String, Object>) jsonService.readFile(testsProcessedPath + "/" + filePath + ".json", Map.class);
         return programConfiguration.map(programConfiguration1 -> {
             List<OutputAlphanumericDataDTO> dataResultConfigurationAlphanumeric = programConfiguration1.getDataResult().stream()
                     .filter(dataResultConfiguration1 -> ObjectUtils.nullSafeEquals(dataResultConfiguration1.getDataType(), DataTypeEnum.ALPHANUMERIC.name()))

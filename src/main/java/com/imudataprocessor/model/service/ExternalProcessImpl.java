@@ -74,7 +74,8 @@ public class ExternalProcessImpl implements ExternalProcess {
 
             try {
                 final Process process = processBuilder.start();
-            } catch (IOException e) {
+                process.waitFor();
+            } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
