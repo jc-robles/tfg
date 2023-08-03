@@ -27,13 +27,13 @@ public class TestControllerImpl implements TestController {
         final List<String> nameTests = externalProcess.getAllNameTest();
         model.addAttribute("nameTests", nameTests);
         this.setValues(model, idTest);
-        return "split_test";
+        return "test/split/split_test";
     }
 
     @GetMapping("/generate-process-test")
     public String processTest(final Model model, final @RequestParam("idTest") String idTest) {
         this.setValues(model, idTest);
-        return "processed_test";
+        return "test/process/processed_test";
     }
 
     private void setValues(final Model model, final String id) {

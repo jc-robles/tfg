@@ -10,7 +10,7 @@ public class HomeControllerImpl implements HomeController {
 
     @GetMapping("/")
     public String home(final Model theModel) {
-        return "home";
+        return "home/home";
     }
 
 }

@@ -61,7 +61,7 @@ public class CreateTestControllerImpl implements CreateTestController {
         model.addAttribute("radioButtonName", dataNameFormatted + "RadioButtonName");
         model.addAttribute("selectDataNameId", dataNameFormatted + "SelectDataNameId");
         model.addAttribute("selectData", testGropingConfiguration.getSelect());
-        return "create_test/add_output_data";
+        return "test/create/add_output_data";
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CreateTestControllerImpl implements CreateTestController {
     public String addGrouping(final Model model, final @RequestParam("groupingName") String groupingName) throws IOException {
         GroupingItemConfiguration groupingItemConfiguration = testGroupingService.addGrouping(groupingName);
         model.addAttribute("allGrouping", Collections.singletonList(groupingItemConfiguration));
-        return "create_test/add_grouping";
+        return "test/create/add_grouping";
     }
 
     @Override
@@ -77,7 +77,7 @@ public class CreateTestControllerImpl implements CreateTestController {
     public String getAllGrouping(Model model) throws IOException {
         final TestGropingConfiguration testGropingConfiguration = testGroupingService.getAllGrouping();
         model.addAttribute("allGrouping", testGropingConfiguration.getSelect());
-        return "create_test/add_grouping";
+        return "test/create/add_grouping";
     }
 
     @Override

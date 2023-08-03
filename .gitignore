@@ -2,5 +2,6 @@
 /target
 
 /src/main/resources/static/tests-processed
+/src/main/resources/static/tests-not-processed
 /src/main/resources/tests-not-processed
 /src/main/resources/tests-processed
