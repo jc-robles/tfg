@@ -9,7 +9,7 @@ public class OutputArrayDataDTO {
 
     private String name;
 
-    private List<String> value;
+    private List<Float> value;
 
     private String group;
 

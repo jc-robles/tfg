@@ -1,5 +1,7 @@
 package com.imudataprocessor.controller;
 
+import com.imudataprocessor.api.configuration.pyrhonprogram.DataResultConfiguration;
+import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
 import com.imudataprocessor.api.controller.TestController;
 import com.imudataprocessor.api.service.ExternalProcess;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 public class TestControllerImpl implements TestController {
@@ -31,7 +36,16 @@ public class TestControllerImpl implements TestController {
     }
 
     @GetMapping("/generate-process-test")
-    public String processTest(final Model model, final @RequestParam("idTest") String idTest) {
+    public String processTest(final Model model, final @RequestParam("idTest") String idTest, final @RequestParam("testTypeName") String testTypeName) throws IOException {
+        Optional<ProgramConfiguration> programConfiguration = this.externalProcess.findByTestName(testTypeName);
+        List<String> groupDataList = programConfiguration
+                .map(programConfiguration1 -> programConfiguration1.getDataResult().stream()
+                        .map(DataResultConfiguration::getGroupData)
+                        .filter(Objects::nonNull)
+                        .distinct()
+                        .toList())
+                .orElse(Collections.emptyList());
+        model.addAttribute("groupDataList", groupDataList);
         this.setValues(model, idTest);
         return "test/process/processed_test";
     }

@@ -117,20 +117,19 @@ function processTest(nameTest) {
     $("#" + nameTest + "ProcessTestButton").attr('disabled', 'disabled');
     let name = nameTest + "Processed";
     let testTypeName = $("#" + nameTest + "testTypeSelectId").val();
-    generateHtmlProcessedTest(nameTest);
+    generateHtmlProcessedTest(nameTest, testTypeName);
     generateGraphicsProcessedTest(nameTest, name, testTypeName);
 }
 
-function generateHtmlProcessedTest(nameTest) {
+function generateHtmlProcessedTest(nameTest, testTypeName) {
     let name = nameTest + "Processed"
     $.ajax({
-        url: '/generate-process-test?idTest=' + name,
+        url: '/generate-process-test?idTest=' + name + "&testTypeName=" + testTypeName,
         type: 'GET',
         data: new FormData(),
         processData: false,
         contentType: false,
         success: function(data) {
-            console.log("test de prueba: " + data)
             $('#' + nameTest + 'TableGraphic').append(data);
         },
         async: false
@@ -142,7 +141,6 @@ function generateGraphicsProcessedTest(nameTest, nameTestProcessed, testTypeName
     form.append('fileName', nameTestProcessed)
     form.append('testTypeName', testTypeName)
     generateOutput('/process-test', form, nameTest, nameTestProcessed);
-    /*createGraphics('/process-test', form, nameTest);*/
 }
 
 function download(id) {
@@ -192,21 +190,40 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
                 createAlphanumeric(nameTestProcessed, data.alphanumericDataList)
             }
             if (Object.keys(data.arrayDataList).length != 0){
-                console.log('arrayDataList empty')
-
-                result = data.arrayDataList.reduce(function (r, a) {
+                /*newGraphic(nameTestProcessed + 'AccelerometerGraphic',[data.arrayDataList[0].name],[data.arrayDataList[0].value]);
+                newGraphic(nameTestProcessed + 'GyroscopeGraphic',[data.arrayDataList[1].name],[data.arrayDataList[1].value]);*/
+                let result = data.arrayDataList.reduce(function (r, a) {
                     r[a.group] = r[a.group] || [];
                     r[a.group].push(a);
                     return r;
                 }, Object.create(null));
 
-                newGraphic(nameTestProcessed + 'AccelerometerGraphic',
-                    ['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ],
-                    [data.accelerometerX, data.accelerometerY, data.accelerometerZ]);
-                $("#" + name + "AccordionPanelsStayOpen").show();
+                console.log(result);
+                console.log(typeof result);
+                for (let categoria in result) {
+                    let names = [];
+                    let values = [];
+                    result[categoria].forEach(objeto => {
+                        names.push(objeto.name)
+                        values.push(objeto.value)
+                    });
+                    newGraphic(categoria + 'ProcessedGraphic',names,values);
+                }
+
+                /*result.forEach(element => {
+                    console.log(element);
+
+                    result.forEach(element => {
+                        names.push(element.name)
+                        values.push(element.value)
+                    });
+                  newGraphic(element[0].group + 'ProcessedGraphic',names,values);
+                });*/
+
+                reload();
+                $("#" + nameTestProcessed + "AccordionPanelsStayOpen").show();
             }
 
-            console.log('name: ' + nameTest)
             $("#" + nameTest + "ProcessTestButton").hide();
             $("#" + nameTest + "DownloadTestButton").show();
         }

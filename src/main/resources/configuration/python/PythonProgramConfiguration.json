@@ -94,11 +94,13 @@
         },
         {
           "nameField": "HR_AP",
-          "dataType": "DATA_ARRAY"
+          "dataType": "DATA_ARRAY",
+          "groupData": "Grafica"
         },
         {
           "nameField": "HR_ML",
-          "dataType": "DATA_ARRAY"
+          "dataType": "DATA_ARRAY",
+          "groupData": "Grafica"
         }
       ]
     }

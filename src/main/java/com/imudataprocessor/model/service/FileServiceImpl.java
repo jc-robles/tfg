@@ -114,10 +114,11 @@ public class FileServiceImpl implements FileService {
             List<OutputArrayDataDTO> dataResultConfigurationDataArray = programConfiguration1.getDataResult().stream()
                     .filter(dataResultConfiguration1 -> ObjectUtils.nullSafeEquals(dataResultConfiguration1.getDataType(), DataTypeEnum.DATA_ARRAY.name()))
                     .map(dataResultConfiguration -> {
-                        final String value = (String) map.get(dataResultConfiguration.getNameField());
+                        final List<Double> dataList = (List<Double>) map.get(dataResultConfiguration.getNameField());
                         final OutputArrayDataDTO dataDTO1 = new OutputArrayDataDTO();
                         dataDTO1.setName(dataResultConfiguration.getNameField());
-                        dataDTO1.setValue(Arrays.stream(value.replace("[", "").replace("]", "").split(",")).toList());
+                        dataDTO1.setValue(dataList.stream().map(Double::floatValue).toList());
+                        dataDTO1.setGroup(dataResultConfiguration.getGroupData());
                         return dataDTO1;
                     }).toList();
 

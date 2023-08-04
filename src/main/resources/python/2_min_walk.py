@@ -1,5 +1,6 @@
 import json
 import sys
+import warnings
 
 import math as mt
 import numpy as np
@@ -13,7 +14,7 @@ from scipy.interpolate import interp1d
 
 
 def Invert_axis(lst):
-    return [ -i for i in lst ]
+  return [ -i for i in lst ]
 
 def remove_fase_positives (step_time, peaks):
   Cadence = np.mean(step_time)
@@ -327,27 +328,15 @@ def two_min_walk (accx, accy, accz, Fs):
 
   return JerkSw, gait_sym, step_reg_even, step_reg_odd, step_reg, St_tv,  Cadence, numSteps, HR_AP, HR_ML
 
-def try_convert_to_float(value):
-  try:
-    return float(value)
-  except ValueError:
-    return np.nan
-
+# Execution Example
 Fs=100
-df=np.array(pd.read_csv(sys.argv[1], sep=";", decimal=","))
-caracter_a_reemplazar = ","
-caracter_reemplazo = "."
-accx = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[1:,1]]
-accy = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[1:,2]]
-accz = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[1:,3]]
-accx1 = np.vectorize(try_convert_to_float)(accx)
-accy1 = np.vectorize(try_convert_to_float)(accy)
-accz1 = np.vectorize(try_convert_to_float)(accz)
+np.set_printoptions(threshold=np.inf, linewidth=np.nan)
+df=np.array(pd.read_csv(sys.argv[1], sep=";"))
+accx = df[2:,1].astype(float)
+accy = df[2:,2].astype(float)
+accz = df[2:,3].astype(float)
 
-for i in range(0, len(accx1)):
-  print(accx1[i]),
-
-JerkSw, gait_sym, step_reg_even, step_reg_odd, step_reg, St_tv,  Cadence, numSteps, HR_AP, HR_ML = two_min_walk (accx1, accy1, accz1, Fs)
+JerkSw, gait_sym, step_reg_even, step_reg_odd, step_reg, St_tv,  Cadence, numSteps, HR_AP, HR_ML = two_min_walk (accx, accy, accz, Fs)
 result = {
   "JerkSw": str(JerkSw),
   "gait_sym": str(gait_sym),
@@ -357,7 +346,7 @@ result = {
   "St_tv": str(St_tv),
   "Cadence": str(Cadence),
   "numSteps": str(numSteps),
-  "HR_AP": str(HR_AP),
-  "HR_ML": str(HR_ML)
+  "HR_AP": HR_AP.tolist(),
+  "HR_ML": HR_ML.tolist()
 }
 print(json.dumps(result, indent=4))
