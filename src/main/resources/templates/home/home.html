@@ -13,10 +13,6 @@
     <script type="text/javascript" src="/js/CreateTestUtils.js"></script>
 
     <script>
-        $(document).ready(function() {
-            generateMainTest();
-        });
-
         function init() {
             $.ajax({
                 url: '/create-test/all-grouping',
@@ -41,7 +37,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">Upload file test</a>
+                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#uploadTestModal" href="#">Upload file test</a>
                     <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#exampleModalFullscreen" href="#">Create test</a>
                 </div>
             </div>
@@ -50,8 +46,8 @@
 </div>
 
 <!-- Modal -->
-<form method="post" enctype="multipart/form-data" id="formUploadFile">
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!--<form method="post" enctype="multipart/form-data" id="formUploadFile">-->
+    <div class="modal fade" id="uploadTestModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="POST" enctype="multipart/form-data" action="/">
@@ -61,20 +57,20 @@
                     </div>
                     <div class="modal-body">
                         <div>
-                            <label for="formFileLg" class="form-label"></label>
-                            <input class="form-control form-control-lg" id="formFileLg" type="file" name="file" required>
+                            <label for="uploadTestFileInput" class="form-label"></label>
+                            <input class="form-control form-control-lg" id="uploadTestFileInput" type="file" name="file" required>
                             <div class="invalid-feedback">File is required</div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUploadModal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Upload</button>
+                        <button type="button" class="btn btn-primary" id="uploadTestFileButton" onclick="uploadTest()">Upload</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-</form>
+<!--</form>-->
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true" style="display: none;">

@@ -262,35 +262,48 @@ function createGraphics(url, form, name) {
     });
 }
 
+function uploadTest() {
+    let isError = false;
+    if($('#uploadTestFileInput').val() === '') {
+        $('#uploadTestModal .modal-body').addClass("was-validated")
+        isError = true;
+    } else {
+        $('#uploadTestModal .modal-body').removeClass("was-validated")
+    }
+
+    if (!isError) {
+        generateMainTest()
+    }
+}
+
 function generateMainTest() {
-    $('#formUploadFile').submit(function(event) {
-        clearAllGraphics();
+    clearAllGraphics();
 
-        $("#mainTable").show();
-        $("#spinner").show();
-        $("#closeUploadModal").click();
-        event.preventDefault();
+    $("#mainTable").show();
+    $("#spinner").show();
+    $("#closeUploadModal").click();
 
-        callGenerateMainTest();
+    callGenerateMainTest();
 
-        var formData = new FormData(this);
-        $.ajax({
-            url: '/upload-file',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                $("#spinner").hide();
-                $("#accordionPanelsStayOpenExample").show();
+    var file = document.getElementById("uploadTestFileInput").files[0];
+    var formData = new FormData();
+    formData.append('file', file)
+    $.ajax({
+        url: '/upload-file',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            $("#spinner").hide();
+            $("#accordionPanelsStayOpenExample").show();
 
-                newGraphic('accelerometerGraphic',['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ] ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ]);
-                newGraphic('gyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ]);
-                newGraphic('quaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ]);
+            newGraphic('accelerometerGraphic',['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ] ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ]);
+            newGraphic('gyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ]);
+            newGraphic('quaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ]);
 
-                $('#formUploadFile')[0].reset();
-            }
-        });
+            $('#createTestFileInput').val("")
+        }
     });
 }
 
