@@ -57,7 +57,18 @@ def two_min_walk (gyrx1, gyry1, gyrz1, Fs):
     gait_sym = 0
   
   return numSteps, gait_sym
-  
-  
 
+# Execution Example
+Fs=100
+np.set_printoptions(threshold=np.inf, linewidth=np.nan)
+df=np.array(pd.read_csv(sys.argv[1], sep=";"))
+gyrx = df[2:,4].astype(float)
+gyry = df[2:,5].astype(float)
+gyrz = df[2:,6].astype(float)
 
+numSteps, gait_sym = two_min_walk (gyrx, gyry, gyrz, Fs)
+result = {
+  "numSteps": str(numSteps),
+  "gait_sym": str(gait_sym)
+}
+print(json.dumps(result, indent=4))

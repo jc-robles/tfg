@@ -71,28 +71,17 @@ def sit2stand (gyrx1, gyry1, gyrz1, Fs):
 
   return numSit, slope
 
-
-def try_convert_to_float(value):
-    try:
-        return float(value)
-    except ValueError:
-        return np.nan
-
+# Execution Example
 Fs=100
-#pd.read_csv(sys.argv[1], sep=";", decimal=",")
-df=np.array(pd.read_csv(sys.argv[1], sep=";", decimal=","))
+np.set_printoptions(threshold=np.inf, linewidth=np.nan)
+df=np.array(pd.read_csv(sys.argv[1], sep=";"))
+gyrx = df[2:,4].astype(float)
+gyry = df[2:,5].astype(float)
+gyrz = df[2:,6].astype(float)
 
-caracter_a_reemplazar = ","
-caracter_reemplazo = "."
-gyrx = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[2:,0]]
-gyry = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[2:,1]]
-gyrz = [cadena.replace(caracter_a_reemplazar, caracter_reemplazo) for cadena in df[2:,2]]
-gyrx1 = np.vectorize(try_convert_to_float)(gyrx)
-gyry1 = np.vectorize(try_convert_to_float)(gyry)
-gyrz1 = np.vectorize(try_convert_to_float)(gyrz)
-numSit, slope = sit2stand (gyrx1, gyry1, gyrz1, Fs)
+numSteps, gait_sym = sit2stand (gyrx, gyry, gyrz, Fs)
 result = {
-  "numSit": str(numSit),
-  "slope": str(slope)
+  "numSteps": str(numSteps),
+  "gait_sym": str(gait_sym)
 }
 print(json.dumps(result, indent=4))

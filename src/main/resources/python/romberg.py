@@ -40,6 +40,21 @@ def romberg (accx1, accz1, Fs):
   NPL_AP = np.around(NPL_AP, decimals = 2)
   
   return NPL_ML, NPL_AP
+
+# Execution Example
+Fs=100
+np.set_printoptions(threshold=np.inf, linewidth=np.nan)
+df=np.array(pd.read_csv(sys.argv[1], sep=";"))
+gyrx = df[2:,4].astype(float)
+gyry = df[2:,5].astype(float)
+gyrz = df[2:,6].astype(float)
+
+NPL_ML, NPL_AP = romberg (accx1, accz1, Fs)
+result = {
+  "NPL_ML": NPL_ML.tolist(),
+  "NPL_AP": NPL_AP.tolist()
+}
+print(json.dumps(result, indent=4))
   
   
   
