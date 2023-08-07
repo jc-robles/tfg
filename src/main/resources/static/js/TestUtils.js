@@ -115,8 +115,14 @@ function deleteAllTest(idTest) {
 
 function processTest(nameTest) {
     $("#" + nameTest + "ProcessTestButton").attr('disabled', 'disabled');
+    $("#" + nameTest + "testTypeSelectId").attr('disabled', 'disabled');
     let name = nameTest + "Processed";
     let testTypeName = $("#" + nameTest + "testTypeSelectId").val();
+
+    if ($("#" + nameTest + "TableGraphic").children().length > 2) {
+        $("#" + nameTest + "TableGraphic").children().last().remove();
+    }
+
     generateHtmlProcessedTest(nameTest, testTypeName);
     generateGraphicsProcessedTest(nameTest, name, testTypeName);
 }
@@ -190,8 +196,6 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
                 createAlphanumeric(nameTestProcessed, data.alphanumericDataList)
             }
             if (Object.keys(data.arrayDataList).length != 0){
-                /*newGraphic(nameTestProcessed + 'AccelerometerGraphic',[data.arrayDataList[0].name],[data.arrayDataList[0].value]);
-                newGraphic(nameTestProcessed + 'GyroscopeGraphic',[data.arrayDataList[1].name],[data.arrayDataList[1].value]);*/
                 let result = data.arrayDataList.reduce(function (r, a) {
                     r[a.group] = r[a.group] || [];
                     r[a.group].push(a);
@@ -210,22 +214,18 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
                     newGraphic(categoria + 'ProcessedGraphic',names,values);
                 }
 
-                /*result.forEach(element => {
-                    console.log(element);
-
-                    result.forEach(element => {
-                        names.push(element.name)
-                        values.push(element.value)
-                    });
-                  newGraphic(element[0].group + 'ProcessedGraphic',names,values);
-                });*/
-
                 reload();
                 $("#" + nameTestProcessed + "AccordionPanelsStayOpen").show();
             }
 
             $("#" + nameTest + "ProcessTestButton").hide();
             $("#" + nameTest + "DownloadTestButton").show();
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            $("#" + nameTestProcessed + "Spinner").hide();
+            $("#" + nameTestProcessed + "ErrorProcessDataId").show();
+            $("#" + nameTest + "ProcessTestButton").removeAttr('disabled');
+            $("#" + nameTest + "testTypeSelectId").removeAttr('disabled');
         }
     });
 }
