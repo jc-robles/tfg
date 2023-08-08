@@ -1,4 +1,4 @@
-package com.imudataprocessor.api.controller.createtest;
+package com.imudataprocessor.api.dto.out.processedtest;
 
 public enum DataTypeEnum {
 

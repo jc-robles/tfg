@@ -1,6 +1,7 @@
-package com.imudataprocessor.api.controller;
+package com.imudataprocessor.api.controller.file;
 
-import com.imudataprocessor.api.service.OutputDataDTO;
+import com.imudataprocessor.api.dto.out.processedtest.OutputDataDTO;
+import com.imudataprocessor.api.dto.out.test.DataDTO;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

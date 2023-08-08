@@ -1,10 +1,10 @@
-package com.imudataprocessor.api.controller;
+package com.imudataprocessor.api.controller.processtest;
 
 import org.springframework.ui.Model;
 
 import java.io.IOException;
 
-public interface TestController {
+public interface ProcessTestController {
 
     String generateMainTest(Model model);
 

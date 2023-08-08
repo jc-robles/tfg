@@ -66,20 +66,31 @@ public class ExternalProcessImpl implements ExternalProcess {
     @Override
     public void execute(final String testTypeName, final String nameTest) throws IOException {
         this.findByTestName(testTypeName).ifPresent(programConfiguration -> {
-            final ProcessBuilder processBuilder = new ProcessBuilder("python",
-                    this.filePythonProgramPath + "/" + programConfiguration.getNameFile(),
-                    this.testsNotProcessedPath + "/" + nameTest.replace("Processed", "") + ".csv");
-            processBuilder.redirectErrorStream(true);
-
-            final File file = new File(this.testsProcessedPath + "/" + nameTest + ".json");
-            processBuilder.redirectOutput(file);
-
-            try {
-                final Process process = processBuilder.start();
-                process.waitFor();
-            } catch (final IOException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            final ProcessBuilder processBuilder = this.createProcess(programConfiguration, nameTest);
+            this.configureOutputProcess(processBuilder, nameTest);
+            this.runProcess(processBuilder);
         });
+    }
+
+    private ProcessBuilder createProcess(final ProgramConfiguration programConfiguration, final String nameTest) {
+        final ProcessBuilder processBuilder = new ProcessBuilder("python",
+                this.filePythonProgramPath + "/" + programConfiguration.getNameFile(),
+                this.testsNotProcessedPath + "/" + nameTest.replace("Processed", "") + ".csv");
+        processBuilder.redirectErrorStream(true);
+        return processBuilder;
+    }
+
+    private void configureOutputProcess(final ProcessBuilder processBuilder, final String nameTest) {
+        final File file = new File(this.testsProcessedPath + "/" + nameTest + ".json");
+        processBuilder.redirectOutput(file);
+    }
+
+    private void runProcess(final ProcessBuilder processBuilder) {
+        try {
+            final Process process = processBuilder.start();
+            process.waitFor();
+        } catch (final IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

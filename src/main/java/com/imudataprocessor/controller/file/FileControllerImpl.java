@@ -1,9 +1,9 @@
-package com.imudataprocessor.controller;
+package com.imudataprocessor.controller.file;
 
-import com.imudataprocessor.api.controller.DataDTO;
-import com.imudataprocessor.api.controller.FileController;
-import com.imudataprocessor.api.service.InternalDataDTO;
-import com.imudataprocessor.api.service.OutputDataDTO;
+import com.imudataprocessor.api.controller.file.FileController;
+import com.imudataprocessor.api.dto.internal.InternalDataDTO;
+import com.imudataprocessor.api.dto.out.processedtest.OutputDataDTO;
+import com.imudataprocessor.api.dto.out.test.DataDTO;
 import com.imudataprocessor.api.service.ProcessDataService;
 import com.imudataprocessor.model.mapper.DataDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +57,8 @@ public class FileControllerImpl implements FileController {
     @PostMapping("/process-test")
     public ResponseEntity<OutputDataDTO> processFile(final @RequestParam("testTypeName") String testTypeName,
                                                      final @RequestParam("fileName") String fileName) throws IOException {
-        final OutputDataDTO internalDataDTO = this.processDataServiceImpl.processDataTest(testTypeName, fileName);
-        return ResponseEntity.ok(internalDataDTO);
+        final OutputDataDTO outputDataDTO = this.processDataServiceImpl.processDataTest(testTypeName, fileName);
+        return ResponseEntity.ok(outputDataDTO);
     }
 
     @Override

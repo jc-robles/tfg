@@ -1,4 +1,4 @@
-package com.imudataprocessor.api.controller;
+package com.imudataprocessor.api.controller.home;
 
 import org.springframework.ui.Model;
 

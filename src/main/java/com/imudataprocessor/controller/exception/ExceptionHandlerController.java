@@ -1,4 +1,4 @@
-package com.imudataprocessor.controller;
+package com.imudataprocessor.controller.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

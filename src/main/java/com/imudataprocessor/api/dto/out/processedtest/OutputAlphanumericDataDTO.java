@@ -1,4 +1,4 @@
-package com.imudataprocessor.api.service;
+package com.imudataprocessor.api.dto.out.processedtest;
 
 import lombok.Data;
 

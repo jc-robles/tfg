@@ -1,4 +1,4 @@
-package com.imudataprocessor.api.controller.createtest;
+package com.imudataprocessor.api.dto.out.createtest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

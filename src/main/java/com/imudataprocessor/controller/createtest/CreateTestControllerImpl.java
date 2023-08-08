@@ -1,10 +1,10 @@
-package com.imudataprocessor.controller;
+package com.imudataprocessor.controller.createtest;
 
 import com.imudataprocessor.api.configuration.GroupingItemConfiguration;
 import com.imudataprocessor.api.configuration.TestGropingConfiguration;
 import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
 import com.imudataprocessor.api.controller.createtest.CreateTestController;
-import com.imudataprocessor.api.controller.createtest.CreateTestDTO;
+import com.imudataprocessor.api.dto.out.createtest.CreateTestDTO;
 import com.imudataprocessor.api.service.ExternalProcess;
 import com.imudataprocessor.api.service.JsonService;
 import com.imudataprocessor.api.service.TestGroupingService;

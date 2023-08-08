@@ -1,6 +1,8 @@
 package com.imudataprocessor.api.service;
 
 import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
+import com.imudataprocessor.api.dto.internal.InternalDataDTO;
+import com.imudataprocessor.api.dto.out.processedtest.OutputDataDTO;
 
 import java.io.File;
 import java.io.IOException;

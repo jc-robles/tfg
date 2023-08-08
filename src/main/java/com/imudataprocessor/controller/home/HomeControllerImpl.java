@@ -1,6 +1,6 @@
-package com.imudataprocessor.controller;
+package com.imudataprocessor.controller.home;
 
-import com.imudataprocessor.api.controller.HomeController;
+import com.imudataprocessor.api.controller.home.HomeController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

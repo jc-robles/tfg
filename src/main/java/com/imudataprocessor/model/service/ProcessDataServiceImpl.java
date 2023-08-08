@@ -1,7 +1,11 @@
 package com.imudataprocessor.model.service;
 
 import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
-import com.imudataprocessor.api.service.*;
+import com.imudataprocessor.api.dto.internal.InternalDataDTO;
+import com.imudataprocessor.api.dto.out.processedtest.OutputDataDTO;
+import com.imudataprocessor.api.service.ExternalProcess;
+import com.imudataprocessor.api.service.FileService;
+import com.imudataprocessor.api.service.ProcessDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

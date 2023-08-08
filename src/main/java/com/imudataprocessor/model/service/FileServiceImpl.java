@@ -1,31 +1,42 @@
 package com.imudataprocessor.model.service;
 
 import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
-import com.imudataprocessor.api.controller.createtest.DataTypeEnum;
-import com.imudataprocessor.api.service.*;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
+import com.imudataprocessor.api.dto.internal.InternalDataDTO;
+import com.imudataprocessor.api.dto.out.processedtest.OutputDataDTO;
+import com.imudataprocessor.api.service.FileService;
+import com.imudataprocessor.api.service.JsonService;
+import com.imudataprocessor.model.mapper.CSVWriterDataMapper;
+import com.imudataprocessor.model.mapper.InternalDataDTOMapper;
+import com.imudataprocessor.model.mapper.OutputDataDTOMapper;
 import com.opencsv.CSVWriter;
-import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.IntStream;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class FileServiceImpl implements FileService {
 
     @Autowired
     private JsonService jsonService;
+
+    @Autowired
+    private OutputDataDTOMapper outputDataDTOMapper;
+
+    @Autowired
+    private InternalDataDTOMapper internalDataDTOMapper;
+
+    @Autowired
+    private CSVWriterDataMapper csvWriterDataMapper;
 
     @Value("${test_extension}")
     private String testExtension;
@@ -44,6 +55,9 @@ public class FileServiceImpl implements FileService {
 
     @Value("${origin-file-path}")
     private String originFilePath;
+
+    @Value("${separator}")
+    private char separator;
 
     @Override
     public void save(final String path, final String fileName, final byte[] bytes) throws IOException {
@@ -101,62 +115,13 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public OutputDataDTO obtainDataToFileProcessed(final Optional<ProgramConfiguration> programConfiguration, final @NonNull String filePath) throws IOException {
-        final Map<String, Object> map = (Map<String, Object>) this.jsonService.readFile(this.testsProcessedPath + "/" + filePath + ".json", Map.class);
-        return programConfiguration.map(programConfiguration1 -> {
-            final List<OutputAlphanumericDataDTO> dataResultConfigurationAlphanumeric = programConfiguration1.getDataResult().stream()
-                    .filter(dataResultConfiguration1 -> ObjectUtils.nullSafeEquals(dataResultConfiguration1.getDataType(), DataTypeEnum.ALPHANUMERIC.name()))
-                    .map(dataResultConfiguration -> {
-                        final Object o = map.get(dataResultConfiguration.getNameField());
-                        final OutputAlphanumericDataDTO dataDTO1 = new OutputAlphanumericDataDTO();
-                        dataDTO1.setName(dataResultConfiguration.getNameField());
-                        dataDTO1.setValue(String.valueOf(o));
-                        return dataDTO1;
-                    }).toList();
-            final List<OutputArrayDataDTO> dataResultConfigurationDataArray = programConfiguration1.getDataResult().stream()
-                    .filter(dataResultConfiguration1 -> ObjectUtils.nullSafeEquals(dataResultConfiguration1.getDataType(), DataTypeEnum.DATA_ARRAY.name()))
-                    .map(dataResultConfiguration -> {
-                        final List<Double> dataList = (List<Double>) map.get(dataResultConfiguration.getNameField());
-                        final OutputArrayDataDTO dataDTO1 = new OutputArrayDataDTO();
-                        dataDTO1.setName(dataResultConfiguration.getNameField());
-                        dataDTO1.setValue(dataList.stream().map(Double::floatValue).toList());
-                        dataDTO1.setGroup(dataResultConfiguration.getGroupData());
-                        return dataDTO1;
-                    }).toList();
-
-            final OutputDataDTO dataDTO2 = new OutputDataDTO();
-            dataDTO2.setAlphanumericDataList(dataResultConfigurationAlphanumeric);
-            dataDTO2.setArrayDataList(dataResultConfigurationDataArray);
-            return dataDTO2;
-        }).orElse(new OutputDataDTO());
+        final Map<String, Object> data = (Map<String, Object>) this.jsonService.readFile(this.testsProcessedPath + "/" + filePath + ".json", Map.class);
+        return this.outputDataDTOMapper.map(programConfiguration, data);
     }
 
     private InternalDataDTO obtainCompleteDataToFile(final @NonNull String filePath) throws IOException {
         final Optional<File> file = Files.walk(Paths.get(filePath)).filter(Files::isRegularFile).map(Path::toFile).findFirst();
-
-        final InternalDataDTO internalDataDTO = new InternalDataDTO();
-        if (file.isPresent()) {
-            try (final CSVReader csvReader = new CSVReaderBuilder(new FileReader(file.get())).withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()) {
-                String[] values;
-                while ((values = csvReader.readNext()) != null) {
-                    if (values.length > 1) {
-                        internalDataDTO.addTimestamp(values[0]);
-                        internalDataDTO.addAccelerometerX(values[1]);
-                        internalDataDTO.addAccelerometerY(values[2]);
-                        internalDataDTO.addAccelerometerZ(values[3]);
-                        internalDataDTO.addGyroscopeX(values[4]);
-                        internalDataDTO.addGyroscopeY(values[5]);
-                        internalDataDTO.addGyroscopeZ(values[6]);
-                        internalDataDTO.addQuaternionW(values[7]);
-                        internalDataDTO.addQuaternionX(values[8]);
-                        internalDataDTO.addQuaternionY(values[9]);
-                        internalDataDTO.addQuaternionZ(values[10]);
-                    }
-                }
-            } catch (final IOException | CsvValidationException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return internalDataDTO;
+        return file.map(this.internalDataDTOMapper::map).orElse(new InternalDataDTO());
     }
 
     private InternalDataDTO splitData(final InternalDataDTO internalDataDTO, final Integer start, final Integer end) {
@@ -200,27 +165,12 @@ public class FileServiceImpl implements FileService {
     }
 
     private File saveToCsv(final InternalDataDTO dataObtained, final String fileName) throws IOException {
-        final List<String[]> data = new ArrayList<>();
-        IntStream.rangeClosed(0, dataObtained.getTimestamp().size() - 1).forEach(value ->
-                data.add(new String[]{
-                        dataObtained.getTimestamp().get(value),
-                        dataObtained.getAccelerometerX().get(value),
-                        dataObtained.getAccelerometerY().get(value),
-                        dataObtained.getAccelerometerZ().get(value),
-                        dataObtained.getGyroscopeX().get(value),
-                        dataObtained.getGyroscopeY().get(value),
-                        dataObtained.getGyroscopeZ().get(value),
-                        dataObtained.getQuaternionW().get(value),
-                        dataObtained.getQuaternionX().get(value),
-                        dataObtained.getQuaternionY().get(value),
-                        dataObtained.getQuaternionZ().get(value)})
-        );
-
+        final List<String[]> data = this.csvWriterDataMapper.map(dataObtained);
         final File file = this.createFile(this.splitTestsNotProcessedPath, fileName + this.testExtension);
         file.createNewFile();
         try {
             final FileWriter outputFile = new FileWriter(file);
-            final CSVWriter writer = new CSVWriter(outputFile, ';', '"', '"', "\n");
+            final CSVWriter writer = new CSVWriter(outputFile, this.separator, '"', '"', "\n");
             writer.writeAll(data);
             writer.close();
         } catch (final IOException e) {

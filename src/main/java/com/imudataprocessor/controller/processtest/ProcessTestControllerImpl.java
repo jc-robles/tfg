@@ -1,8 +1,8 @@
-package com.imudataprocessor.controller;
+package com.imudataprocessor.controller.processtest;
 
 import com.imudataprocessor.api.configuration.pyrhonprogram.DataResultConfiguration;
 import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
-import com.imudataprocessor.api.controller.TestController;
+import com.imudataprocessor.api.controller.processtest.ProcessTestController;
 import com.imudataprocessor.api.service.ExternalProcess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Controller
-public class TestControllerImpl implements TestController {
+public class ProcessTestControllerImpl implements ProcessTestController {
 
     @Autowired
     private ExternalProcess externalProcess;

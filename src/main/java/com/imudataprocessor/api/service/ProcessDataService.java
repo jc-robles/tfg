@@ -1,5 +1,7 @@
 package com.imudataprocessor.api.service;
 
+import com.imudataprocessor.api.dto.internal.InternalDataDTO;
+import com.imudataprocessor.api.dto.out.processedtest.OutputDataDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

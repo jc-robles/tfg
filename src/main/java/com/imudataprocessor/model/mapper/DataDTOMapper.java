@@ -1,7 +1,7 @@
 package com.imudataprocessor.model.mapper;
 
-import com.imudataprocessor.api.controller.DataDTO;
-import com.imudataprocessor.api.service.InternalDataDTO;
+import com.imudataprocessor.api.dto.internal.InternalDataDTO;
+import com.imudataprocessor.api.dto.out.test.DataDTO;
 import org.mapstruct.Mapper;
 
 import java.util.Objects;

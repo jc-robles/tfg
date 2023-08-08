@@ -1,7 +1,7 @@
 package com.imudataprocessor.model.mapper;
 
 import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
-import com.imudataprocessor.api.controller.createtest.CreateTestDTO;
+import com.imudataprocessor.api.dto.out.createtest.CreateTestDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
