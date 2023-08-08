@@ -69,11 +69,15 @@ public class TestTypeServiceImpl implements TestTypeService {
     public void removeTestType(final String testType) throws IOException {
         final PythonProgramConfiguration pythonProgramConfiguration =
                 (PythonProgramConfiguration) this.jsonService.readFile(this.pythonProgramConfigurationPath, PythonProgramConfiguration.class);
-        pythonProgramConfiguration.getProgramConfigurations().stream()
+        final Optional<ProgramConfiguration> programConfigurationOptional = pythonProgramConfiguration.getProgramConfigurations().stream()
                 .filter(programConfiguration -> ObjectUtils.nullSafeEquals(programConfiguration.getNameTest(), testType))
-                .findFirst()
-                .ifPresent(programConfiguration -> pythonProgramConfiguration.getProgramConfigurations().remove(programConfiguration));
-        this.jsonService.saveFile(this.pythonProgramConfigurationPath, pythonProgramConfiguration);
+                .findFirst();
+
+        if (programConfigurationOptional.isPresent()) {
+            pythonProgramConfiguration.getProgramConfigurations().remove(programConfigurationOptional.get());
+            this.jsonService.saveFile(this.pythonProgramConfigurationPath, pythonProgramConfiguration);
+            this.fileService.deleteTestType(programConfigurationOptional.get().getNameFile());
+        }
     }
 
 }

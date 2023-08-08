@@ -18,11 +18,11 @@ public interface FileService {
 
     InternalDataDTO getDataFromTest(String nameTest) throws IOException;
 
-    InternalDataDTO getDataFromProcessedTest(String nameTest) throws IOException;
-
     OutputDataDTO obtainDataToFileProcessed(Optional<ProgramConfiguration> programConfiguration, String nameTest) throws IOException;
 
     void deleteTest(String nameTest) throws IOException;
+
+    void deleteTestType(final String nameTestType) throws IOException;
 
     void deleteAllTest() throws IOException;
 

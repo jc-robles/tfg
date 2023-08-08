@@ -319,3 +319,22 @@ function callGenerateMainTest() {
         async: false
     });
 }
+
+function getAllTestType() {
+    $.ajax({
+        url: '/test-type/all-test-type',
+        type: 'GET',
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            $('#removeTestTypeSelectId').find('option').remove()
+            data.forEach((element, index, array) => {
+            if (index==0) {
+                $("#removeTestTypeSelectId").append('<option value="' + element + '" selected>' + element + '</option>');
+            } else {
+                $("#removeTestTypeSelectId").append('<option value="' + element + '">' + element + '</option>');
+            }
+            });
+        }
+    });
+}

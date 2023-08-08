@@ -50,6 +50,9 @@ public class FileServiceImpl implements FileService {
     @Value("${split-tests-not-processed-path}")
     private String splitTestsNotProcessedPath;
 
+    @Value("${file-python-program}")
+    private String filePythonProgram;
+
     @Value("${tests-processed-path}")
     private String testsProcessedPath;
 
@@ -95,6 +98,11 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteTest(final String nameTest) throws IOException {
         Files.deleteIfExists(Paths.get(this.splitTestsNotProcessedPath + "/" + nameTest + this.testExtension));
+    }
+
+    @Override
+    public void deleteTestType(final String nameTestType) throws IOException {
+        Files.deleteIfExists(Paths.get(this.filePythonProgram + "/" + nameTestType));
     }
 
     @Override

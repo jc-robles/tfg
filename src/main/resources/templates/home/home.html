@@ -23,24 +23,7 @@
                     $("#groupingRow").append(data);
                 }
             });
-
-            $.ajax({
-                url: '/test-type/all-test-type',
-                type: 'GET',
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    data.forEach((element, index, array) => {
-                    if (index==0) {
-                        $("#removeTestTypeSelectId").append('<option value="' + element + '" selected>' + element + '</option>');
-                    } else {
-                        $("#removeTestTypeSelectId").append('<option value="' + element + '">' + element + '</option>');
-                    }
-                    });
-                }
-            });
         }
-
     </script>
 
 </head>
@@ -60,7 +43,7 @@
                     <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
                        data-bs-target="#exampleModalFullscreen" href="#">Create test type</a>
                     <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
-                       data-bs-target="#deleteTestTypeModal" href="#">Delete test type</a>
+                       data-bs-target="#deleteTestTypeModal" href="#" onclick="getAllTestType()">Delete test type</a>
                 </div>
             </div>
         </div>
