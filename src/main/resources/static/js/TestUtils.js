@@ -302,7 +302,7 @@ function generateMainTest() {
             newGraphic('gyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ]);
             newGraphic('quaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ]);
 
-            $('#createTestFileInput').val("")
+            $('#uploadTestFileInput').val("")
         }
     });
 }
