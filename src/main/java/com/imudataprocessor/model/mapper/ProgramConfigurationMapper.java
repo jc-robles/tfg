@@ -5,7 +5,7 @@ import com.imudataprocessor.api.controller.createtest.CreateTestDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel="spring", uses = {DataResultConfigurationMapper.class})
+@Mapper(componentModel = "spring", uses = {DataResultConfigurationMapper.class})
 public interface ProgramConfigurationMapper {
 
     @Mapping(target = "nameTest", source = "nameTest")

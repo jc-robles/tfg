@@ -1,11 +1,7 @@
 package com.imudataprocessor.api.configuration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Getter
 @Setter

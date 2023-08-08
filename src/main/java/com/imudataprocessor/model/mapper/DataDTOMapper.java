@@ -6,18 +6,18 @@ import org.mapstruct.Mapper;
 
 import java.util.Objects;
 
-@Mapper(componentModel="spring")
+@Mapper(componentModel = "spring")
 public interface DataDTOMapper {
 
     DataDTO map(final InternalDataDTO dataDTO);
 
-    default Float map(String s) {
-        if (Objects.isNull(s)){
+    default Float map(final String s) {
+        if (Objects.isNull(s)) {
             return null;
         }
         try {
             return Float.valueOf(s.replace(",", "."));
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             return null;
         }
     }

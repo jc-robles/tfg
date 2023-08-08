@@ -17,7 +17,7 @@ public class JsonServiceImpl implements JsonService {
     private String groupingConfigurationFile;
 
     @Override
-    public Object convertToObject(String json, Class<?> eClass) throws IOException {
+    public Object convertToObject(final String json, final Class<?> eClass) throws IOException {
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.fromJson(json, eClass);
     }
@@ -31,7 +31,7 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public void saveFile(final String path, final Object object) throws IOException {
         final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        FileWriter myWriter = new FileWriter(path);
+        final FileWriter myWriter = new FileWriter(path);
         myWriter.write(gson.toJson(object));
         myWriter.close();
     }

@@ -40,18 +40,18 @@ public class CreateTestControllerImpl implements CreateTestController {
     @Override
     @PostMapping("/create-test")
     public ResponseEntity<HttpStatus> createTest(final Model model, final @RequestParam("createTest") String createTest,
-                                                 @RequestParam("fileTest") MultipartFile fileTest) throws IOException {
-        CreateTestDTO createTestDTO = (CreateTestDTO) jsonService.convertToObject(createTest, CreateTestDTO.class);
-        ProgramConfiguration programConfiguration = programConfigurationMapper.map(createTestDTO);
+                                                 @RequestParam("fileTest") final MultipartFile fileTest) throws IOException {
+        final CreateTestDTO createTestDTO = (CreateTestDTO) this.jsonService.convertToObject(createTest, CreateTestDTO.class);
+        final ProgramConfiguration programConfiguration = this.programConfigurationMapper.map(createTestDTO);
         programConfiguration.setNameFile(fileTest.getOriginalFilename());
-        externalProcess.createNewProgramToExecute(programConfiguration, fileTest.getBytes());
+        this.externalProcess.createNewProgramToExecute(programConfiguration, fileTest.getBytes());
         return ResponseEntity.ok().build();
     }
 
     @Override
     @GetMapping("/create-test/add-output-data")
     public String addOutputData(final Model model, final @RequestParam("dataName") String dataName) throws IOException {
-        final TestGropingConfiguration testGropingConfiguration = testGroupingService.getAllGrouping();
+        final TestGropingConfiguration testGropingConfiguration = this.testGroupingService.getAllGrouping();
 
         final String dataNameFormatted = dataName.replace(" ", "_");
         model.addAttribute("dataName", dataName);
@@ -67,23 +67,23 @@ public class CreateTestControllerImpl implements CreateTestController {
     @Override
     @GetMapping("/create-test/add-grouping")
     public String addGrouping(final Model model, final @RequestParam("groupingName") String groupingName) throws IOException {
-        GroupingItemConfiguration groupingItemConfiguration = testGroupingService.addGrouping(groupingName);
+        final GroupingItemConfiguration groupingItemConfiguration = this.testGroupingService.addGrouping(groupingName);
         model.addAttribute("allGrouping", Collections.singletonList(groupingItemConfiguration));
         return "test/create/add_grouping";
     }
 
     @Override
     @GetMapping("/create-test/all-grouping")
-    public String getAllGrouping(Model model) throws IOException {
-        final TestGropingConfiguration testGropingConfiguration = testGroupingService.getAllGrouping();
+    public String getAllGrouping(final Model model) throws IOException {
+        final TestGropingConfiguration testGropingConfiguration = this.testGroupingService.getAllGrouping();
         model.addAttribute("allGrouping", testGropingConfiguration.getSelect());
         return "test/create/add_grouping";
     }
 
     @Override
     @GetMapping("/create-test/remove-grouping")
-    public ResponseEntity<HttpStatus> removeGrouping(Model model, final @RequestParam("groupingId") String groupingId) throws IOException {
-        testGroupingService.removeGrouping(groupingId);
+    public ResponseEntity<HttpStatus> removeGrouping(final Model model, final @RequestParam("groupingId") String groupingId) throws IOException {
+        this.testGroupingService.removeGrouping(groupingId);
         return ResponseEntity.ok().build();
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeControllerImpl implements HomeController {
 
+    @Override
     @GetMapping("/")
     public String home(final Model theModel) {
         return "home/home";

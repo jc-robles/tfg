@@ -23,13 +23,13 @@ public class ProcessDataServiceImpl implements ProcessDataService {
     private String mainFilePath;
 
     @Override
-    public InternalDataDTO processMainTest(final MultipartFile multipartFile)  throws IOException {
+    public InternalDataDTO processMainTest(final MultipartFile multipartFile) throws IOException {
         this.fileService.save(this.mainFilePath, multipartFile.getOriginalFilename(), multipartFile.getBytes());
         return this.fileService.getDataFromMainFile();
     }
 
     @Override
-    public InternalDataDTO processSplitTest(final String fileName, final Integer start, final Integer end)  throws IOException {
+    public InternalDataDTO processSplitTest(final String fileName, final Integer start, final Integer end) throws IOException {
         this.fileService.split(fileName, start, end);
         return this.fileService.getDataFromTest(fileName);
     }
@@ -47,7 +47,7 @@ public class ProcessDataServiceImpl implements ProcessDataService {
     @Override
     public OutputDataDTO processDataTest(final String testTypeName, final String nameTest) throws IOException {
         this.externalProcess.execute(testTypeName, nameTest);
-        Optional<ProgramConfiguration> programConfiguration = this.externalProcess.findByTestName(testTypeName);
+        final Optional<ProgramConfiguration> programConfiguration = this.externalProcess.findByTestName(testTypeName);
         return this.fileService.obtainDataToFileProcessed(programConfiguration, nameTest);
     }
 

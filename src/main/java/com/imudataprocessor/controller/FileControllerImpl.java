@@ -40,23 +40,23 @@ public class FileControllerImpl implements FileController {
     @Override
     @PostMapping("/upload-file")
     public ResponseEntity<DataDTO> uploadFile(final @RequestParam("file") MultipartFile multipartFile,
-            final Model model) throws IOException {
+                                              final Model model) throws IOException {
         final InternalDataDTO internalDataDTO = this.processDataServiceImpl.processMainTest(multipartFile);
-        return ResponseEntity.ok(dataDTOMapper.map(internalDataDTO));
+        return ResponseEntity.ok(this.dataDTOMapper.map(internalDataDTO));
     }
 
     @Override
     @PostMapping("/split-file")
     public ResponseEntity<DataDTO> splitFile(final @RequestParam("fileName") String fileName,
-            final @RequestParam("start") Integer start, final @RequestParam("end") Integer end) throws IOException {
+                                             final @RequestParam("start") Integer start, final @RequestParam("end") Integer end) throws IOException {
         final InternalDataDTO internalDataDTO = this.processDataServiceImpl.processSplitTest(fileName, start, end);
-        return ResponseEntity.ok(dataDTOMapper.map(internalDataDTO));
+        return ResponseEntity.ok(this.dataDTOMapper.map(internalDataDTO));
     }
 
     @Override
     @PostMapping("/process-test")
     public ResponseEntity<OutputDataDTO> processFile(final @RequestParam("testTypeName") String testTypeName,
-                                               final @RequestParam("fileName") String fileName) throws IOException {
+                                                     final @RequestParam("fileName") String fileName) throws IOException {
         final OutputDataDTO internalDataDTO = this.processDataServiceImpl.processDataTest(testTypeName, fileName);
         return ResponseEntity.ok(internalDataDTO);
     }
@@ -78,8 +78,8 @@ public class FileControllerImpl implements FileController {
     @Override
     @GetMapping("/download-processed-test")
     public ResponseEntity<FileSystemResource> downloadProcessedTest(final @RequestParam("nameTest") String nameTest) {
-        String pathFile = this.testsProcessedPath + "/" + nameTest + ".json";
-        HttpHeaders headers = new HttpHeaders();
+        final String pathFile = this.testsProcessedPath + "/" + nameTest + ".json";
+        final HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + nameTest + ".json");
         return ResponseEntity.ok().headers(headers).body(new FileSystemResource(pathFile));
     }
@@ -87,8 +87,8 @@ public class FileControllerImpl implements FileController {
     @Override
     @GetMapping("/download-raw-test")
     public ResponseEntity<FileSystemResource> downloadRawTest(final @RequestParam("nameTest") String nameTest) {
-        String pathFile = this.splitTestsNotProcessedPath + "/" + nameTest + ".csv";
-        HttpHeaders headers = new HttpHeaders();
+        final String pathFile = this.splitTestsNotProcessedPath + "/" + nameTest + ".csv";
+        final HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + nameTest + ".csv");
         return ResponseEntity.ok().headers(headers).body(new FileSystemResource(pathFile));
     }

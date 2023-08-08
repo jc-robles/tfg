@@ -4,6 +4,6 @@ public enum DataTypeEnum {
 
     ALPHANUMERIC,
 
-    DATA_ARRAY;
+    DATA_ARRAY
 
 }

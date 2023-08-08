@@ -29,7 +29,7 @@ public class TestGroupingServiceImpl implements TestGroupingService {
 
     @Override
     public GroupingItemConfiguration addGrouping(final String name) throws IOException {
-        TestGropingConfiguration testGropingConfiguration =
+        final TestGropingConfiguration testGropingConfiguration =
                 (TestGropingConfiguration) this.jsonService.readFile(this.groupingConfigurationFile, TestGropingConfiguration.class);
         if (Objects.isNull(testGropingConfiguration.getSelect())) {
             testGropingConfiguration.setSelect(new ArrayList<>());
@@ -42,8 +42,8 @@ public class TestGroupingServiceImpl implements TestGroupingService {
     }
 
     @Override
-    public void removeGrouping(String groupingId) throws IOException {
-        TestGropingConfiguration testGropingConfiguration =
+    public void removeGrouping(final String groupingId) throws IOException {
+        final TestGropingConfiguration testGropingConfiguration =
                 (TestGropingConfiguration) this.jsonService.readFile(this.groupingConfigurationFile, TestGropingConfiguration.class);
         if (Objects.nonNull(testGropingConfiguration.getSelect())) {
             testGropingConfiguration.getSelect().stream()

@@ -50,15 +50,15 @@ public class FileServiceImpl implements FileService {
         final File file = this.createFile(path, fileName);
         try (final OutputStream os = new FileOutputStream(file)) {
             os.write(bytes);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public File split(final String fileName, final Integer start, final Integer end) throws IOException {
-        final InternalDataDTO dataObtained =  this.obtainCompleteDataToFile(this.mainFilePath);
-        final InternalDataDTO splitData =  this.splitData(dataObtained, start, end);
+        final InternalDataDTO dataObtained = this.obtainCompleteDataToFile(this.mainFilePath);
+        final InternalDataDTO splitData = this.splitData(dataObtained, start, end);
         return this.saveToCsv(splitData, fileName);
     }
 
@@ -84,25 +84,26 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void deleteAllTest() throws IOException  {
-        Files.walk(Paths.get(originFilePath)).forEach(path -> {
+    public void deleteAllTest() throws IOException {
+        Files.walk(Paths.get(this.originFilePath)).forEach(path -> {
             try {
                 Files.deleteIfExists(path);
-            } catch (IOException e) {
+            } catch (final IOException e) {
             }
         });
     }
 
     private InternalDataDTO obtainDataToFile(final @NonNull String filePath) throws IOException {
-        final InternalDataDTO dataDTO = obtainCompleteDataToFile(filePath);
+        final InternalDataDTO dataDTO = this.obtainCompleteDataToFile(filePath);
         this.deleteHeaders(dataDTO);
         return dataDTO;
     }
 
+    @Override
     public OutputDataDTO obtainDataToFileProcessed(final Optional<ProgramConfiguration> programConfiguration, final @NonNull String filePath) throws IOException {
-        Map<String, Object> map = (Map<String, Object>) jsonService.readFile(testsProcessedPath + "/" + filePath + ".json", Map.class);
+        final Map<String, Object> map = (Map<String, Object>) this.jsonService.readFile(this.testsProcessedPath + "/" + filePath + ".json", Map.class);
         return programConfiguration.map(programConfiguration1 -> {
-            List<OutputAlphanumericDataDTO> dataResultConfigurationAlphanumeric = programConfiguration1.getDataResult().stream()
+            final List<OutputAlphanumericDataDTO> dataResultConfigurationAlphanumeric = programConfiguration1.getDataResult().stream()
                     .filter(dataResultConfiguration1 -> ObjectUtils.nullSafeEquals(dataResultConfiguration1.getDataType(), DataTypeEnum.ALPHANUMERIC.name()))
                     .map(dataResultConfiguration -> {
                         final Object o = map.get(dataResultConfiguration.getNameField());
@@ -111,7 +112,7 @@ public class FileServiceImpl implements FileService {
                         dataDTO1.setValue(String.valueOf(o));
                         return dataDTO1;
                     }).toList();
-            List<OutputArrayDataDTO> dataResultConfigurationDataArray = programConfiguration1.getDataResult().stream()
+            final List<OutputArrayDataDTO> dataResultConfigurationDataArray = programConfiguration1.getDataResult().stream()
                     .filter(dataResultConfiguration1 -> ObjectUtils.nullSafeEquals(dataResultConfiguration1.getDataType(), DataTypeEnum.DATA_ARRAY.name()))
                     .map(dataResultConfiguration -> {
                         final List<Double> dataList = (List<Double>) map.get(dataResultConfiguration.getNameField());
@@ -130,11 +131,11 @@ public class FileServiceImpl implements FileService {
     }
 
     private InternalDataDTO obtainCompleteDataToFile(final @NonNull String filePath) throws IOException {
-        final Optional<File> file = Files. walk(Paths.get(filePath)).filter(Files::isRegularFile).map(Path::toFile).findFirst();
+        final Optional<File> file = Files.walk(Paths.get(filePath)).filter(Files::isRegularFile).map(Path::toFile).findFirst();
 
         final InternalDataDTO internalDataDTO = new InternalDataDTO();
         if (file.isPresent()) {
-            try (CSVReader csvReader = new CSVReaderBuilder(new FileReader(file.get())).withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()) {
+            try (final CSVReader csvReader = new CSVReaderBuilder(new FileReader(file.get())).withCSVParser(new CSVParserBuilder().withSeparator(';').build()).build()) {
                 String[] values;
                 while ((values = csvReader.readNext()) != null) {
                     if (values.length > 1) {
@@ -151,7 +152,7 @@ public class FileServiceImpl implements FileService {
                         internalDataDTO.addQuaternionZ(values[10]);
                     }
                 }
-            } catch (IOException | CsvValidationException e) {
+            } catch (final IOException | CsvValidationException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -161,7 +162,7 @@ public class FileServiceImpl implements FileService {
     private InternalDataDTO splitData(final InternalDataDTO internalDataDTO, final Integer start, final Integer end) {
         final int fileStart = Objects.isNull(start) ? 0 : start;
         final int fileEnd = Objects.isNull(end) ? internalDataDTO.getAccelerometerX().size() : end + 2;
-        InternalDataDTO internalDataSplit = new InternalDataDTO();
+        final InternalDataDTO internalDataSplit = new InternalDataDTO();
         internalDataSplit.setTimestamp(internalDataDTO.getTimestamp().subList(fileStart, fileEnd));
         internalDataSplit.setAccelerometerX(internalDataDTO.getAccelerometerX().subList(fileStart, fileEnd));
         internalDataSplit.setAccelerometerY(internalDataDTO.getAccelerometerY().subList(fileStart, fileEnd));
@@ -201,18 +202,18 @@ public class FileServiceImpl implements FileService {
     private File saveToCsv(final InternalDataDTO dataObtained, final String fileName) throws IOException {
         final List<String[]> data = new ArrayList<>();
         IntStream.rangeClosed(0, dataObtained.getTimestamp().size() - 1).forEach(value ->
-            data.add(new String[] {
-                dataObtained.getTimestamp().get(value),
-                dataObtained.getAccelerometerX().get(value),
-                dataObtained.getAccelerometerY().get(value),
-                dataObtained.getAccelerometerZ().get(value),
-                dataObtained.getGyroscopeX().get(value),
-                dataObtained.getGyroscopeY().get(value),
-                dataObtained.getGyroscopeZ().get(value),
-                dataObtained.getQuaternionW().get(value),
-                dataObtained.getQuaternionX().get(value),
-                dataObtained.getQuaternionY().get(value),
-                dataObtained.getQuaternionZ().get(value)})
+                data.add(new String[]{
+                        dataObtained.getTimestamp().get(value),
+                        dataObtained.getAccelerometerX().get(value),
+                        dataObtained.getAccelerometerY().get(value),
+                        dataObtained.getAccelerometerZ().get(value),
+                        dataObtained.getGyroscopeX().get(value),
+                        dataObtained.getGyroscopeY().get(value),
+                        dataObtained.getGyroscopeZ().get(value),
+                        dataObtained.getQuaternionW().get(value),
+                        dataObtained.getQuaternionX().get(value),
+                        dataObtained.getQuaternionY().get(value),
+                        dataObtained.getQuaternionZ().get(value)})
         );
 
         final File file = this.createFile(this.splitTestsNotProcessedPath, fileName + this.testExtension);
@@ -222,7 +223,7 @@ public class FileServiceImpl implements FileService {
             final CSVWriter writer = new CSVWriter(outputFile, ';', '"', '"', "\n");
             writer.writeAll(data);
             writer.close();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         return file;

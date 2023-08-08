@@ -22,23 +22,26 @@ public class TestControllerImpl implements TestController {
     @Autowired
     private ExternalProcess externalProcess;
 
+    @Override
     @GetMapping("/generate-main-test")
     public String generateMainTest(final Model model) {
         return "test/main/main_test";
     }
 
+    @Override
     @GetMapping("/generate-split-test")
     public String generateSplitTest(final Model model, final @RequestParam("idTest") String idTest) throws IOException {
-        final List<String> nameTests = externalProcess.getAllNameTest();
+        final List<String> nameTests = this.externalProcess.getAllNameTest();
         model.addAttribute("nameTests", nameTests);
         this.setValues(model, idTest);
         return "test/split/split_test";
     }
 
+    @Override
     @GetMapping("/generate-process-test")
     public String processTest(final Model model, final @RequestParam("idTest") String idTest, final @RequestParam("testTypeName") String testTypeName) throws IOException {
-        Optional<ProgramConfiguration> programConfiguration = this.externalProcess.findByTestName(testTypeName);
-        List<String> groupDataList = programConfiguration
+        final Optional<ProgramConfiguration> programConfiguration = this.externalProcess.findByTestName(testTypeName);
+        final List<String> groupDataList = programConfiguration
                 .map(programConfiguration1 -> programConfiguration1.getDataResult().stream()
                         .map(DataResultConfiguration::getGroupData)
                         .filter(Objects::nonNull)
