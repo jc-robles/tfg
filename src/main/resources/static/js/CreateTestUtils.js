@@ -175,7 +175,7 @@ function deleteTestType() {
         processData: false,
         contentType: false,
         success: function(data) {
-            $("closeDeleteTestTypeModal").click()
+            $("#closeDeleteTestTypeModal").click()
             $("#removeTestTypeSelectId option[value='" + testType + "']").each(function() {
                 $(this).remove();
             });

@@ -24,6 +24,7 @@
                 }
             });
         }
+
     </script>
 
 </head>
@@ -48,6 +49,30 @@
             </div>
         </div>
     </nav>
+</div>
+
+<div class="px-4 pt-5 my-5 text-center">
+    <h1 class="display-4 fw-bold text-body-emphasis">welcome to data processing program</h1>
+    <div class="col-lg-6 mx-auto">
+        <div class="lead mb-4 d-inline-flex text-start">
+            <ul>
+                <li>Click on Upload file test button to add a data set to process</li>
+                <li>Click on Create test type button to add a new type of test</li>
+                <li>Click on Delete test type button to delete an existing test type</li>
+            </ul>
+        </div>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+            <button type="button" class="btn btn-dark btn-lg px-4 me-sm-3" data-bs-toggle="modal"
+                    data-bs-target="#uploadTestModal">Upload file test
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalFullscreen">Create test type
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-lg px-4" data-bs-toggle="modal"
+                    data-bs-target="#deleteTestTypeModal" onclick="getAllTestType()">Delete test type
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Modal -->
