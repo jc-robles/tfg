@@ -17,7 +17,7 @@ function addOutputData() {
     if (!isError) {
         $('#outputData').val('');
         $.ajax({
-            url: '/create-test/add-output-data?dataName=' + outputDataValue,
+            url: '/test-type/add-output-data?dataName=' + outputDataValue,
             type: 'GET',
             processData: false,
             contentType: false,
@@ -32,7 +32,7 @@ function addGrouping() {
     let groupingValue = $('#grouping').val();
     $('#grouping').val('');
     $.ajax({
-        url: '/create-test/add-grouping?groupingName=' + groupingValue,
+        url: '/test-type/add-grouping?groupingName=' + groupingValue,
         type: 'GET',
         processData: false,
         contentType: false,
@@ -53,7 +53,7 @@ function deleteDataName(dataNameId) {
 
 function deleteGrouping(groupingId, groupingValue) {
     $.ajax({
-        url: '/create-test/remove-grouping?groupingId=' + groupingId,
+        url: '/test-type/remove-grouping?groupingId=' + groupingId,
         type: 'GET',
         processData: false,
         contentType: false,
@@ -154,7 +154,7 @@ function createTest() {
         console.log(JSON.stringify(CreateTestDTO))
 
         $.ajax({
-            url: '/create-test',
+            url: '/test-type/create',
             type: 'POST',
             data: formData,
             processData: false,
@@ -165,4 +165,24 @@ function createTest() {
             }
         });
     }
+}
+
+function deleteTestType() {
+    let testType = $("#removeTestTypeSelectId").val();
+    $.ajax({
+        url: '/test-type/delete?testType=' + testType,
+        type: 'DELETE',
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            $("closeDeleteTestTypeModal").click()
+            $("#removeTestTypeSelectId option[value='" + testType + "']").each(function() {
+                $(this).remove();
+            });
+
+            $("[id$='testTypeSelectId'] option[value='" + testType + "']").each(function() {
+                $(this).remove();
+            });
+        }
+    });
 }

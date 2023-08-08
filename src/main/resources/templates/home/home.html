@@ -1,5 +1,5 @@
 <!DOCTYPE  html>
-<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,7 @@
     <script>
         function init() {
             $.ajax({
-                url: '/create-test/all-grouping',
+                url: '/test-type/all-grouping',
                 type: 'GET',
                 processData: false,
                 contentType: false,
@@ -23,7 +23,24 @@
                     $("#groupingRow").append(data);
                 }
             });
+
+            $.ajax({
+                url: '/test-type/all-test-type',
+                type: 'GET',
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    data.forEach((element, index, array) => {
+                    if (index==0) {
+                        $("#removeTestTypeSelectId").append('<option value="' + element + '" selected>' + element + '</option>');
+                    } else {
+                        $("#removeTestTypeSelectId").append('<option value="' + element + '">' + element + '</option>');
+                    }
+                    });
+                }
+            });
         }
+
     </script>
 
 </head>
@@ -32,13 +49,18 @@
     <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">IMU Data Process</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#uploadTestModal" href="#">Upload file test</a>
-                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal" data-bs-target="#exampleModalFullscreen" href="#">Create test</a>
+                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
+                       data-bs-target="#uploadTestModal" href="#">Upload file test</a>
+                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
+                       data-bs-target="#exampleModalFullscreen" href="#">Create test type</a>
+                    <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
+                       data-bs-target="#deleteTestTypeModal" href="#">Delete test type</a>
                 </div>
             </div>
         </div>
@@ -46,34 +68,38 @@
 </div>
 
 <!-- Modal -->
-<!--<form method="post" enctype="multipart/form-data" id="formUploadFile">-->
-    <div class="modal fade" id="uploadTestModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="POST" enctype="multipart/form-data" action="/">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Select a CSV file</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="uploadTestModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" enctype="multipart/form-data" action="/">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Select a CSV file</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label for="uploadTestFileInput" class="form-label"></label>
+                        <input class="form-control form-control-lg" id="uploadTestFileInput" type="file" name="file"
+                               required>
+                        <div class="invalid-feedback">File is required</div>
                     </div>
-                    <div class="modal-body">
-                        <div>
-                            <label for="uploadTestFileInput" class="form-label"></label>
-                            <input class="form-control form-control-lg" id="uploadTestFileInput" type="file" name="file" required>
-                            <div class="invalid-feedback">File is required</div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUploadModal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="uploadTestFileButton" onclick="uploadTest()">Upload</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUploadModal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="uploadTestFileButton" onclick="uploadTest()">
+                        Upload
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-<!--</form>-->
+</div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="exampleModalFullscreen" tabindex="-1" aria-labelledby="exampleModalFullscreenLabel"
+     aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
             <div class="modal-header text-bg-dark">
@@ -94,14 +120,19 @@
                             <div class="col-md-12 mb-2">
                                 <div class="input-group">
                                     <button class="btn btn-secondary" type="button" onclick="addOutputData()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
                                         </svg>
                                     </button>
-                                    <input id="outputData" type="text" class="form-control" placeholder="Output Data" aria-label="Input group example" aria-describedby="basic-addon1" required>
-                                    <div id="invalidFeedbackNameFieldId" class="invalid-feedback">Name field is required</div>
+                                    <input id="outputData" type="text" class="form-control" placeholder="Output Data"
+                                           aria-label="Input group example" aria-describedby="basic-addon1" required>
+                                    <div id="invalidFeedbackNameFieldId" class="invalid-feedback">Name field is
+                                        required
+                                    </div>
                                     <div id="invalidFeedbackFieldId" class="invalid-feedback">Field is required</div>
-                                    <div id="invalidFeedbackDataTypeId" class="invalid-feedback">Data type is required</div>
+                                    <div id="invalidFeedbackDataTypeId" class="invalid-feedback">Data type is required
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -112,11 +143,13 @@
                             <div class="col-md-12 mb-2">
                                 <div class="input-group">
                                     <button class="btn btn-secondary" type="button" onclick="addGrouping()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
                                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
                                         </svg>
                                     </button>
-                                    <input id="grouping"  type="text" class="form-control" placeholder="Create grouping" aria-label="Input group example" aria-describedby="basic-addon1">
+                                    <input id="grouping" type="text" class="form-control" placeholder="Create grouping"
+                                           aria-label="Input group example" aria-describedby="basic-addon1">
                                 </div>
                             </div>
                         </div>
@@ -125,16 +158,44 @@
                     <li id="fileCreateTestLiId" class="list-group-item">
                         <div>
                             <label for="createTestFileInput" class="form-label"></label>
-                            <input class="form-control form-control-lg" id="createTestFileInput" type="file" name="file" required>
+                            <input class="form-control form-control-lg" id="createTestFileInput" type="file" name="file"
+                                   required>
                             <div class="invalid-feedback">File is required</div>
                         </div>
                     </li>
                 </ul>
             </div>
             <div class="modal-footer">
-                <button id="closeCreateTestId" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="closeCreateTestId" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                </button>
                 <button type="button" class="btn btn-primary" onclick="createTest()">Create</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteTestTypeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" enctype="multipart/form-data" action="/">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteTestTypeModalLabel">Select a test type</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <select class="form-select" aria-label="Default select example" id="removeTestTypeSelectId">
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            id="closeDeleteTestTypeModal">Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="deleteTestTypeModalButton"
+                            onclick="deleteTestType()">
+                        Delete
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -143,6 +204,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
 </body>
 </html>

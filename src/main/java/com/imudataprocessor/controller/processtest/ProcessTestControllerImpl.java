@@ -3,7 +3,7 @@ package com.imudataprocessor.controller.processtest;
 import com.imudataprocessor.api.configuration.pyrhonprogram.DataResultConfiguration;
 import com.imudataprocessor.api.configuration.pyrhonprogram.ProgramConfiguration;
 import com.imudataprocessor.api.controller.processtest.ProcessTestController;
-import com.imudataprocessor.api.service.ExternalProcess;
+import com.imudataprocessor.api.service.TestTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,7 @@ import java.util.Optional;
 public class ProcessTestControllerImpl implements ProcessTestController {
 
     @Autowired
-    private ExternalProcess externalProcess;
+    private TestTypeService testTypeService;
 
     @Override
     @GetMapping("/generate-main-test")
@@ -31,7 +31,7 @@ public class ProcessTestControllerImpl implements ProcessTestController {
     @Override
     @GetMapping("/generate-split-test")
     public String generateSplitTest(final Model model, final @RequestParam("idTest") String idTest) throws IOException {
-        final List<String> nameTests = this.externalProcess.getAllNameTest();
+        final List<String> nameTests = this.testTypeService.getAllNameTest();
         model.addAttribute("nameTests", nameTests);
         this.setValues(model, idTest);
         return "test/split/split_test";
@@ -40,7 +40,7 @@ public class ProcessTestControllerImpl implements ProcessTestController {
     @Override
     @GetMapping("/generate-process-test")
     public String processTest(final Model model, final @RequestParam("idTest") String idTest, final @RequestParam("testTypeName") String testTypeName) throws IOException {
-        final Optional<ProgramConfiguration> programConfiguration = this.externalProcess.findByTestName(testTypeName);
+        final Optional<ProgramConfiguration> programConfiguration = this.testTypeService.findByTestName(testTypeName);
         final List<String> groupDataList = programConfiguration
                 .map(programConfiguration1 -> programConfiguration1.getDataResult().stream()
                         .map(DataResultConfiguration::getGroupData)

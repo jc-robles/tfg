@@ -6,6 +6,7 @@ import com.imudataprocessor.api.dto.out.processedtest.OutputDataDTO;
 import com.imudataprocessor.api.service.ExternalProcess;
 import com.imudataprocessor.api.service.FileService;
 import com.imudataprocessor.api.service.ProcessDataService;
+import com.imudataprocessor.api.service.TestTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,9 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 
     @Autowired
     private ExternalProcess externalProcess;
+
+    @Autowired
+    private TestTypeService testTypeService;
 
     @Value("${main-file-path}")
     private String mainFilePath;
@@ -51,7 +55,7 @@ public class ProcessDataServiceImpl implements ProcessDataService {
     @Override
     public OutputDataDTO processDataTest(final String testTypeName, final String nameTest) throws IOException {
         this.externalProcess.execute(testTypeName, nameTest);
-        final Optional<ProgramConfiguration> programConfiguration = this.externalProcess.findByTestName(testTypeName);
+        final Optional<ProgramConfiguration> programConfiguration = this.testTypeService.findByTestName(testTypeName);
         return this.fileService.obtainDataToFileProcessed(programConfiguration, nameTest);
     }
 
