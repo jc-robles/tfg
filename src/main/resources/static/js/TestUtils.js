@@ -13,15 +13,51 @@ function sendSplit() {
     $('#inputStartSplit').removeClass("is-invalid")
     $('#inputEndSplit').removeClass("is-invalid")
 
+    $('#invalidFeedbackEmptyNameTest').hide()
+    $('#invalidFeedbackDuplicateTest').hide()
+
+    $('#invalidFeedbackNegativeStartTest').hide()
+    $('#invalidFeedbackEmptyStartTest').hide()
+
+    $('#invalidFeedbackEmptyEndTest').hide()
+    $('#invalidFeedbackNegativeEndTest').hide()
+    $('#invalidFeedbackGreaterThanEndTest').hide()
+
     if (name) {
         checkName = true;
+        if ($('#listTest #' + name).length > 0) {
+            $('#invalidFeedbackDuplicateTest').show()
+            $('#invalidFeedbackEmptyNameTest').hide()
+            checkName = false;
+        }
+    } else {
+        $('#invalidFeedbackEmptyNameTest').show()
+        $('#invalidFeedbackDuplicateTest').hide()
     }
 
-    if (start >= 0 && start!='') {
+    if (start < 0 ) {
+        $('#invalidFeedbackNegativeStartTest').show()
+        $('#invalidFeedbackEmptyStartTest').hide()
+    } else if (start == '') {
+        $('#invalidFeedbackNegativeStartTest').hide()
+        $('#invalidFeedbackEmptyStartTest').show()
+    } else {
         checkStart = true;
     }
 
-    if (end == -1 || end>start) {
+    if (end == '') {
+        $('#invalidFeedbackEmptyEndTest').show()
+        $('#invalidFeedbackNegativeEndTest').hide()
+        $('#invalidFeedbackGreaterThanEndTest').hide()
+    } else if (end<=start) {
+        $('#invalidFeedbackEmptyEndTest').hide()
+        $('#invalidFeedbackNegativeEndTest').hide()
+        $('#invalidFeedbackGreaterThanEndTest').show()
+    } else if (end<1) {
+        $('#invalidFeedbackEmptyEndTest').hide()
+        $('#invalidFeedbackNegativeEndTest').show()
+        $('#invalidFeedbackGreaterThanEndTest').hide()
+    } else {
         checkEnd = true;
     }
 

@@ -30,7 +30,8 @@
                     <div id="inputNameTestPopover" class="d-none">
                         This name will be used to name the new test that is created with the selected data division.
                     </div>
-                    <div class="invalid-feedback">Name is required</div>
+                    <div id="invalidFeedbackEmptyNameTest" class="invalid-feedback">Name is required</div>
+                    <div id="invalidFeedbackDuplicateTest" class="invalid-feedback">Test already exists</div>
                 </div>
             </div>
             <div class="col-lg-3 mb-2">
@@ -49,7 +50,9 @@
                     <div id="inputStartTestPopover" class="d-none">
                         This value indicates the starting position of the test. This value cannot be negative.
                     </div>
-                    <div class="invalid-feedback">Invalid start value</div>
+                    <div id="invalidFeedbackEmptyStartTest" class="invalid-feedback">Value cannot be empty</div>
+                    <div id="invalidFeedbackNegativeStartTest" class="invalid-feedback">The value cannot be negative
+                    </div>
                 </div>
             </div>
             <div class="col-lg-3 mb-2">
@@ -71,7 +74,13 @@
                             <li>the end value must always be the start value.</li>
                         </ul>
                     </div>
-                    <div class="invalid-feedback">Invalid end value</div>
+                    <div id="invalidFeedbackEmptyEndTest" class="invalid-feedback">Value cannot be empty</div>
+                    <div id="invalidFeedbackNegativeEndTest" class="invalid-feedback">
+                        Value has to be greater than zero
+                    </div>
+                    <div id="invalidFeedbackGreaterThanEndTest" class="invalid-feedback">
+                        Final value must be greater than start test value
+                    </div>
                 </div>
             </div>
             <div class="col-lg-2 mb-2">
@@ -111,6 +120,15 @@
                         toastBootstrap.show()
                     })
                 }
+
+
+
+
+
+
+
+
+
             </script>
 
             <div class="ms-auto col-lg-1 mb-2">
