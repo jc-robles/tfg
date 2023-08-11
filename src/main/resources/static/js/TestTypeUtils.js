@@ -39,10 +39,6 @@ function addGrouping() {
         contentType: false,
         success: function(data) {
             $("#groupingRow").append(data);
-            $("[id$='SelectDataNameId']").each(function(data, index) {
-                console.log(data);
-                console.log(index);
-            });
             $("[id$='SelectDataNameId']").append('<option value="' + groupingValue + '">' + groupingValue + '</option>');
         }
     });

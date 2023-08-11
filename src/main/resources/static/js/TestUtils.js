@@ -202,8 +202,6 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
                     return r;
                 }, Object.create(null));
 
-                console.log(result);
-                console.log(typeof result);
                 for (let categoria in result) {
                     let names = [];
                     let values = [];
