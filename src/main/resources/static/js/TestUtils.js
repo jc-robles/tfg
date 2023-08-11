@@ -150,7 +150,7 @@ function deleteAllTest(idTest) {
 }
 
 function processTest(nameTest) {
-    $("#" + nameTest + "ProcessTestButton").attr('disabled', 'disabled');
+    $("#" + nameTest + "ProcessTestButton").children().attr('disabled', 'disabled');
     $("#" + nameTest + "testTypeSelectId").attr('disabled', 'disabled');
     let name = nameTest + "Processed";
     let testTypeName = $("#" + nameTest + "testTypeSelectId").val();
@@ -258,7 +258,7 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
         error: function(xhr, ajaxOptions, thrownError) {
             $("#" + nameTestProcessed + "Spinner").hide();
             $("#" + nameTestProcessed + "ErrorProcessDataId").show();
-            $("#" + nameTest + "ProcessTestButton").removeAttr('disabled');
+            $("#" + nameTest + "ProcessTestButton").children().removeAttr('disabled');
             $("#" + nameTest + "testTypeSelectId").removeAttr('disabled');
         }
     });
@@ -297,6 +297,7 @@ function createGraphics(url, form, name) {
 }
 
 function uploadTest() {
+    $('#mainTable').remove()
     $('#invalidFeedbackFileRawId').hide()
     let isError = false;
     if($('#uploadTestFileInput').val() === '') {
