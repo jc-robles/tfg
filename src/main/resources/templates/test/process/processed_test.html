@@ -22,14 +22,14 @@
             <div th:each="item: ${groupDataList}" class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            th:attr="data-bs-target=${'#'+item} + PanelsStayOpenCollapse, aria-controls=${item} + panelsStayOpenCollapse"
+                            th:attr="data-bs-target=${'#'+id} + ${item} + PanelsStayOpenCollapse, aria-controls=${id} + ${item} + panelsStayOpenCollapse"
                             aria-expanded="false">
                         [(${item})]
                     </button>
                 </h2>
-                <div th:id="${item} + PanelsStayOpenCollapse" class="accordion-collapse collapse">
+                <div th:id="${id} + ${item} + PanelsStayOpenCollapse" class="accordion-collapse collapse">
                     <div class="accordion-body">
-                        <canvas th:id="${item} + ProcessedGraphic"></canvas>
+                        <canvas th:id="${id} + ${item} + ProcessedGraphic"></canvas>
                     </div>
                 </div>
             </div>

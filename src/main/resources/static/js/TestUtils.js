@@ -202,14 +202,14 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
                     return r;
                 }, Object.create(null));
 
-                for (let categoria in result) {
+                for (let category in result) {
                     let names = [];
                     let values = [];
-                    result[categoria].forEach(objeto => {
-                        names.push(objeto.name)
-                        values.push(objeto.value)
+                    result[category].forEach(item => {
+                        names.push(item.name)
+                        values.push(item.value)
                     });
-                    newGraphic(categoria + 'ProcessedGraphic',names,values);
+                    newGraphic(nameTestProcessed + category + 'ProcessedGraphic',names,values);
                 }
 
                 reload();
