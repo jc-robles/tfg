@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -27,12 +32,13 @@ public class ExternalProcessImpl implements ExternalProcess {
     private String testsProcessedPath;
 
     @Override
-    public void execute(final String testTypeName, final String nameTest) throws IOException {
-        this.testTypeService.findByTestName(testTypeName).ifPresent(programConfiguration -> {
-            final ProcessBuilder processBuilder = this.createProcess(programConfiguration, nameTest);
+    public void execute(final String testTypeName, final String nameTest) throws Exception {
+        final Optional<ProgramConfiguration> programConfiguration = this.testTypeService.findByTestName(testTypeName);
+        if (programConfiguration.isPresent()) {
+            final ProcessBuilder processBuilder = this.createProcess(programConfiguration.get(), nameTest);
             this.configureOutputProcess(processBuilder, nameTest);
             this.runProcess(processBuilder);
-        });
+        }
     }
 
     private ProcessBuilder createProcess(final ProgramConfiguration programConfiguration, final String nameTest) {
@@ -43,17 +49,22 @@ public class ExternalProcessImpl implements ExternalProcess {
         return processBuilder;
     }
 
-    private void configureOutputProcess(final ProcessBuilder processBuilder, final String nameTest) {
+    private void configureOutputProcess(final ProcessBuilder processBuilder, final String nameTest) throws IOException {
+        final Path path = Paths.get(Objects.requireNonNull(this.testsProcessedPath));
+        if (Files.notExists(path)) {
+            Files.createDirectories(path);
+        }
         final File file = new File(this.testsProcessedPath + "/" + nameTest + ".json");
-        processBuilder.redirectOutput(file);
+        processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(file));
     }
 
-    private void runProcess(final ProcessBuilder processBuilder) {
-        try {
-            final Process process = processBuilder.start();
-            process.waitFor();
-        } catch (final IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+    private void runProcess(final ProcessBuilder processBuilder) throws Exception {
+        final Process process = processBuilder.start();
+        final int exit = process.waitFor();
+        process.getOutputStream().close();
+
+        if (exit != 0) {
+            throw new Exception("Python process execution failed");
         }
     }
 }

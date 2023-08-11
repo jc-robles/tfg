@@ -26,14 +26,16 @@ public class JsonServiceImpl implements JsonService {
 
     @Override
     public Object readFile(final String path, final Class<?> eClass) throws IOException {
-        return this.gson.fromJson(new FileReader(path), eClass);
+        try (final FileReader reader = new FileReader(path)) {
+            return this.gson.fromJson(reader, eClass);
+        }
     }
 
     @Override
     public void saveFile(final String path, final Object object) throws IOException {
-        final FileWriter myWriter = new FileWriter(path);
-        myWriter.write(this.gson.toJson(object));
-        myWriter.close();
+        try (final FileWriter myWriter = new FileWriter(path)) {
+            myWriter.write(this.gson.toJson(object));
+        }
     }
 
 }

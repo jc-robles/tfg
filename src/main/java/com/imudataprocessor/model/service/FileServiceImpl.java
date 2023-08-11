@@ -41,6 +41,9 @@ public class FileServiceImpl implements FileService {
     @Value("${test_extension}")
     private String testExtension;
 
+    @Value("${test_processed_extension}")
+    private String testProcessedExtension;
+
     @Value("${main-file-path}")
     private String mainFilePath;
 
@@ -98,6 +101,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteTest(final String nameTest) throws IOException {
         Files.deleteIfExists(Paths.get(this.splitTestsNotProcessedPath + "/" + nameTest + this.testExtension));
+        Files.deleteIfExists(Paths.get(this.testsProcessedPath + "/" + nameTest + "Processed" + this.testProcessedExtension));
     }
 
     @Override
@@ -107,12 +111,20 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void deleteAllTest() throws IOException {
-        Files.walk(Paths.get(this.originFilePath)).forEach(path -> {
-            try {
-                Files.deleteIfExists(path);
-            } catch (final IOException e) {
-            }
-        });
+        this.deleteAllTestFromPath(this.originFilePath);
+        this.deleteAllTestFromPath(this.testsProcessedPath);
+    }
+
+    private void deleteAllTestFromPath(final String pathTest) throws IOException {
+        final Path rootPath = Paths.get(pathTest);
+        if (Files.exists(rootPath)) {
+            Files.walk(rootPath).forEach(path -> {
+                try {
+                    Files.deleteIfExists(path);
+                } catch (final IOException e) {
+                }
+            });
+        }
     }
 
     private InternalDataDTO obtainDataToFile(final @NonNull String filePath) throws IOException {
@@ -122,7 +134,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public OutputDataDTO obtainDataToFileProcessed(final Optional<ProgramConfiguration> programConfiguration, final @NonNull String filePath) throws IOException {
+    public OutputDataDTO obtainDataToFileProcessed(final Optional<ProgramConfiguration> programConfiguration,
+                                                   final @NonNull String filePath) throws IOException {
         final Map<String, Object> data = (Map<String, Object>) this.jsonService.readFile(this.testsProcessedPath + "/" + filePath + ".json", Map.class);
         return this.outputDataDTOMapper.map(programConfiguration, data);
     }
@@ -132,7 +145,8 @@ public class FileServiceImpl implements FileService {
         return file.map(this.internalDataDTOMapper::map).orElse(new InternalDataDTO());
     }
 
-    private InternalDataDTO splitData(final InternalDataDTO internalDataDTO, final Integer start, final Integer end) {
+    private InternalDataDTO splitData(final InternalDataDTO internalDataDTO, final Integer start,
+                                      final Integer end) {
         final int fileStart = Objects.isNull(start) ? 0 : start;
         final int fileEnd = Objects.isNull(end) ? internalDataDTO.getAccelerometerX().size() : end + 2;
         final InternalDataDTO internalDataSplit = new InternalDataDTO();
