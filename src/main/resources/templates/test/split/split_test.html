@@ -1,32 +1,41 @@
 <div class="row" th:id="${tableGraphic}" style="display: none;">
     <div class="row mt-2 d-flex" th:id="${inputSplit}">
-        <div class="col-2">
+        <div class="col-lg-2 mb-2">
             <div class="form-floating">
                 <select th:id="${id} + testTypeSelectId" class="form-select" aria-label="Floating label select example">
                     <div th:each="item: ${nameTests}">
                         <option th:if="${itemStat.index == 0}" th:attr="value=${item}" selected>[(${item})]</option>
-                        <<option th:if="${itemStat.index != 0}" th:attr="value=${item}">[(${item})]</option>
+                        <option th:if="${itemStat.index != 0}" th:attr="value=${item}">[(${item})]</option>
                     </div>
                 </select>
                 <label th:attr="for=|${id} + testTypeSelectId|">Choose test type</label>
             </div>
         </div>
-        <div class="col">
-            <div class="col-auto">
-                <button type="button" class="btn btn-primary btn-lg" th:attr="onclick=|downloadRawTest('${id}')|" >Download Raw Test</button>
-                <button type="button" class="btn btn-dark btn-lg me-4" th:id="${processTestButton}" th:attr="onclick=|processTest('${id}')|">Process Test</button>
-                <button type="button" class="btn btn-success btn-lg" th:id="${downloadTestButton}" th:attr="onclick=|download('${id}')|" style="display: none;">Download Test</button>
-            </div>
+        <div th:id="${processTestButton}" class="col-lg-2 mb-2">
+            <button type="button" class="btn btn-dark btn-lg" th:attr="onclick=|processTest('${id}')|">
+                Process Test
+            </button>
         </div>
-        <div class="ms-auto col-1">
-            <div class="col-auto">
-                <button type="button" class="btn btn-outline-danger btn-lg" th:id="${deleteTestButton}" th:attr="onclick=|deleteTest('${id}')|">Delete</button>
-            </div>
+        <div th:id="${downloadTestButton}" class="col-lg-2 mb-2" style="display: none;">
+            <button type="button" class="btn btn-success btn-lg" th:attr="onclick=|download('${id}')|">
+                Download Test
+            </button>
+        </div>
+        <div class="col-lg mb-2">
+            <button type="button" class="btn btn-primary btn-lg" th:attr="onclick=|downloadRawTest('${id}')|">
+                Download Raw Test
+            </button>
+        </div>
+        <div class="ms-auto col-lg-1 mb-2">
+            <button type="button" class="btn btn-outline-danger btn-lg" th:id="${deleteTestButton}"
+                    th:attr="onclick=|deleteTest('${id}')|">
+                Delete
+            </button>
         </div>
     </div>
 
     <div class="card px-0 mt-2">
-        <div class="card-header">Raw Data</div>
+        <div class="card-header">Raw data</div>
         <div class="card-body">
 
             <div class="row mt-5 justify-content-center" style="display: none;" th:id="${spinner}">
@@ -40,7 +49,11 @@
             <div class="accordion" th:id="${accordionPanelsStayOpen}" style="display: none;">
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=${idPanelsStayOpenCollapseOne}, aria-controls=${panelsStayOpenCollapseOne}" aria-expanded="false">Accelerometer data</button>
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                th:attr="data-bs-target=${idPanelsStayOpenCollapseOne}, aria-controls=${panelsStayOpenCollapseOne}"
+                                aria-expanded="false">
+                            Accelerometer data
+                        </button>
                     </h2>
                     <div th:id="${panelsStayOpenCollapseOne}" class="accordion-collapse collapse">
                         <div class="accordion-body">
@@ -50,7 +63,11 @@
                 </div>
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=${idPanelsStayOpenCollapseTwo}, aria-controls=${panelsStayOpenCollapseTwo}" aria-expanded="false">Gyroscope data</button>
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                th:attr="data-bs-target=${idPanelsStayOpenCollapseTwo}, aria-controls=${panelsStayOpenCollapseTwo}"
+                                aria-expanded="false">
+                            Gyroscope data
+                        </button>
                     </h2>
                     <div th:id="${panelsStayOpenCollapseTwo}" class="accordion-collapse collapse">
                         <div class="accordion-body">
@@ -60,7 +77,11 @@
                 </div>
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" th:attr="data-bs-target=${idPanelsStayOpenCollapseThree}, aria-controls=${panelsStayOpenCollapseThree}" aria-expanded="false">Quaternion data</button>
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                th:attr="data-bs-target=${idPanelsStayOpenCollapseThree}, aria-controls=${panelsStayOpenCollapseThree}"
+                                aria-expanded="false">
+                            Quaternion data
+                        </button>
                     </h2>
                     <div th:id="${panelsStayOpenCollapseThree}" class="accordion-collapse collapse">
                         <div class="accordion-body">

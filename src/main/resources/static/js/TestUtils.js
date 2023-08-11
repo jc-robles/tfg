@@ -233,9 +233,9 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
 function createAlphanumeric(name, alphanumericDataList) {
     alphanumericDataList.forEach((element) => {
         let data =
-        "<div class='col-3 mb-2'>" +
+        "<div class='col-lg-3 mb-2'>" +
             "<ul class='list-group list-group-horizontal'>" +
-                "<li class='list-group-item'>" + element.name + "</li>" +
+                "<li class='list-group-item bg-body-tertiary'>" + element.name + "</li>" +
                 "<li class='list-group-item'>" + element.value + "</li>" +
             "</ul>" +
         "</div>"
@@ -263,9 +263,11 @@ function createGraphics(url, form, name) {
 }
 
 function uploadTest() {
+    $('#invalidFeedbackFileRawId').hide()
     let isError = false;
     if($('#uploadTestFileInput').val() === '') {
         $('#uploadTestModal .modal-body').addClass("was-validated")
+        $('#invalidFeedbackFileRawId').show()
         isError = true;
     } else {
         $('#uploadTestModal .modal-body').removeClass("was-validated")
@@ -273,12 +275,14 @@ function uploadTest() {
 
     if (!isError) {
         generateMainTest()
+        popover()
     }
 }
 
 function generateMainTest() {
     clearAllGraphics();
 
+    $('#bodyMainPageId').hide()
     $("#mainTable").show();
     $("#spinner").show();
     $("#closeUploadModal").click();
@@ -286,6 +290,7 @@ function generateMainTest() {
     callGenerateMainTest();
 
     var file = document.getElementById("uploadTestFileInput").files[0];
+    var fileName = file.name;
     var formData = new FormData();
     formData.append('file', file)
     $.ajax({
@@ -302,6 +307,7 @@ function generateMainTest() {
             newGraphic('gyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ]);
             newGraphic('quaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ]);
 
+            $('#inputUploadTestNameId').val(fileName)
             $('#uploadTestFileInput').val("")
         }
     });

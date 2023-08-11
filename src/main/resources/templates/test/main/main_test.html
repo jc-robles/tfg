@@ -3,7 +3,10 @@
         <div class="col">
             <ul class="nav nav-tabs" id="listTest">
                 <li class="nav-item">
-                    <a class="nav-link text-body active" aria-current="page" href="#" id="mainTest" onclick="selectTest('mainTest')">Raw input file</a>
+                    <a class="nav-link text-body active" aria-current="page" href="#" id="mainTest"
+                       onclick="selectTest('mainTest')">
+                        Raw input file
+                    </a>
                 </li>
             </ul>
         </div>
@@ -11,47 +14,90 @@
 
     <div class="row" id="mainTestTableGraphic">
         <div class="row mt-2 mb-2 d-flex" id="inputSplitTest">
-            <div class="col-2">
+            <div class="col-lg-3 mb-2">
                 <div class="input-group has-validation" id="inputNameId">
                     <span class="input-group-text">Name</span>
-                    <input for="fileName" id="inputNameSplit" type="text" aria-label="Name test" class="form-control" required>
-                    <div class="invalid-feedback">Invalid name value</div>
+                    <input for="fileName" id="inputNameSplit" type="text" aria-label="Name test" class="form-control"
+                           required>
+                    <span class="input-group-text" tabindex="0" data-bs-toggle="popover"
+                          data-bs-trigger="hover" data-bs-content-id="inputNameTestPopover">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-question-circle " viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+                        </svg>
+                    </span>
+                    <div id="inputNameTestPopover" class="d-none">
+                        This name will be used to name the new test that is created with the selected data division.
+                    </div>
+                    <div class="invalid-feedback">Name is required</div>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-lg-3 mb-2">
                 <div class="input-group has-validation" id="inputStartId">
                     <span class="input-group-text">Start test</span>
-                    <input id="inputStartSplit" type="number" aria-label="Start test" class="form-control" min="0" required>
+                    <input id="inputStartSplit" type="number" aria-label="Start test" class="form-control" min="0"
+                           required>
+                    <span class="input-group-text" tabindex="0" data-bs-toggle="popover"
+                          data-bs-trigger="hover" data-bs-content-id="inputStartTestPopover">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-question-circle " viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+                        </svg>
+                    </span>
+                    <div id="inputStartTestPopover" class="d-none">
+                        This value indicates the starting position of the test. This value cannot be negative.
+                    </div>
                     <div class="invalid-feedback">Invalid start value</div>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-lg-3 mb-2">
                 <div class="input-group has-validation" id="inputEndId">
                     <span class="input-group-text">End test</span>
                     <input id="inputEndSplit" type="number" aria-label="End test" class="form-control" min="1" required>
+                    <span class="input-group-text" tabindex="0" data-bs-toggle="popover"
+                          data-bs-trigger="hover" data-bs-content-id="inputEndTestPopover">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-question-circle " viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+                        </svg>
+                    </span>
+                    <div id="inputEndTestPopover" class="d-none">
+                        This value indicates the final position of the test. This value must meet the following:
+                        <ul>
+                            <li>The value cannot be negative.</li>
+                            <li>the end value must always be the start value.</li>
+                        </ul>
+                    </div>
                     <div class="invalid-feedback">Invalid end value</div>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-lg-2 mb-2">
                 <div class="col-auto">
-                    <button type="button" class="btn btn-dark btn-lg" id="splitTest" onclick="sendSplit()">Split Test</button>
+                    <button type="button" class="btn btn-dark btn-lg" id="splitTest" onclick="sendSplit()">
+                        Split Test
+                    </button>
                     <button type="button" id="splitTestSuccess" style="display: none;"></button>
                     <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
-                        <div id="liveToast1" class="toast text-bg-success fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div id="liveToast1" class="toast text-bg-success fade hide" role="alert" aria-live="assertive"
+                             aria-atomic="true">
                             <div class="d-flex">
                                 <div class="toast-body"></div>
-                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                                        data-bs-dismiss="toast" aria-label="Close"></button>
                             </div>
-
                         </div>
                     </div>
                     <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3">
-                        <div id="liveToast2" class="toast text-bg-danger fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div id="liveToast2" class="toast text-bg-danger fade hide" role="alert" aria-live="assertive"
+                             aria-atomic="true">
                             <div class="d-flex">
                                 <div class="toast-body"></div>
-                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                                        data-bs-dismiss="toast" aria-label="Close"></button>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -67,9 +113,12 @@
                 }
             </script>
 
-            <div class="ms-auto col-1">
+            <div class="ms-auto col-lg-1 mb-2">
                 <div class="col-auto">
-                    <button type="button" class="btn btn-outline-danger btn-lg" id="deleteTest" onclick="deleteAllTest('deleteTest')">Delete</button>
+                    <button type="button" class="btn btn-outline-danger btn-lg" id="deleteTest"
+                            onclick="deleteAllTest('deleteTest')">
+                        Delete
+                    </button>
                 </div>
             </div>
         </div>
@@ -82,10 +131,32 @@
             </div>
         </div>
 
-        <div class="accordion" id="accordionPanelsStayOpenExample" style="display: none;" >
+        <div class="accordion" id="accordionPanelsStayOpenExample" style="display: none;">
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                    <button class="accordion-button bg-body-secondary collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseInfo" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseInfo">
+                        Uploaded file info
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseInfo" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        <div class="mt-2">
+                            <div class="input-group">
+                                <span class="input-group-text">Uploaded file</span>
+                                <input for="fileName" id="inputUploadTestNameId" type="text" aria-label="Name test"
+                                       class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseOne">
                         Accelerometer data
                     </button>
                 </h2>
@@ -97,7 +168,9 @@
             </div>
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseTwo">
                         Gyroscope data
                     </button>
                 </h2>
@@ -109,7 +182,9 @@
             </div>
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseThree">
                         Quaternion data
                     </button>
                 </h2>

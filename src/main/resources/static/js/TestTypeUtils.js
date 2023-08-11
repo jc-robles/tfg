@@ -23,6 +23,7 @@ function addOutputData() {
             contentType: false,
             success: function(data) {
                 $("#outputDataRow").append(data);
+                popover();
             }
         });
     }
@@ -87,20 +88,35 @@ function restoreDefaultValues() {
 }
 
 function createTest() {
-    let isError = false;
-    $("#outputData").val("")
+    resetValuesCreateTestType()
+    let isError = checkErrorCreateTestType();
+    if (!isError) {
+        let createTestDTO = generateTestTypeDTO()
+        sendTestTypeDTO(createTestDTO);
+    }
+}
 
+function resetValuesCreateTestType() {
+    $("#outputData").val("")
     $('#invalidFeedbackNameFieldId').hide()
     $('#invalidFeedbackFieldId').hide()
     $('#invalidFeedbackDataTypeId').hide()
+    $('#invalidFeedbackNameTestId').hide()
+    $('#invalidFeedbackFiledId').hide()
+}
+
+function checkErrorCreateTestType() {
+    let isError = false;
     if($('#createTestName').val() === '') {
         $('#createTestNameLiId').addClass("was-validated")
+        $('#invalidFeedbackNameTestId').show()
         isError = true;
     } else {
         $('#createTestNameLiId').removeClass("was-validated")
     }
     if($('#createTestFileInput').val() === '') {
         $('#fileCreateTestLiId').addClass("was-validated")
+        $('#invalidFeedbackFiledId').show()
         isError = true;
     } else {
         $('#fileCreateTestLiId').removeClass("was-validated")
@@ -113,10 +129,8 @@ function createTest() {
     } else {
         $('#outputDataRow').children(":first").removeClass("was-validated")
     }
-    $("#outputDataRow .toast-body").each(function() {
-        console.log('val: ' + $('#' + $(this).attr('name') + 'SelectDataNameId').val())
-        console.log('checked: ' + $('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val())
 
+    $("#outputDataRow .toast-body").each(function() {
         if ($('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val() === 'DATA_ARRAY' && $('#' + $(this).attr('name') + 'SelectDataNameId').val() == null) {
            $('#invalidFeedbackFieldId').hide()
            $('#invalidFeedbackDataTypeId').show()
@@ -124,47 +138,53 @@ function createTest() {
         }
     })
 
-    if (!isError) {
-        let fields = [];
-        $("#outputDataRow .toast-body").each(function() {
-            let name = $(this).attr('name');
-            let data_type = $('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val();
-            let grouping;
-            if ($('#' + $(this).attr('name') + 'SelectDataNameId').is(':visible')) {
-                grouping = $('#' + $(this).attr('name') + 'SelectDataNameId').val();
-            }
-            let field = {
-                name: name,
-                dataType: data_type,
-                grouping: grouping
-            }
-            fields.push(field);
-        });
+    return isError;
+}
 
-        let CreateTestDTO = {
-            nameTest: $('#createTestName').val(),
-            fields: fields
+function getAllFieldsCreateTestType() {
+    let fields = [];
+    $("#outputDataRow .toast-body").each(function() {
+        let name = $(this).attr('name');
+        let data_type = $('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val();
+        let grouping;
+        if ($('#' + $(this).attr('name') + 'SelectDataNameId').is(':visible')) {
+            grouping = $('#' + $(this).attr('name') + 'SelectDataNameId').val();
         }
+        let field = {
+            name: name,
+            dataType: data_type,
+            grouping: grouping
+        }
+        fields.push(field);
+    });
+    return fields;
+}
 
-        var file = document.getElementById("createTestFileInput").files[0];
-        var formData = new FormData();
-        formData.append('createTest', JSON.stringify(CreateTestDTO))
-        formData.append('fileTest', file)
-
-        console.log(JSON.stringify(CreateTestDTO))
-
-        $.ajax({
-            url: '/test-type/create',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(data) {
-                $("#closeCreateTestId").click()
-                restoreDefaultValues()
-            }
-        });
+function generateTestTypeDTO() {
+    let fields = getAllFieldsCreateTestType();
+    let CreateTestDTO = {
+        nameTest: $('#createTestName').val(),
+        fields: fields
     }
+    return CreateTestDTO;
+}
+
+function sendTestTypeDTO(createTestDTO) {
+    var file = document.getElementById("createTestFileInput").files[0];
+    var formData = new FormData();
+    formData.append('createTest', JSON.stringify(createTestDTO))
+    formData.append('fileTest', file)
+    $.ajax({
+        url: '/test-type/create',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            $("#closeCreateTestId").click()
+            restoreDefaultValues()
+        }
+    });
 }
 
 function deleteTestType() {

@@ -10,7 +10,7 @@
 
     <script type="text/javascript" src="/js/GraphicUtils.js"></script>
     <script type="text/javascript" src="/js/TestUtils.js"></script>
-    <script type="text/javascript" src="/js/CreateTestUtils.js"></script>
+    <script type="text/javascript" src="/js/TestTypeUtils.js"></script>
 
     <script>
         function init() {
@@ -23,16 +23,30 @@
                     $("#groupingRow").append(data);
                 }
             });
+
+            popover();
         }
 
-
+        function popover() {
+            var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+            var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+                  let opts = {
+                    animation: false,
+                  }
+                if (popoverTriggerEl.hasAttribute('data-bs-content-id')) {
+                    opts.content = document.getElementById(popoverTriggerEl.getAttribute('data-bs-content-id')).innerHTML;
+                    opts.html = true;
+                  }
+              return new bootstrap.Popover(popoverTriggerEl, opts)
+            })
+        }
     </script>
 </head>
 <body onload="javascript:init()">
-<div class="container-fluid px-0">
+<div class="container-fluid px-0 sticky-top">
     <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">IMU Data Process</a>
+            <span class="navbar-brand">IMU Data Process</span>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                     aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -40,11 +54,17 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
-                       data-bs-target="#uploadTestModal" href="#">Upload file test</a>
+                       data-bs-target="#uploadTestModal" href="#">
+                        Upload test file
+                    </a>
                     <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
-                       data-bs-target="#exampleModalFullscreen" href="#">Create test type</a>
+                       data-bs-target="#exampleModalFullscreen" href="#">
+                        Create test type
+                    </a>
                     <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
-                       data-bs-target="#deleteTestTypeModal" href="#" onclick="getAllTestType()">Delete test type</a>
+                       data-bs-target="#deleteTestTypeModal" href="#" onclick="getAllTestType()">
+                        Delete test type
+                    </a>
                 </div>
             </div>
         </div>
@@ -52,25 +72,28 @@
 </div>
 
 <!-- Modal upload datasets -->
-<div class="px-4 pt-5 my-5 text-center">
-    <h1 class="display-4 fw-bold text-body-emphasis">Welcome to data processing program</h1>
+<div class="px-4 pt-5 my-5 text-center" id="bodyMainPageId">
+    <h1 class="display-4 fw-bold text-body-emphasis">Welcome to IMU Data Process</h1>
     <div class="col-lg-6 mx-auto">
         <div class="lead my-4 d-inline-flex text-start">
             <ul>
-                <li>Click on Upload file test button to add a data set to process</li>
-                <li>Click on Create test type button to add a new type of test</li>
+                <li>Click on Upload test file button to add a dataset to be processed</li>
+                <li>Click on Create test type button to add a new test type</li>
                 <li>Click on Delete test type button to delete an existing test type</li>
             </ul>
         </div>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-            <button type="button" class="btn btn-dark btn-lg px-4 me-sm-3" data-bs-toggle="modal"
-                    data-bs-target="#uploadTestModal">Upload file test
+            <button type="button" class="btn btn-dark btn-lg px-4" data-bs-toggle="modal"
+                    data-bs-target="#uploadTestModal">
+                Upload test file
             </button>
             <button type="button" class="btn btn-outline-secondary btn-lg px-4" data-bs-toggle="modal"
-                    data-bs-target="#exampleModalFullscreen">Create test type
+                    data-bs-target="#exampleModalFullscreen">
+                Create test type
             </button>
             <button type="button" class="btn btn-outline-danger btn-lg px-4" data-bs-toggle="modal"
-                    data-bs-target="#deleteTestTypeModal" onclick="getAllTestType()">Delete test type
+                    data-bs-target="#deleteTestTypeModal" onclick="getAllTestType()">
+                Delete test type
             </button>
         </div>
     </div>
@@ -87,10 +110,32 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        <label for="uploadTestFileInput" class="form-label"></label>
-                        <input class="form-control form-control-lg" id="uploadTestFileInput" type="file" name="file"
-                               required>
-                        <div class="invalid-feedback">File is required</div>
+                        <div class="input-group input-group-lg">
+                            <input type="file" name="file" class="form-control" id="uploadTestFileInput" required>
+                            <span class="input-group-text" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover"
+                                  data-bs-content-id="inputRawTestPopover">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                 fill="currentColor" class="bi bi-question-circle " viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+                            </svg>
+                            </span>
+                        </div>
+                        <div id="inputRawTestPopover" class="d-none">
+                            A csv file containing the following structure must be selected:
+                            <ul>
+                                <li>The header should have this order: timestamp, accelerometer x, accelerometer y,
+                                    accelerometer z, gyroscope x , gyroscope y, gyroscope z, magnetometer x,
+                                    magnetometer y, magnetometer z.
+                                </li>
+                                <li>The row following the header must be indicated with the units of each column.
+                                </li>
+                                <li>If the units are not available, each cell can be left empty or with a N/A
+                                    value.
+                                </li>
+                            </ul>
+                        </div>
+                        <div id="invalidFeedbackFileRawId" class="invalid-feedback">File is required</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -111,17 +156,32 @@
      aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-fullscreen">
         <div class="modal-content">
-            <div class="modal-header text-bg-dark">
-                <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Create new test</h1>
+            <div class="modal-header text-bg-dark" data-bs-theme="dark">
+                <h1 class="modal-title fs-4" id="exampleModalFullscreenLabel">Create test type</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <ul class="list-group list-group-flush">
                     <li id="createTestNameLiId" class="list-group-item">
-                        <div class="form-floating mb-5">
-                            <input type="text" class="form-control" id="createTestName" placeholder="Test 1" required>
-                            <label for="createTestName">Name Test</label>
-                            <div class="invalid-feedback">Name is required</div>
+                        <div id="" class="row">
+                            <div class="col-md-12 mb-2">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="createTestName" placeholder="Test name"
+                                           required>
+                                    <span class="input-group-text" tabindex="0" data-bs-toggle="popover"
+                                          data-bs-trigger="hover" data-bs-content-id="inputNameTestTypePopover">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-question-circle " viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div id="inputNameTestTypePopover" class="d-none">
+                                    The name to which the new type of test refers must be entered.
+                                </div>
+                                <div id="invalidFeedbackNameTestId" class="invalid-feedback">Name is required</div>
+                            </div>
                         </div>
                     </li>
                     <li id="outputDataRowLiId" class="list-group-item">
@@ -134,14 +194,32 @@
                                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
                                         </svg>
                                     </button>
-                                    <input id="outputData" type="text" class="form-control" placeholder="Output Data"
+                                    <input id="outputData" type="text" class="form-control" placeholder="Output data"
                                            aria-label="Input group example" aria-describedby="basic-addon1" required>
-                                    <div id="invalidFeedbackNameFieldId" class="invalid-feedback">Name field is
-                                        required
-                                    </div>
-                                    <div id="invalidFeedbackFieldId" class="invalid-feedback">Field is required</div>
-                                    <div id="invalidFeedbackDataTypeId" class="invalid-feedback">Data type is required
-                                    </div>
+                                    <span class="input-group-text" tabindex="0" data-bs-toggle="popover"
+                                          data-bs-trigger="hover" data-bs-content-id="inputOutputDataTestTypePopover">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-question-circle " viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div id="inputOutputDataTestTypePopover" class="d-none">
+                                    All the output fields of the new test type must be indicated. Output fields can be :
+                                    <ul>
+                                        <li>Alphanumeric: when the output is to be displayed in a text.</li>
+                                        <li>Data Array: when the output data is to be displayed in a graph.</li>
+                                    </ul>
+                                </div>
+                                <div id="invalidFeedbackNameFieldId" class="invalid-feedback">
+                                    Name field is required
+                                </div>
+                                <div id="invalidFeedbackFieldId" class="invalid-feedback">
+                                    Field is required
+                                </div>
+                                <div id="invalidFeedbackDataTypeId" class="invalid-feedback">
+                                    Data type is required
                                 </div>
                             </div>
                         </div>
@@ -157,8 +235,22 @@
                                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
                                         </svg>
                                     </button>
-                                    <input id="grouping" type="text" class="form-control" placeholder="Create grouping"
-                                           aria-label="Input group example" aria-describedby="basic-addon1">
+                                    <input id="grouping" type="text" class="form-control"
+                                           placeholder="Create data group" aria-label="Input group example"
+                                           aria-describedby="basic-addon1">
+                                    <span class="input-group-text" tabindex="0" data-bs-toggle="popover"
+                                          data-bs-trigger="hover" data-bs-content-id="inputGroupTestTypePopover">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-question-circle " viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                                <div id="inputGroupTestTypePopover" class="d-none">
+                                    <p>Each grouping corresponds to a graph. All the fields that are indicated with the
+                                        same grouping will be shown in the same output graph.</p>
+                                    <p>With this option you can create or delete the different types of groupings.</p>
                                 </div>
                             </div>
                         </div>
@@ -166,16 +258,29 @@
                     </li>
                     <li id="fileCreateTestLiId" class="list-group-item">
                         <div>
-                            <label for="createTestFileInput" class="form-label"></label>
-                            <input class="form-control form-control-lg" id="createTestFileInput" type="file" name="file"
-                                   required>
-                            <div class="invalid-feedback">File is required</div>
+                            <div class="input-group input-group-lg">
+                                <input type="file" name="file" class="form-control" id="createTestFileInput" required>
+                                <span class="input-group-text" tabindex="0" data-bs-toggle="popover"
+                                      data-bs-trigger="hover" data-bs-content-id="inputTestTypeFilePopover">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-question-circle " viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+                                        </svg>
+                                    </span>
+                            </div>
+                            <div id="invalidFeedbackFiledId" class="invalid-feedback">File is required</div>
+                            <div id="inputTestTypeFilePopover" class="d-none">
+                                You must select the python file that contains the code that will be executed when the
+                                data is processed.
+                            </div>
                         </div>
                     </li>
                 </ul>
             </div>
             <div class="modal-footer">
-                <button id="closeCreateTestId" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                <button id="closeCreateTestId" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
                 </button>
                 <button type="button" class="btn btn-primary" onclick="createTest()">Create</button>
             </div>
@@ -189,7 +294,7 @@
         <div class="modal-content">
             <form method="POST" enctype="multipart/form-data" action="/">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteTestTypeModalLabel">Select a test type</h1>
+                    <h1 class="modal-title fs-5" id="deleteTestTypeModalLabel">Select test type</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -198,7 +303,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            id="closeDeleteTestTypeModal">Cancel
+                            id="closeDeleteTestTypeModal">
+                        Cancel
                     </button>
                     <button type="button" class="btn btn-primary" id="deleteTestTypeModalButton"
                             onclick="deleteTestType()">

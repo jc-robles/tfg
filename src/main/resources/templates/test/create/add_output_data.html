@@ -4,25 +4,48 @@
             <div class="toast-body" th:attr="name=${dataName}">
                 [(${dataName})]
                 <div class="form-check" th:attr="onclick=|selectDisabled('${selectDataNameId}')|">
-                    <input th:id="${radioButtonId1}" class="form-check-input" type="radio" name="flexRadioDefault" th:attr="name=${radioButtonName}" value="ALPHANUMERIC" checked>
+                    <input th:id="${radioButtonId1}" class="form-check-input" type="radio" name="flexRadioDefault"
+                           th:attr="name=${radioButtonName}" value="ALPHANUMERIC" checked>
                     <label class="form-check-label" th:attr="for=${radioButtonId1}">
                         Alphanumeric
                     </label>
                 </div>
                 <div class="form-check" th:attr="onclick=|selectEnabled('${selectDataNameId}')|">
-                    <input th:id="${radioButtonId2}" class="form-check-input" type="radio" th:attr="name=${radioButtonName}" value="DATA_ARRAY">
+                    <input th:id="${radioButtonId2}" class="form-check-input" type="radio"
+                           th:attr="name=${radioButtonName}" value="DATA_ARRAY">
                     <label class="form-check-label" th:attr="for=${radioButtonId2}">
                         Data Array
                     </label>
                 </div>
-                <select th:id="${selectDataNameId}" class="form-select form-select-sm" aria-label="Small select example" style="display: none;">
-                    <div th:each="item: ${selectData}">
-                        <option th:if="${itemStat.index == 0}" th:attr="value=${item.value}" selected>[(${item.name})]</option>
-                        <<option th:if="${itemStat.index != 0}" th:attr="value=${item.value}">[(${item.name})]</option>
-                    </div>
-                </select>
+                <div th:id="${selectDataNameId}" class="input-group" style="display: none;">
+                    <select class="form-select form-select-sm" aria-label="Small select example">
+                        <div th:each="item: ${selectData}">
+                            <option th:if="${itemStat.index == 0}" th:attr="value=${item.value}" selected>
+                                [(${item.name})]
+                            </option>
+                            <option th:if="${itemStat.index != 0}" th:attr="value=${item.value}">
+                                [(${item.name})]
+                            </option>
+                        </div>
+                    </select>
+                    <span class="input-group-text" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover"
+                          data-bs-content-id="inputGroupDataTestTypePopover">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-question-circle " viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
+                        </svg>
+                    </span>
+                </div>
+                <div id="inputGroupDataTestTypePopover" class="d-none">
+                    This field corresponds to the grouping that will be performed when displaying the graph with the
+                    final result. All the fields that are indicated with the same grouping will be shown together in the
+                    graph.
+                </div>
             </div>
-            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close" th:attr="onclick=|deleteDataName('${dataNameId}')|"></button>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"
+                    th:attr="onclick=|deleteDataName('${dataNameId}')|">
+            </button>
         </div>
     </div>
 </div>
