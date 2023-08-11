@@ -53,7 +53,7 @@ public class ProcessDataServiceImpl implements ProcessDataService {
     }
 
     @Override
-    public OutputDataDTO processDataTest(final String testTypeName, final String nameTest) throws IOException {
+    public OutputDataDTO processDataTest(final String testTypeName, final String nameTest) throws Exception {
         this.externalProcess.execute(testTypeName, nameTest);
         final Optional<ProgramConfiguration> programConfiguration = this.testTypeService.findByTestName(testTypeName);
         return this.fileService.obtainDataToFileProcessed(programConfiguration, nameTest);

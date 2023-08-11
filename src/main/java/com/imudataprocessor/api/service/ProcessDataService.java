@@ -16,5 +16,5 @@ public interface ProcessDataService {
 
     void deleteAllTest() throws IOException;
 
-    OutputDataDTO processDataTest(String testTypeName, String nameTest) throws IOException;
+    OutputDataDTO processDataTest(String testTypeName, String nameTest) throws Exception;
 }

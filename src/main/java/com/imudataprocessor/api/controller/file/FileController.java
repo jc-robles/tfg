@@ -16,7 +16,7 @@ public interface FileController {
 
     ResponseEntity<DataDTO> splitFile(String fileName, Integer start, Integer end) throws IOException;
 
-    ResponseEntity<OutputDataDTO> processFile(String testTypeName, String fileName) throws IOException;
+    ResponseEntity<OutputDataDTO> processFile(String testTypeName, String fileName) throws Exception;
 
     ResponseEntity<HttpStatus> deleteFile(String fileName) throws IOException;
 

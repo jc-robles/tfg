@@ -57,7 +57,7 @@ public class FileControllerImpl implements FileController {
     @Override
     @PostMapping("/process-test")
     public ResponseEntity<OutputDataDTO> processFile(final @RequestParam("testTypeName") String testTypeName,
-                                                     final @RequestParam("fileName") String fileName) throws IOException {
+                                                     final @RequestParam("fileName") String fileName) throws Exception {
         final OutputDataDTO outputDataDTO = this.processDataServiceImpl.processDataTest(testTypeName, fileName);
         return ResponseEntity.ok(outputDataDTO);
     }
