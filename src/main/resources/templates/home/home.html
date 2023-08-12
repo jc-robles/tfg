@@ -40,6 +40,7 @@
               return new bootstrap.Popover(popoverTriggerEl, opts)
             })
         }
+
     </script>
 </head>
 <body onload="javascript:init()">
@@ -124,14 +125,17 @@
                         <div id="inputRawTestPopover" class="d-none">
                             A csv file containing the following structure must be selected:
                             <ul>
-                                <li>The header should have this order: timestamp, accelerometer x, accelerometer y,
+                                <li>
+                                    The header should follow this order: timestamp, accelerometer x, accelerometer y,
                                     accelerometer z, gyroscope x , gyroscope y, gyroscope z, magnetometer x,
                                     magnetometer y, magnetometer z.
                                 </li>
-                                <li>The row following the header must be indicated with the units of each column.
+                                <li>
+                                    The row following the header must indicate the units of each column.
                                 </li>
-                                <li>If the units are not available, each cell can be left empty or with a N/A
-                                    value.
+                                <li>
+                                    If the units are not available, each cell can display a N/A value or can be left
+                                    empty.
                                 </li>
                             </ul>
                         </div>
@@ -178,7 +182,7 @@
                                     </span>
                                 </div>
                                 <div id="inputNameTestTypePopover" class="d-none">
-                                    The name to which the new type of test refers must be entered.
+                                    Indicate the name of the new test type.
                                 </div>
                                 <div id="invalidFeedbackNameTestId" class="invalid-feedback">Name is required</div>
                             </div>
@@ -206,10 +210,10 @@
                                     </span>
                                 </div>
                                 <div id="inputOutputDataTestTypePopover" class="d-none">
-                                    All the output fields of the new test type must be indicated. Output fields can be :
+                                    All the output fields of the new test type must be indicated. Output fields can be:
                                     <ul>
-                                        <li>Alphanumeric: when the output is to be displayed in a text.</li>
-                                        <li>Data Array: when the output data is to be displayed in a graph.</li>
+                                        <li>Alphanumeric: when the output is displayed in the form of a text.</li>
+                                        <li>Data Array: when the output data is displayed in the form of a graph.</li>
                                     </ul>
                                 </div>
                                 <div id="invalidFeedbackNameFieldId" class="invalid-feedback">
@@ -236,7 +240,7 @@
                                         </svg>
                                     </button>
                                     <input id="grouping" type="text" class="form-control"
-                                           placeholder="Create data group" aria-label="Input group example"
+                                           placeholder="Create graph" aria-label="Input group example"
                                            aria-describedby="basic-addon1">
                                     <span class="input-group-text" tabindex="0" data-bs-toggle="popover"
                                           data-bs-trigger="hover" data-bs-content-id="inputGroupTestTypePopover">
@@ -248,9 +252,8 @@
                                     </span>
                                 </div>
                                 <div id="inputGroupTestTypePopover" class="d-none">
-                                    <p>Each grouping corresponds to a graph. All the fields that are indicated with the
-                                        same grouping will be shown in the same output graph.</p>
-                                    <p>With this option you can create or delete the different types of groupings.</p>
+                                    This field allows creating or deleting graphs which could be used in the output
+                                    data section.
                                 </div>
                             </div>
                         </div>
@@ -271,7 +274,7 @@
                             </div>
                             <div id="invalidFeedbackFiledId" class="invalid-feedback">File is required</div>
                             <div id="inputTestTypeFilePopover" class="d-none">
-                                You must select the python file that contains the code that will be executed when the
+                                Select a python file that contains the code that will be executed when the
                                 data is processed.
                             </div>
                         </div>

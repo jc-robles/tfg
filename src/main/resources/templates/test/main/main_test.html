@@ -28,7 +28,7 @@
                         </svg>
                     </span>
                     <div id="inputNameTestPopover" class="d-none">
-                        This name will be used to name the new test that is created with the selected data division.
+                        Name the new test that is created with the selected data split.
                     </div>
                     <div id="invalidFeedbackEmptyNameTest" class="invalid-feedback">Name is required</div>
                     <div id="invalidFeedbackDuplicateTest" class="invalid-feedback">Test already exists</div>
@@ -48,11 +48,10 @@
                         </svg>
                     </span>
                     <div id="inputStartTestPopover" class="d-none">
-                        This value indicates the starting position of the test. This value cannot be negative.
+                        This field indicates the starting position of the test. This value cannot be negative or empty.
                     </div>
-                    <div id="invalidFeedbackEmptyStartTest" class="invalid-feedback">Value cannot be empty</div>
-                    <div id="invalidFeedbackNegativeStartTest" class="invalid-feedback">The value cannot be negative
-                    </div>
+                    <div id="invalidFeedbackEmptyStartTest" class="invalid-feedback">Field cannot be empty</div>
+                    <div id="invalidFeedbackNegativeStartTest" class="invalid-feedback">Field cannot be negative</div>
                 </div>
             </div>
             <div class="col-lg-3 mb-2">
@@ -68,18 +67,19 @@
                         </svg>
                     </span>
                     <div id="inputEndTestPopover" class="d-none">
-                        This value indicates the final position of the test. This value must meet the following:
+                        This field indicates the ending position of the test. This value must meet the following
+                        parameters:
                         <ul>
-                            <li>The value cannot be negative.</li>
-                            <li>the end value must always be the start value.</li>
+                            <li>The value must be greater than zero.</li>
+                            <li>The end value must be greater than the start value.</li>
                         </ul>
                     </div>
-                    <div id="invalidFeedbackEmptyEndTest" class="invalid-feedback">Value cannot be empty</div>
+                    <div id="invalidFeedbackEmptyEndTest" class="invalid-feedback">Field cannot be empty</div>
                     <div id="invalidFeedbackNegativeEndTest" class="invalid-feedback">
-                        Value has to be greater than zero
+                        Field must be greater than zero
                     </div>
                     <div id="invalidFeedbackGreaterThanEndTest" class="invalid-feedback">
-                        Final value must be greater than start test value
+                        End value must be greater than the start value
                     </div>
                 </div>
             </div>
@@ -120,6 +120,13 @@
                         toastBootstrap.show()
                     })
                 }
+
+
+
+
+
+
+
             </script>
 
             <div class="ms-auto col-lg-1 mb-2">

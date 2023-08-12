@@ -71,16 +71,16 @@ public class TestTypeControllerImpl implements TestTypeController {
     @GetMapping("/test-type/add-grouping")
     public String addGrouping(final Model model, final @RequestParam("groupingName") String groupingName) throws IOException {
         final GroupingItemConfiguration groupingItemConfiguration = this.testGroupingService.addGrouping(groupingName);
-        model.addAttribute("allGrouping", Collections.singletonList(groupingItemConfiguration));
-        return "test/create/add_grouping";
+        model.addAttribute("allGraph", Collections.singletonList(groupingItemConfiguration));
+        return "test/create/graph";
     }
 
     @Override
     @GetMapping("/test-type/all-grouping")
     public String getAllGrouping(final Model model) throws IOException {
         final TestGropingConfiguration testGropingConfiguration = this.testGroupingService.getAllGrouping();
-        model.addAttribute("allGrouping", testGropingConfiguration.getSelect());
-        return "test/create/add_grouping";
+        model.addAttribute("allGraph", testGropingConfiguration.getSelect());
+        return "test/create/graph";
     }
 
     @Override
