@@ -135,7 +135,7 @@ function deleteTest(idTest) {
     });
 }
 
-function deleteAllTest(idTest) {
+function deleteAllTest() {
     $("#mainTable").remove();
     $.ajax({
         url: '/delete-all-file',
@@ -144,6 +144,7 @@ function deleteAllTest(idTest) {
         processData: false,
         contentType: false,
         success: function(data) {
+            $('#bodyMainPageId').show()
         },
         async: false
     });
@@ -335,6 +336,7 @@ function generateMainTest() {
         processData: false,
         contentType: false,
         success: function(data) {
+            $("#splitTest").removeAttr('disabled');
             $("#spinner").hide();
             $("#accordionPanelsStayOpenExample").show();
 
