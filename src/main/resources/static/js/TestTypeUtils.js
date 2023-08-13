@@ -33,7 +33,7 @@ function addGrouping() {
     let groupingValue = $('#grouping').val();
     $('#grouping').val('');
     $.ajax({
-        url: '/test-type/add-grouping?groupingName=' + groupingValue,
+        url: '/test-type/create/graph?groupingName=' + groupingValue,
         type: 'GET',
         processData: false,
         contentType: false,

@@ -68,7 +68,7 @@ public class TestTypeControllerImpl implements TestTypeController {
     }
 
     @Override
-    @GetMapping("/test-type/add-grouping")
+    @GetMapping("/test-type/create/graph")
     public String addGrouping(final Model model, final @RequestParam("groupingName") String groupingName) throws IOException {
         final GroupingItemConfiguration groupingItemConfiguration = this.testGroupingService.addGrouping(groupingName);
         model.addAttribute("allGraph", Collections.singletonList(groupingItemConfiguration));
@@ -76,7 +76,7 @@ public class TestTypeControllerImpl implements TestTypeController {
     }
 
     @Override
-    @GetMapping("/test-type/all-grouping")
+    @GetMapping("/test-type/all-graph")
     public String getAllGrouping(final Model model) throws IOException {
         final TestGropingConfiguration testGropingConfiguration = this.testGroupingService.getAllGrouping();
         model.addAttribute("allGraph", testGropingConfiguration.getSelect());
