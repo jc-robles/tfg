@@ -344,6 +344,10 @@ function generateMainTest() {
 
             $('#inputUploadTestNameId').val(fileName)
             $('#uploadTestFileInput').val("")
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+           $("#spinner").hide();
+           $("#mainTestErrorProcessDataId").show();
         }
     });
 }
