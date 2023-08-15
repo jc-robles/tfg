@@ -4,7 +4,6 @@ function addOutputData() {
 
     $('#invalidFeedbackNameFieldId').hide()
     $('#invalidFeedbackFieldId').hide()
-    $('#invalidFeedbackDataTypeId').hide()
 
     if (outputDataValue === '') {
         $('#invalidFeedbackNameFieldId').show()
@@ -107,10 +106,12 @@ function resetValuesCreateTestType() {
     $("#outputData").val("")
     $('#invalidFeedbackNameFieldId').hide()
     $('#invalidFeedbackFieldId').hide()
-    $('#invalidFeedbackDataTypeId').hide()
     $('#invalidFeedbackNameTestId').hide()
     $('#invalidFeedbackFiledId').hide()
     $('#invalidFeedbackEmptyGraphic').hide()
+    $("[id$='InvalidFeedbackEmptyGraphic']").each(function() {
+        $(this).hide()
+    })
 }
 
 function checkErrorCreateTestType() {
@@ -131,7 +132,6 @@ function checkErrorCreateTestType() {
     }
     if($('#outputDataRow').children().length <= 1) {
         $('#invalidFeedbackFieldId').show()
-        $('#invalidFeedbackDataTypeId').hide()
         $('#outputDataRow').children(":first").addClass("was-validated")
         isError = true;
     } else {
@@ -139,17 +139,17 @@ function checkErrorCreateTestType() {
     }
 
     $("#outputDataRow .toast-body").each(function() {
-        if ($('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val() === 'DATA_ARRAY' && $('#' + $(this).attr('name') + 'SelectDataNameId').val() == null) {
-           $('#invalidFeedbackFieldId').hide()
-           $('#invalidFeedbackDataTypeId').show()
-           $('#outputDataRow').children(":first").addClass("was-validated")
+        if ($('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val() === 'DATA_ARRAY') {
+            $("[id$='SelectDataNameId'] select").each(function() {
+                if(!$(this).val()) {
+                    let parentId = $(this).parent().attr('id')
+                    let id = parentId.split("SelectDataNameId")[0]
+                    $('#'+ id + 'InvalidFeedbackEmptyGraphic').show()
+                    $('#outputDataRow').children(":first").addClass("was-validated")
+                }
+            });
         }
-    })
-
-    if (!$("div[id$='SelectDataNameId'] select").val()) {
-        $('#invalidFeedbackEmptyGraphic').show()
-        $('#outputDataRow').children(":first").addClass("was-validated")
-    }
+    });
 
     return isError;
 }

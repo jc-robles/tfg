@@ -58,11 +58,13 @@ public class TestTypeControllerImpl implements TestTypeController {
 
         final String dataNameFormatted = dataName.replace(" ", "_");
         model.addAttribute("dataName", dataName);
+        model.addAttribute("dataNameFormatted", dataNameFormatted);
         model.addAttribute("dataNameId", dataNameFormatted + "Id");
         model.addAttribute("radioButtonId1", dataNameFormatted + "RadioButtonId1");
         model.addAttribute("radioButtonId2", dataNameFormatted + "RadioButtonId2");
         model.addAttribute("radioButtonName", dataNameFormatted + "RadioButtonName");
         model.addAttribute("selectDataNameId", dataNameFormatted + "SelectDataNameId");
+        model.addAttribute("errorId", dataNameFormatted + "InvalidFeedbackEmptyGraphic");
         model.addAttribute("selectData", testGropingConfiguration.getSelect());
         return "test/create/output_data";
     }
