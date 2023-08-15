@@ -29,7 +29,7 @@ function addOutputData() {
     }
 }
 
-function addGrouping() {
+function addGraphic() {
     $('#invalidFeedbackGraphicName').hide();
     $("#grouping").removeClass("is-invalid")
     let groupingValue = $('#grouping').val();
@@ -39,8 +39,7 @@ function addGrouping() {
         $('#invalidFeedbackGraphicName').show();
         $("#grouping").addClass("is-invalid")
     }
-    console.log('isError: ' + isError)
-    console.log('groupingValue: ' + groupingValue)
+
     if (!isError){
         $('#grouping').val('');
         $.ajax({
@@ -50,7 +49,7 @@ function addGrouping() {
             contentType: false,
             success: function(data) {
                 $("#graphicRow").append(data);
-                $("[id$='SelectDataNameId']").append('<option value="' + groupingValue + '">' + groupingValue + '</option>');
+                $("[id$='SelectDataNameId'] select").append('<option value="' + groupingValue + '">' + groupingValue + '</option>');
             }
         });
     }
@@ -111,6 +110,7 @@ function resetValuesCreateTestType() {
     $('#invalidFeedbackDataTypeId').hide()
     $('#invalidFeedbackNameTestId').hide()
     $('#invalidFeedbackFiledId').hide()
+    $('#invalidFeedbackEmptyGraphic').hide()
 }
 
 function checkErrorCreateTestType() {
@@ -145,6 +145,11 @@ function checkErrorCreateTestType() {
            $('#outputDataRow').children(":first").addClass("was-validated")
         }
     })
+
+    if (!$("div[id$='SelectDataNameId'] select").val()) {
+        $('#invalidFeedbackEmptyGraphic').show()
+        $('#outputDataRow').children(":first").addClass("was-validated")
+    }
 
     return isError;
 }

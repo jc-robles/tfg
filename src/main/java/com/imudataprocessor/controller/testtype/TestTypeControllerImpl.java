@@ -64,7 +64,7 @@ public class TestTypeControllerImpl implements TestTypeController {
         model.addAttribute("radioButtonName", dataNameFormatted + "RadioButtonName");
         model.addAttribute("selectDataNameId", dataNameFormatted + "SelectDataNameId");
         model.addAttribute("selectData", testGropingConfiguration.getSelect());
-        return "test/create/add_output_data";
+        return "test/create/output_data";
     }
 
     @Override
