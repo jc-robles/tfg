@@ -30,18 +30,30 @@ function addOutputData() {
 }
 
 function addGrouping() {
+    $('#invalidFeedbackGraphicName').hide();
+    $("#grouping").removeClass("is-invalid")
     let groupingValue = $('#grouping').val();
-    $('#grouping').val('');
-    $.ajax({
-        url: '/test-type/create/graph?groupingName=' + groupingValue,
-        type: 'GET',
-        processData: false,
-        contentType: false,
-        success: function(data) {
-            $("#groupingRow").append(data);
-            $("[id$='SelectDataNameId']").append('<option value="' + groupingValue + '">' + groupingValue + '</option>');
-        }
-    });
+    let isError = false
+    if (groupingValue == ''){
+        isError = true
+        $('#invalidFeedbackGraphicName').show();
+        $("#grouping").addClass("is-invalid")
+    }
+    console.log('isError: ' + isError)
+    console.log('groupingValue: ' + groupingValue)
+    if (!isError){
+        $('#grouping').val('');
+        $.ajax({
+            url: '/test-type/create/graph?groupingName=' + groupingValue,
+            type: 'GET',
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                $("#graphicRow").append(data);
+                $("[id$='SelectDataNameId']").append('<option value="' + groupingValue + '">' + groupingValue + '</option>');
+            }
+        });
+    }
 }
 
 function deleteDataName(dataNameId) {

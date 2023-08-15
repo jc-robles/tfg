@@ -20,7 +20,7 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    $("#groupingRow").append(data);
+                    $("#graphicRow").append(data);
                 }
             });
 
@@ -40,6 +40,9 @@
               return new bootstrap.Popover(popoverTriggerEl, opts)
             })
         }
+
+
+
 
 
     </script>
@@ -231,7 +234,7 @@
                         <div class="col-md-12 mb-5"></div>
                     </li>
                     <li class="list-group-item">
-                        <div id="groupingRow" class="row">
+                        <div id="graphicRow" class="row">
                             <div class="col-md-12 mb-2">
                                 <div class="input-group">
                                     <button class="btn btn-secondary" type="button" onclick="addGrouping()">
@@ -255,6 +258,9 @@
                                 <div id="inputGroupTestTypePopover" class="d-none">
                                     This field allows creating or deleting graphs which could be used in the output
                                     data section.
+                                </div>
+                                <div id="invalidFeedbackGraphicName" class="invalid-feedback">
+                                    Name is required
                                 </div>
                             </div>
                         </div>
