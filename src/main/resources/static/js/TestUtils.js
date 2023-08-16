@@ -234,8 +234,8 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
             }
             if (Object.keys(data.arrayDataList).length != 0){
                 let result = data.arrayDataList.reduce(function (r, a) {
-                    r[a.group] = r[a.group] || [];
-                    r[a.group].push(a);
+                    r[a.graph] = r[a.graph] || [];
+                    r[a.graph].push(a);
                     return r;
                 }, Object.create(null));
 

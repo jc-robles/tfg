@@ -9,9 +9,9 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor(staticName = "of")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class TestGropingConfiguration {
+public class TestGraphConfiguration {
 
     @JsonProperty("name")
-    private List<GroupingItemConfiguration> select;
+    private List<GraphItemConfiguration> select;
 
 }

@@ -12,7 +12,7 @@ public class FieldDTO {
     @JsonProperty("data_type")
     private String dataType;
 
-    @JsonProperty("grouping")
-    private String grouping;
+    @JsonProperty("graph")
+    private String graph;
 
 }

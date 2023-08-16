@@ -41,14 +41,14 @@ public class ProcessTestControllerImpl implements ProcessTestController {
     @GetMapping("/generate-process-test")
     public String processTest(final Model model, final @RequestParam("idTest") String idTest, final @RequestParam("testTypeName") String testTypeName) throws IOException {
         final Optional<ProgramConfiguration> programConfiguration = this.testTypeService.findByTestName(testTypeName);
-        final List<String> groupDataList = programConfiguration
+        final List<String> graphList = programConfiguration
                 .map(programConfiguration1 -> programConfiguration1.getDataResult().stream()
-                        .map(DataResultConfiguration::getGroupData)
+                        .map(DataResultConfiguration::getGraph)
                         .filter(Objects::nonNull)
                         .distinct()
                         .toList())
                 .orElse(Collections.emptyList());
-        model.addAttribute("groupDataList", groupDataList);
+        model.addAttribute("graphList", graphList);
         this.setValues(model, idTest);
         return "test/process/processed_test";
     }

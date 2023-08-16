@@ -44,7 +44,7 @@ public class OutputDataDTOMapper {
                     final OutputArrayDataDTO dataDTO1 = new OutputArrayDataDTO();
                     dataDTO1.setName(dataResultConfiguration.getNameField());
                     dataDTO1.setValue(dataList.stream().map(Double::floatValue).toList());
-                    dataDTO1.setGroup(dataResultConfiguration.getGroupData());
+                    dataDTO1.setGraph(dataResultConfiguration.getGraph());
                     return dataDTO1;
                 }).toList();
     }

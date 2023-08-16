@@ -16,8 +16,8 @@ public class JsonServiceImpl implements JsonService {
     @Autowired
     private Gson gson;
 
-    @Value("${grouping_configuration}")
-    private String groupingConfigurationFile;
+    @Value("${graph_configuration}")
+    private String graphConfigurationFile;
 
     @Override
     public Object convertToObject(final String json, final Class<?> eClass) throws IOException {

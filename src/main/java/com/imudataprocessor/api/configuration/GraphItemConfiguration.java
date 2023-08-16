@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @RequiredArgsConstructor(staticName = "of")
-public class GroupingItemConfiguration {
+public class GraphItemConfiguration {
 
     @JsonProperty("id")
     @NonNull

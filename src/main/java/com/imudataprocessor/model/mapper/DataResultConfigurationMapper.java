@@ -14,7 +14,7 @@ public interface DataResultConfigurationMapper {
     @Named("DataResultConfigurationFromFieldDTO")
     @Mapping(target = "nameField", source = "name")
     @Mapping(target = "dataType", source = "dataType")
-    @Mapping(target = "groupData", source = "grouping")
+    @Mapping(target = "graph", source = "graph")
     DataResultConfiguration map(FieldDTO fieldDTO);
 
     List<DataResultConfiguration> map(List<FieldDTO> fieldDTOS);

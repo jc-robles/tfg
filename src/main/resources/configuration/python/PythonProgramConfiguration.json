@@ -95,12 +95,12 @@
         {
           "nameField": "HR_AP",
           "dataType": "DATA_ARRAY",
-          "groupData": "HR_AP"
+          "graph": "HR_AP"
         },
         {
           "nameField": "HR_ML",
           "dataType": "DATA_ARRAY",
-          "groupData": "HR_ML"
+          "graph": "HR_ML"
         }
       ]
     }

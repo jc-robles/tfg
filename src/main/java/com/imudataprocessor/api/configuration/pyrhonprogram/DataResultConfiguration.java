@@ -16,7 +16,7 @@ public class DataResultConfiguration {
     @JsonProperty("dataType")
     private String dataType;
 
-    @JsonProperty("groupData")
-    private String groupData;
+    @JsonProperty("graph")
+    private String graph;
 
 }

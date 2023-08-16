@@ -30,25 +30,25 @@ function addOutputData() {
 
 function addGraphic() {
     $('#invalidFeedbackGraphicName').hide();
-    $("#grouping").removeClass("is-invalid")
-    let groupingValue = $('#grouping').val();
+    $("#graphId").removeClass("is-invalid")
+    let graphValue = $('#graphId').val();
     let isError = false
-    if (groupingValue == ''){
+    if (graphValue == ''){
         isError = true
         $('#invalidFeedbackGraphicName').show();
-        $("#grouping").addClass("is-invalid")
+        $("#graphId").addClass("is-invalid")
     }
 
     if (!isError){
-        $('#grouping').val('');
+        $('#graphId').val('');
         $.ajax({
-            url: '/test-type/create/graph?groupingName=' + groupingValue,
+            url: '/test-type/create/graph?graphName=' + graphValue,
             type: 'GET',
             processData: false,
             contentType: false,
             success: function(data) {
                 $("#graphicRow").append(data);
-                $("[id$='SelectDataNameId'] select").append('<option value="' + groupingValue + '">' + groupingValue + '</option>');
+                $("[id$='SelectDataNameId'] select").append('<option value="' + graphValue + '">' + graphValue + '</option>');
             }
         });
     }
@@ -58,15 +58,15 @@ function deleteDataName(dataNameId) {
     $("#" + dataNameId).remove();
 }
 
-function deleteGrouping(groupingId, groupingValue) {
+function deleteGraph(graphId, graphValue) {
     $.ajax({
-        url: '/test-type/remove-grouping?groupingId=' + groupingId,
+        url: '/test-type/remove-graph?graphId=' + graphId,
         type: 'GET',
         processData: false,
         contentType: false,
         success: function(data) {
-            $("#" + groupingId).remove();
-            $("[id$='SelectDataNameId'] option[value='" + groupingValue + "']").each(function() {
+            $("#" + graphId).remove();
+            $("[id$='SelectDataNameId'] option[value='" + graphValue + "']").each(function() {
                 $(this).remove();
             });
         }
@@ -83,7 +83,7 @@ function selectEnabled(selectId){
 
 function restoreDefaultValues() {
     $("#createTestName").val("")
-    $("#grouping").val("")
+    $("#graphId").val("")
     $("#createTestFileInput").val("")
     $("#outputDataRow").children().each(function(index) {
         if(index>0){
@@ -159,14 +159,14 @@ function getAllFieldsCreateTestType() {
     $("#outputDataRow .toast-body").each(function() {
         let name = $(this).attr('name');
         let data_type = $('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val();
-        let grouping;
+        let graph;
         if ($('#' + $(this).attr('name') + 'SelectDataNameId').is(':visible')) {
-            grouping = $('#' + $(this).attr('name') + 'SelectDataNameId').val();
+            graph = $('#' + $(this).attr('name') + 'SelectDataNameId').val();
         }
         let field = {
             name: name,
             dataType: data_type,
-            grouping: grouping
+            graph: graph
         }
         fields.push(field);
     });

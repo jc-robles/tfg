@@ -1,10 +1,10 @@
 package com.imudataprocessor.controller.testtype;
 
-import com.imudataprocessor.api.configuration.GroupingItemConfiguration;
-import com.imudataprocessor.api.configuration.TestGropingConfiguration;
+import com.imudataprocessor.api.configuration.GraphItemConfiguration;
+import com.imudataprocessor.api.configuration.TestGraphConfiguration;
 import com.imudataprocessor.api.controller.testtype.TestTypeController;
 import com.imudataprocessor.api.service.JsonService;
-import com.imudataprocessor.api.service.TestGroupingService;
+import com.imudataprocessor.api.service.TestGraphService;
 import com.imudataprocessor.api.service.TestTypeService;
 import com.imudataprocessor.model.mapper.ProgramConfigurationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import java.util.List;
 public class TestTypeControllerImpl implements TestTypeController {
 
     @Autowired
-    private TestGroupingService testGroupingService;
+    private TestGraphService testGraphService;
 
     @Autowired
     private TestTypeService testTypeService;
@@ -54,7 +54,7 @@ public class TestTypeControllerImpl implements TestTypeController {
     @Override
     @GetMapping("/test-type/add-output-data")
     public String addOutputData(final Model model, final @RequestParam("dataName") String dataName) throws IOException {
-        final TestGropingConfiguration testGropingConfiguration = this.testGroupingService.getAllGrouping();
+        final TestGraphConfiguration testGraphConfiguration = this.testGraphService.getAllGraphs();
 
         final String dataNameFormatted = dataName.replace(" ", "_");
         model.addAttribute("dataName", dataName);
@@ -65,30 +65,30 @@ public class TestTypeControllerImpl implements TestTypeController {
         model.addAttribute("radioButtonName", dataNameFormatted + "RadioButtonName");
         model.addAttribute("selectDataNameId", dataNameFormatted + "SelectDataNameId");
         model.addAttribute("errorId", dataNameFormatted + "InvalidFeedbackEmptyGraphic");
-        model.addAttribute("selectData", testGropingConfiguration.getSelect());
+        model.addAttribute("selectData", testGraphConfiguration.getSelect());
         return "test/create/output_data";
     }
 
     @Override
     @GetMapping("/test-type/create/graph")
-    public String addGrouping(final Model model, final @RequestParam("groupingName") String groupingName) throws IOException {
-        final GroupingItemConfiguration groupingItemConfiguration = this.testGroupingService.addGrouping(groupingName);
-        model.addAttribute("allGraph", Collections.singletonList(groupingItemConfiguration));
+    public String addGraph(final Model model, final @RequestParam("graphName") String graphName) throws IOException {
+        final GraphItemConfiguration graphItemConfiguration = this.testGraphService.addGraph(graphName);
+        model.addAttribute("allGraph", Collections.singletonList(graphItemConfiguration));
         return "test/create/graph";
     }
 
     @Override
     @GetMapping("/test-type/all-graph")
-    public String getAllGrouping(final Model model) throws IOException {
-        final TestGropingConfiguration testGropingConfiguration = this.testGroupingService.getAllGrouping();
-        model.addAttribute("allGraph", testGropingConfiguration.getSelect());
+    public String getAllGraphs(final Model model) throws IOException {
+        final TestGraphConfiguration testGraphConfiguration = this.testGraphService.getAllGraphs();
+        model.addAttribute("allGraph", testGraphConfiguration.getSelect());
         return "test/create/graph";
     }
 
     @Override
-    @GetMapping("/test-type/remove-grouping")
-    public ResponseEntity<HttpStatus> removeGrouping(final Model model, final @RequestParam("groupingId") String groupingId) throws IOException {
-        this.testGroupingService.removeGrouping(groupingId);
+    @GetMapping("/test-type/remove-graph")
+    public ResponseEntity<HttpStatus> removeGraph(final Model model, final @RequestParam("graphId") String graphId) throws IOException {
+        this.testGraphService.removeGraph(graphId);
         return ResponseEntity.ok().build();
     }
 

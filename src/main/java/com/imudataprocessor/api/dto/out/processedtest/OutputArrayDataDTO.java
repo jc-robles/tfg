@@ -11,6 +11,6 @@ public class OutputArrayDataDTO {
 
     private List<Float> value;
 
-    private String group;
+    private String graph;
 
 }

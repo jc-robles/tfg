@@ -16,11 +16,11 @@ public interface TestTypeController {
 
     String addOutputData(Model model, String dataName) throws IOException;
 
-    String addGrouping(Model model, String groupingName) throws IOException;
+    String addGraph(Model model, String graphName) throws IOException;
 
-    String getAllGrouping(Model model) throws IOException;
+    String getAllGraphs(Model model) throws IOException;
 
-    ResponseEntity<HttpStatus> removeGrouping(Model model, String groupingId) throws IOException;
+    ResponseEntity<HttpStatus> removeGraph(Model model, String graphId) throws IOException;
 
     ResponseEntity<HttpStatus> deleteTestType(Model model, String testType) throws IOException;
 

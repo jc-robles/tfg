@@ -23,7 +23,7 @@
         </div>
 
         <div class="accordion" th:id="${accordionPanelsStayOpen}" style="display: none;">
-            <div th:each="item: ${groupDataList}" class="accordion-item">
+            <div th:each="item: ${graphList}" class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             th:attr="data-bs-target=${'#'+id} + ${item} + PanelsStayOpenCollapse, aria-controls=${id} + ${item} + panelsStayOpenCollapse"
