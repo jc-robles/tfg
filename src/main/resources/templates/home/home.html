@@ -75,17 +75,16 @@
 <div class="modal fade" id="uploadTestModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" enctype="multipart/form-data" action="/">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Select a CSV file</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <div class="input-group input-group-lg">
-                            <input type="file" name="file" class="form-control" id="uploadTestFileInput" required>
-                            <span class="input-group-text" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover"
-                                  data-bs-content-id="inputRawTestPopover">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Select a CSV file</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="input-group input-group-lg">
+                        <input type="file" name="file" class="form-control" id="uploadTestFileInput" required>
+                        <span class="input-group-text" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover"
+                              data-bs-content-id="inputRawTestPopover">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor" class="bi bi-question-circle " viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
@@ -96,36 +95,35 @@
                                         1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"></path>
                             </svg>
                             </span>
-                        </div>
-                        <div id="inputRawTestPopover" class="d-none">
-                            A csv file containing the following structure must be selected:
-                            <ul>
-                                <li>
-                                    The header should follow this order: timestamp, accelerometer x, accelerometer y,
-                                    accelerometer z, gyroscope x , gyroscope y, gyroscope z, magnetometer x,
-                                    magnetometer y, magnetometer z.
-                                </li>
-                                <li>
-                                    The row following the header must indicate the units of each column.
-                                </li>
-                                <li>
-                                    If the units are not available, each cell can display a N/A value or can be left
-                                    empty.
-                                </li>
-                            </ul>
-                        </div>
-                        <div id="invalidFeedbackFileRawId" class="invalid-feedback">File is required</div>
                     </div>
+                    <div id="inputRawTestPopover" class="d-none">
+                        A csv file containing the following structure must be selected:
+                        <ul>
+                            <li>
+                                The header should follow this order: timestamp, accelerometer x, accelerometer y,
+                                accelerometer z, gyroscope x , gyroscope y, gyroscope z, magnetometer x,
+                                magnetometer y, magnetometer z.
+                            </li>
+                            <li>
+                                The row following the header must indicate the units of each column.
+                            </li>
+                            <li>
+                                If the units are not available, each cell can display a N/A value or can be left
+                                empty.
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="invalidFeedbackFileRawId" class="invalid-feedback">File is required</div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUploadModal">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-primary" id="uploadTestFileButton" onclick="uploadTest()">
-                        Upload
-                    </button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUploadModal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary" id="uploadTestFileButton" onclick="uploadTest()">
+                    Upload
+                </button>
+            </div>
         </div>
     </div>
 </div>

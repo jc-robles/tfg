@@ -1,13 +1,13 @@
 
 function sendSplit() {
     /* validate */
-    let checkName = false;
-    let checkStart = false;
-    let checkEnd = false;
+    let checkName = false
+    let checkStart = false
+    let checkEnd = false
 
-    let start = $('#inputStartSplit').val();
-    let end = $('#inputEndSplit').val();
-    let name = $('#inputNameSplit').val();
+    let start = $('#inputStartSplit').val()
+    let end = $('#inputEndSplit').val()
+    let name = $('#inputNameSplit').val()
 
     $('#inputNameSplit').removeClass("is-invalid")
     $('#inputStartSplit').removeClass("is-invalid")
@@ -24,11 +24,11 @@ function sendSplit() {
     $('#invalidFeedbackGreaterThanEndTest').hide()
 
     if (name) {
-        checkName = true;
+        checkName = true
         if ($('#listTest #' + name).length > 0) {
             $('#invalidFeedbackDuplicateTest').show()
             $('#invalidFeedbackEmptyNameTest').hide()
-            checkName = false;
+            checkName = false
         }
     } else {
         $('#invalidFeedbackEmptyNameTest').show()
@@ -42,7 +42,7 @@ function sendSplit() {
         $('#invalidFeedbackNegativeStartTest').hide()
         $('#invalidFeedbackEmptyStartTest').show()
     } else {
-        checkStart = true;
+        checkStart = true
     }
 
     if (end == '') {
@@ -58,7 +58,7 @@ function sendSplit() {
         $('#invalidFeedbackNegativeEndTest').show()
         $('#invalidFeedbackGreaterThanEndTest').hide()
     } else {
-        checkEnd = true;
+        checkEnd = true
     }
 
     if (checkName && checkStart && checkEnd) {
@@ -66,8 +66,8 @@ function sendSplit() {
         $('#inputStartSplit').val("")
         $('#inputEndSplit').val("")
 
-        generateHtmlSplit(name);
-        generateGraphicsSplit(name, start, end);
+        generateHtmlSplit(name)
+        generateGraphicsSplit(name, start, end)
 
         $("#splitTestSuccess").click()
         $("#liveToast1 .toast-body").empty()
@@ -86,7 +86,7 @@ function sendSplit() {
 }
 
 function generateHtmlSplit(name) {
-    $('#listTest').append('<li class="nav-item"><a class="nav-link text-body" id="' + name + '" onclick="selectTest(\'' + name + '\')">' + name + '</a></li>');
+    $('#listTest').append('<li class="nav-item"><a class="nav-link text-body" id="' + name + '" onclick="selectTest(\'' + name + '\')">' + name + '</a></li>')
     $.ajax({
         url: '/generate-split-test?idTest=' + name,
         type: 'GET',
@@ -94,34 +94,34 @@ function generateHtmlSplit(name) {
         processData: false,
         contentType: false,
         success: function(data) {
-            $('#mainTable').append(data);
-            $("#" + name + "Spinner").show();
+            $('#mainTable').append(data)
+            $("#" + name + "Spinner").show()
         },
         async: false
-    });
+    })
 }
 
 function generateGraphicsSplit(name, start, end) {
-    let f = $('#formSplitId')[0];
-    f.start.value = start;
-    f.end.value = end;
-    f.fileName.value = name;
-    createGraphics('/split-file', new FormData(f), name);
+    let f = $('#formSplitId')[0]
+    f.start.value = start
+    f.end.value = end
+    f.fileName.value = name
+    createGraphics('/split-file', new FormData(f), name)
 }
 
 function selectTest(idTest) {
     $("#listTest li a").each(function(i) {
-       $(this).removeClass('active');
-    });
-    $("#"+idTest).addClass("active");
-    $('div[id$="TableGraphic"]').hide();
-    $('#' + idTest +'TableGraphic').show();
+       $(this).removeClass('active')
+    })
+    $("#"+idTest).addClass("active")
+    $('div[id$="TableGraphic"]').hide()
+    $('#' + idTest +'TableGraphic').show()
 }
 
 function deleteTest(idTest) {
-    $("#"+idTest).parent().remove();
-    $("#" + idTest + "TableGraphic").remove();
-    $("#mainTest").click();
+    $("#"+idTest).parent().remove()
+    $("#" + idTest + "TableGraphic").remove()
+    $("#mainTest").click()
 
     $.ajax({
         url: '/delete-file?fileName=' + idTest,
@@ -132,11 +132,11 @@ function deleteTest(idTest) {
         success: function(data) {
         },
         async: false
-    });
+    })
 }
 
 function deleteAllTest() {
-    $("#mainTable").remove();
+    $("#mainTable").remove()
     $.ajax({
         url: '/delete-all-file',
         type: 'DELETE',
@@ -147,21 +147,21 @@ function deleteAllTest() {
             $('#bodyMainPageId').show()
         },
         async: false
-    });
+    })
 }
 
 function processTest(nameTest) {
-    $("#" + nameTest + "ProcessTestButton").children().attr('disabled', 'disabled');
-    $("#" + nameTest + "testTypeSelectId").attr('disabled', 'disabled');
-    let name = nameTest + "Processed";
-    let testTypeName = $("#" + nameTest + "testTypeSelectId").val();
+    $("#" + nameTest + "ProcessTestButton").children().attr('disabled', 'disabled')
+    $("#" + nameTest + "testTypeSelectId").attr('disabled', 'disabled')
+    let name = nameTest + "Processed"
+    let testTypeName = $("#" + nameTest + "testTypeSelectId").val()
 
     if ($("#" + nameTest + "TableGraphic").children().length > 2) {
-        $("#" + nameTest + "TableGraphic").children().last().remove();
+        $("#" + nameTest + "TableGraphic").children().last().remove()
     }
 
-    generateHtmlProcessedTest(nameTest, testTypeName);
-    generateGraphicsProcessedTest(nameTest, name, testTypeName);
+    generateHtmlProcessedTest(nameTest, testTypeName)
+    generateGraphicsProcessedTest(nameTest, name, testTypeName)
 }
 
 function generateHtmlProcessedTest(nameTest, testTypeName) {
@@ -173,52 +173,52 @@ function generateHtmlProcessedTest(nameTest, testTypeName) {
         processData: false,
         contentType: false,
         success: function(data) {
-            $('#' + nameTest + 'TableGraphic').append(data);
+            $('#' + nameTest + 'TableGraphic').append(data)
         },
         async: false
-    });
+    })
 }
 
 function generateGraphicsProcessedTest(nameTest, nameTestProcessed, testTypeName) {
     let form = new FormData()
     form.append('fileName', nameTestProcessed)
     form.append('testTypeName', testTypeName)
-    generateOutput('/process-test', form, nameTest, nameTestProcessed);
+    generateOutput('/process-test', form, nameTest, nameTestProcessed)
 }
 
 function download(id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/download-processed-test?nameTest=' + id + 'Processed', true);
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', '/download-processed-test?nameTest=' + id + 'Processed', true)
     xhr.onload = function() {
         if (xhr.status === 200) {
-            const fileContent = xhr.response;
-            const url = URL.createObjectURL(new Blob([fileContent]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = id + 'Processed.json';
-            link.click();
-            URL.revokeObjectURL(url);
+            const fileContent = xhr.response
+            const url = URL.createObjectURL(new Blob([fileContent]))
+            const link = document.createElement("a")
+            link.href = url
+            link.download = id + 'Processed.json'
+            link.click()
+            URL.revokeObjectURL(url)
         }
-    };
-    xhr.send();
-};
+    }
+    xhr.send()
+}
 
 function downloadRawTest(id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/download-raw-test?nameTest=' + id, true);
+    const xhr = new XMLHttpRequest()
+    xhr.open('GET', '/download-raw-test?nameTest=' + id, true)
     xhr.onload = function() {
         if (xhr.status === 200) {
-            const fileContent = xhr.response;
-            const url = URL.createObjectURL(new Blob([fileContent]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = id + '.csv';
-            link.click();
-            URL.revokeObjectURL(url);
+            const fileContent = xhr.response
+            const url = URL.createObjectURL(new Blob([fileContent]))
+            const link = document.createElement("a")
+            link.href = url
+            link.download = id + '.csv'
+            link.click()
+            URL.revokeObjectURL(url)
         }
-    };
-    xhr.send();
-};
+    }
+    xhr.send()
+}
 
 function generateOutput(url, form, nameTest, nameTestProcessed) {
     $.ajax({
@@ -228,41 +228,41 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
         processData: false,
         contentType: false,
         success: function(data) {
-            $("#" + nameTestProcessed + "Spinner").hide();
+            $("#" + nameTestProcessed + "Spinner").hide()
             if (Object.keys(data.alphanumericDataList).length != 0){
                 createAlphanumeric(nameTestProcessed, data.alphanumericDataList)
             }
             if (Object.keys(data.arrayDataList).length != 0){
                 let result = data.arrayDataList.reduce(function (r, a) {
-                    r[a.graph] = r[a.graph] || [];
-                    r[a.graph].push(a);
-                    return r;
-                }, Object.create(null));
+                    r[a.graph] = r[a.graph] || []
+                    r[a.graph].push(a)
+                    return r
+                }, Object.create(null))
 
                 for (let category in result) {
-                    let names = [];
-                    let values = [];
+                    let names = []
+                    let values = []
                     result[category].forEach(item => {
                         names.push(item.name)
                         values.push(item.value)
-                    });
-                    newGraphic(nameTestProcessed + category + 'ProcessedGraphic',names,values);
+                    })
+                    newGraphic(nameTestProcessed + category + 'ProcessedGraphic',names,values)
                 }
 
-                reload();
-                $("#" + nameTestProcessed + "AccordionPanelsStayOpen").show();
+                reload()
+                $("#" + nameTestProcessed + "AccordionPanelsStayOpen").show()
             }
 
-            $("#" + nameTest + "ProcessTestButton").hide();
-            $("#" + nameTest + "DownloadTestButton").show();
+            $("#" + nameTest + "ProcessTestButton").hide()
+            $("#" + nameTest + "DownloadTestButton").show()
         },
         error: function(xhr, ajaxOptions, thrownError) {
-            $("#" + nameTestProcessed + "Spinner").hide();
-            $("#" + nameTestProcessed + "ErrorProcessDataId").show();
-            $("#" + nameTest + "ProcessTestButton").children().removeAttr('disabled');
-            $("#" + nameTest + "testTypeSelectId").removeAttr('disabled');
+            $("#" + nameTestProcessed + "Spinner").hide()
+            $("#" + nameTestProcessed + "ErrorProcessDataId").show()
+            $("#" + nameTest + "ProcessTestButton").children().removeAttr('disabled')
+            $("#" + nameTest + "testTypeSelectId").removeAttr('disabled')
         }
-    });
+    })
 }
 
 function createAlphanumeric(name, alphanumericDataList) {
@@ -274,9 +274,9 @@ function createAlphanumeric(name, alphanumericDataList) {
                 "<li class='list-group-item'>" + element.value + "</li>" +
             "</ul>" +
         "</div>"
-        $("#" + name + "AlphanumericDataId").append(data);
-    });
-    $("#" + name + "AlphanumericDataId").show();
+        $("#" + name + "AlphanumericDataId").append(data)
+    })
+    $("#" + name + "AlphanumericDataId").show()
 }
 
 function createGraphics(url, form, name) {
@@ -287,84 +287,127 @@ function createGraphics(url, form, name) {
         processData: false,
         contentType: false,
         success: function(data) {
-            newGraphic(name + 'AccelerometerGraphic',['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ] ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ]);
-            newGraphic(name + 'GyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ]);
-            newGraphic(name + 'QuaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ]);
-            reload();
-            $("#" + name + "Spinner").hide();
-            $("#" + name + "AccordionPanelsStayOpen").show();
+            newGraphic(name + 'AccelerometerGraphic',['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ] ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ])
+            newGraphic(name + 'GyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ])
+            newGraphic(name + 'QuaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ])
+            reload()
+            $("#" + name + "Spinner").hide()
+            $("#" + name + "AccordionPanelsStayOpen").show()
         }
-    });
+    })
 }
 
 function uploadTest() {
-    $('#mainTable').remove()
-    $('#invalidFeedbackFileRawId').hide()
-    let isError = false;
-    if($('#uploadTestFileInput').val() === '') {
-        $('#uploadTestModal .modal-body').addClass("was-validated")
-        $('#invalidFeedbackFileRawId').show()
-        isError = true;
-    } else {
-        $('#uploadTestModal .modal-body').removeClass("was-validated")
-    }
-
+    let isError = checkErrorUploadTest()
     if (!isError) {
+        clearMainTable()
+        clearAllGraphics()
+        hideMainBodyText()
+        showMainTableLoading()
+        closeUploadModal()
         generateMainTest()
+        setAllDataMainTest()
         popover()
     }
 }
 
-function generateMainTest() {
-    clearAllGraphics();
+function clearMainTable() {
+    $('#mainTable').remove()
+}
 
+function checkErrorUploadTest() {
+    $('#invalidFeedbackFileRawId').hide()
+    let isError = false
+    if($('#uploadTestFileInput').val() === '') {
+        $('#uploadTestModal .modal-body').addClass("was-validated")
+        $('#invalidFeedbackFileRawId').show()
+        isError = true
+    } else {
+        $('#uploadTestModal .modal-body').removeClass("was-validated")
+    }
+    return isError
+}
+
+function hideMainBodyText() {
     $('#bodyMainPageId').hide()
-    $("#mainTable").show();
-    $("#spinner").show();
-    $("#closeUploadModal").click();
+}
 
-    callGenerateMainTest();
+function showMainTableLoading() {
+    $("#mainTable").show()
+    $("#spinner").show()
+}
 
-    var file = document.getElementById("uploadTestFileInput").files[0];
-    var fileName = file.name;
-    var formData = new FormData();
+function closeUploadModal() {
+    $("#closeUploadModal").click()
+}
+
+function getUploadTestFile() {
+    return document.getElementById("uploadTestFileInput").files[0]
+}
+
+function createFormDataWithDatasetFile(file) {
+    let fileName = file.name
+    let formData = new FormData()
     formData.append('file', file)
+    return formData
+}
+
+function setAllDataMainTest() {
+    let file = getUploadTestFile()
     $.ajax({
         url: '/upload-file',
         type: 'POST',
-        data: formData,
+        data: createFormDataWithDatasetFile(file),
         processData: false,
         contentType: false,
         success: function(data) {
-            $("#splitTest").removeAttr('disabled');
-            $("#spinner").hide();
-            $("#accordionPanelsStayOpenExample").show();
-
-            newGraphic('accelerometerGraphic',['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ] ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ]);
-            newGraphic('gyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ]);
-            newGraphic('quaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ]);
-
-            $('#inputUploadTestNameId').val(fileName)
-            $('#uploadTestFileInput').val("")
+            showAccordionMainData()
+            setMainGraphics(data)
+            setUploadedFileInfo(file.name)
+            clearInputUploadModal()
         },
         error: function(xhr, ajaxOptions, thrownError) {
-           $("#spinner").hide();
-           $("#mainTestErrorProcessDataId").show();
+            showErrorUploadModal()
         }
-    });
+    })
 }
 
-function callGenerateMainTest() {
+function showAccordionMainData() {
+    $("#spinner").hide()
+    $("#accordionPanelsStayOpenExample").show()
+}
+
+function setMainGraphics(data) {
+    newGraphic('accelerometerGraphic',['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ] ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ])
+    newGraphic('gyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ])
+    newGraphic('quaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ])
+}
+
+function setUploadedFileInfo(fileName) {
+    $('#inputUploadTestNameId').val(fileName)
+}
+
+function clearInputUploadModal() {
+    $('#uploadTestFileInput').val("")
+}
+
+function showErrorUploadModal() {
+   $("#spinner").hide()
+   $("#mainTestErrorProcessDataId").show()
+}
+
+function generateMainTest() {
     $.ajax({
         url: '/generate-main-test',
         type: 'GET',
         processData: false,
         contentType: false,
         success: function(data) {
-            $("body").append(data);
+            $("body").append(data)
+            $("#splitTest").removeAttr('disabled')
         },
         async: false
-    });
+    })
 }
 
 function getAllTestType() {
@@ -377,11 +420,11 @@ function getAllTestType() {
             $('#removeTestTypeSelectId').find('option').remove()
             data.forEach((element, index, array) => {
             if (index==0) {
-                $("#removeTestTypeSelectId").append('<option value="' + element + '" selected>' + element + '</option>');
+                $("#removeTestTypeSelectId").append('<option value="' + element + '" selected>' + element + '</option>')
             } else {
-                $("#removeTestTypeSelectId").append('<option value="' + element + '">' + element + '</option>');
+                $("#removeTestTypeSelectId").append('<option value="' + element + '">' + element + '</option>')
             }
-            });
+            })
         }
-    });
+    })
 }
