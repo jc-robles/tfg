@@ -249,7 +249,6 @@ function generateOutput(url, form, nameTest, nameTestProcessed) {
                     newGraphic(nameTestProcessed + category + 'ProcessedGraphic',names,values)
                 }
 
-                reload()
                 $("#" + nameTestProcessed + "AccordionPanelsStayOpen").show()
             }
 
@@ -290,7 +289,6 @@ function createGraphics(url, form, name) {
             newGraphic(name + 'AccelerometerGraphic',['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ] ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ])
             newGraphic(name + 'GyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ])
             newGraphic(name + 'QuaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ])
-            reload()
             $("#" + name + "Spinner").hide()
             $("#" + name + "AccordionPanelsStayOpen").show()
         }
@@ -307,7 +305,8 @@ function uploadTest() {
         closeUploadModal()
         generateMainTest()
         setAllDataMainTest()
-        popover()
+        loadPopover()
+        loadToast()
     }
 }
 

@@ -1,16 +1,8 @@
-let myCharts= [];
-
-function reload() {
-    if (typeof variable !== 'undefined') {
-            myCharts.forEach(function(elemento, indice, array) {
-                elemento.update();
-            })
-    }
-}
+const charts = [];
 
 function clearAllGraphics() {
-    myCharts.forEach(function(elemento, indice, array) {
-        elemento.destroy();
+    charts.forEach(function(element) {
+        element.destroy();
     })
 }
 
@@ -56,5 +48,5 @@ function newGraphic(idElement, dataLabels, data) {
         });
 
         window.addEventListener('resize', function() {myChart.resize();});
-        myCharts.push(myChart)
+        charts.push(myChart)
 }

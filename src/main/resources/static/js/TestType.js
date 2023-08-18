@@ -22,7 +22,7 @@ function addOutputData() {
             contentType: false,
             success: function(data) {
                 $("#outputDataRow").append(data);
-                popover();
+                loadPopover();
             }
         });
     }
@@ -216,6 +216,18 @@ function deleteTestType() {
             $("[id$='testTypeSelectId'] option[value='" + testType + "']").each(function() {
                 $(this).remove();
             });
+        }
+    });
+}
+
+function getAllGraphs() {
+    $.ajax({
+        url: '/test-type/all-graph',
+        type: 'GET',
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            $("#graphicRow").append(data);
         }
     });
 }
