@@ -35,13 +35,13 @@ function sendSplit() {
         $('#invalidFeedbackDuplicateTest').hide()
     }
 
-    if (start < 0 ) {
-        $('#invalidFeedbackNegativeStartTest').show()
-        $('#invalidFeedbackEmptyStartTest').hide()
-    } else if (start == '') {
+    if (start == '') {
         $('#invalidFeedbackNegativeStartTest').hide()
         $('#invalidFeedbackEmptyStartTest').show()
-    } else {
+    } else if (parseInt(start) < 0 ) {
+        $('#invalidFeedbackNegativeStartTest').show()
+        $('#invalidFeedbackEmptyStartTest').hide()
+    }  else {
         checkStart = true
     }
 
@@ -49,11 +49,11 @@ function sendSplit() {
         $('#invalidFeedbackEmptyEndTest').show()
         $('#invalidFeedbackNegativeEndTest').hide()
         $('#invalidFeedbackGreaterThanEndTest').hide()
-    } else if (end<=start) {
+    } else if (parseInt(end)<=parseInt(start)) {
         $('#invalidFeedbackEmptyEndTest').hide()
         $('#invalidFeedbackNegativeEndTest').hide()
         $('#invalidFeedbackGreaterThanEndTest').show()
-    } else if (end<1) {
+    } else if (parseInt(end)<1) {
         $('#invalidFeedbackEmptyEndTest').hide()
         $('#invalidFeedbackNegativeEndTest').show()
         $('#invalidFeedbackGreaterThanEndTest').hide()
@@ -317,15 +317,15 @@ function clearMainTable() {
 
 function checkErrorUploadTest() {
     $('#invalidFeedbackFileRawId').hide()
-    let isError = false
+    $('#uploadTestFileInput').removeClass("is-invalid")
+
     if($('#uploadTestFileInput').val() === '') {
-        $('#uploadTestModal .modal-body').addClass("was-validated")
+        $('#uploadTestFileInput').addClass("is-invalid")
         $('#invalidFeedbackFileRawId').show()
-        isError = true
-    } else {
-        $('#uploadTestModal .modal-body').removeClass("was-validated")
+        return true
     }
-    return isError
+
+    return false
 }
 
 function hideMainBodyText() {
