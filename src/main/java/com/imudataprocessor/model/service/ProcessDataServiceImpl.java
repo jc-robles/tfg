@@ -32,6 +32,7 @@ public class ProcessDataServiceImpl implements ProcessDataService {
 
     @Override
     public InternalDataDTO processMainTest(final MultipartFile multipartFile) throws IOException {
+        this.deleteAllTest();
         this.fileService.save(this.mainFilePath, multipartFile.getOriginalFilename(), multipartFile.getBytes());
         return this.fileService.getDataFromMainFile();
     }

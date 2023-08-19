@@ -41,7 +41,6 @@ public class FileControllerImpl implements FileController {
     @PostMapping("/upload-file")
     public ResponseEntity<DataDTO> uploadFile(final @RequestParam("file") MultipartFile multipartFile,
                                               final Model model) throws IOException {
-        this.processDataServiceImpl.deleteAllTest();
         final InternalDataDTO internalDataDTO = this.processDataServiceImpl.processMainTest(multipartFile);
         return ResponseEntity.ok(this.dataDTOMapper.map(internalDataDTO));
     }

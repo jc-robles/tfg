@@ -301,7 +301,6 @@ function uploadTest() {
         clearMainTable()
         clearAllGraphics()
         hideMainBodyText()
-        showMainTableLoading()
         closeUploadModal()
         generateMainTest()
         setAllDataMainTest()
@@ -331,11 +330,6 @@ function hideMainBodyText() {
     $('#bodyMainPageId').hide()
 }
 
-function showMainTableLoading() {
-    $("#mainTable").show()
-    $("#spinner").show()
-}
-
 function closeUploadModal() {
     $("#closeUploadModal").click()
 }
@@ -360,10 +354,11 @@ function setAllDataMainTest() {
         processData: false,
         contentType: false,
         success: function(data) {
-            showAccordionMainData()
             setMainGraphics(data)
             setUploadedFileInfo(file.name)
             clearInputUploadModal()
+            showAccordionMainData()
+            enabledSplitTestButton()
         },
         error: function(xhr, ajaxOptions, thrownError) {
             showErrorUploadModal()
@@ -386,6 +381,10 @@ function setUploadedFileInfo(fileName) {
     $('#inputUploadTestNameId').val(fileName)
 }
 
+function enabledSplitTestButton() {
+    $("#splitTest").removeAttr('disabled')
+}
+
 function clearInputUploadModal() {
     $('#uploadTestFileInput').val("")
 }
@@ -403,7 +402,6 @@ function generateMainTest() {
         contentType: false,
         success: function(data) {
             $("body").append(data)
-            $("#splitTest").removeAttr('disabled')
         },
         async: false
     })
