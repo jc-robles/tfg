@@ -16,8 +16,8 @@ function newGraphic(idElement, dataLabels, data) {
         let newChart = new Chart(document.getElementById(idElement), {
         type: 'line',
         data: {
-            labels: generateDataset(1, data[0].length, 1).map(String),
-            datasets: generateValues(dataLabels, data)
+            labels: generateXAxisLabels(1, data[0].length, 1),
+            datasets: generateDatasets(dataLabels, data)
         },
         options: {
           scales: {
@@ -33,22 +33,22 @@ function newGraphic(idElement, dataLabels, data) {
         charts.push(newChart)
 }
 
-function generateDataset(start, stop, step) {
+function generateXAxisLabels(start, stop, step) {
     return Array.from(
         { length: (stop - start) / step + 1 },
         (value, index) => start + index * step
-    )
+    ).map(String)
 }
 
-function generateValues(dataLabels, data) {
+function generateDatasets(dataLabels, data) {
     let dataValues = [];
     data.forEach((element, index) => {
-        dataValues.push(dataValue(dataLabels[index], element, colors[index]));
+        dataValues.push(dataset(dataLabels[index], element, colors[index]));
     });
     return dataValues;
 }
 
-function dataValue(label, data, color) {
+function dataset(label, data, color) {
     return {
         label: label,
         data: data,

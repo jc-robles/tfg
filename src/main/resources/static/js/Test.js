@@ -1,3 +1,6 @@
+const accelerometerGraphic = ['Accelerometer X', 'Accelerometer Y', 'Accelerometer Z']
+const gyroscopeGraphic = ['Gyroscope X', 'Gyroscope Y','Gyroscope Z']
+const quaternionGraphic = ['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z']
 
 function sendSplit() {
     /* validate */
@@ -286,9 +289,9 @@ function createGraphics(url, form, name) {
         processData: false,
         contentType: false,
         success: function(data) {
-            newGraphic(name + 'AccelerometerGraphic',['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ] ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ])
-            newGraphic(name + 'GyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ])
-            newGraphic(name + 'QuaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ])
+            newGraphic(name + 'AccelerometerGraphic',accelerometerGraphic ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ])
+            newGraphic(name + 'GyroscopeGraphic',gyroscopeGraphic ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ])
+            newGraphic(name + 'QuaternionGraphic',quaternionGraphic ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ])
             $("#" + name + "Spinner").hide()
             $("#" + name + "AccordionPanelsStayOpen").show()
         }
@@ -372,9 +375,9 @@ function showAccordionMainData() {
 }
 
 function setMainGraphics(data) {
-    newGraphic('accelerometerGraphic',['Accelerometer X', 'Accelerometer Y','Accelerometer Z' ] ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ])
-    newGraphic('gyroscopeGraphic',['Gyroscope X', 'Gyroscope Y','Gyroscope Z'] ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ])
-    newGraphic('quaternionGraphic',['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z'] ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ])
+    newGraphic('accelerometerGraphic',accelerometerGraphic ,[data.accelerometerX, data.accelerometerY, data.accelerometerZ])
+    newGraphic('gyroscopeGraphic',gyroscopeGraphic ,[data.gyroscopeX, data.gyroscopeY, data.gyroscopeZ])
+    newGraphic('quaternionGraphic',quaternionGraphic ,[data.quaternionW, data.quaternionX, data.quaternionY, data.quaternionZ])
 }
 
 function setUploadedFileInfo(fileName) {
