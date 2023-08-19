@@ -1,61 +1,67 @@
 function addOutputData() {
-    let outputDataValue = $('#outputData').val();
-    let isError = false;
+    resetAddOutputData()
+    let isError = checkErrorAddOutputData()
 
-    $('#invalidFeedbackNameFieldId').hide()
-    $('#invalidFeedbackFieldId').hide()
-
-    if (outputDataValue === '') {
-        $('#invalidFeedbackNameFieldId').show()
-        $('#outputDataRow').children(":first").addClass("was-validated")
-        isError = true;
-    } else {
-        $('#outputDataRow').children(":first").removeClass("was-validated")
-    }
-
+    let outputDataValue = $('#outputData').val()
     if (!isError) {
-        $('#outputData').val('');
+        $('#outputData').val('')
         $.ajax({
             url: '/test-type/add-output-data?dataName=' + outputDataValue,
             type: 'GET',
             processData: false,
             contentType: false,
             success: function(data) {
-                $("#outputDataRow").append(data);
-                loadPopover();
+                $("#outputDataRow").append(data)
+                loadPopover()
             }
-        });
+        })
     }
 }
 
+function resetAddOutputData() {
+    $('#invalidFeedbackNameFieldId').hide()
+    $('#invalidFeedbackFieldId').hide()
+    $('#outputDataRow').children(":first").removeClass("was-validated")
+}
+
+function checkErrorAddOutputData() {
+    let outputDataValue = $('#outputData').val()
+    if (outputDataValue === '') {
+        $('#invalidFeedbackNameFieldId').show()
+        $('#outputDataRow').children(":first").addClass("was-validated")
+        return true
+    }
+    return false
+}
+
 function addGraphic() {
-    $('#invalidFeedbackGraphicName').hide();
+    $('#invalidFeedbackGraphicName').hide()
     $("#graphId").removeClass("is-invalid")
-    let graphValue = $('#graphId').val();
+    let graphValue = $('#graphId').val()
     let isError = false
     if (graphValue == ''){
         isError = true
-        $('#invalidFeedbackGraphicName').show();
+        $('#invalidFeedbackGraphicName').show()
         $("#graphId").addClass("is-invalid")
     }
 
     if (!isError){
-        $('#graphId').val('');
+        $('#graphId').val('')
         $.ajax({
             url: '/test-type/create/graph?graphName=' + graphValue,
             type: 'GET',
             processData: false,
             contentType: false,
             success: function(data) {
-                $("#graphicRow").append(data);
-                $("[id$='SelectDataNameId'] select").append('<option value="' + graphValue + '">' + graphValue + '</option>');
+                $("#graphicRow").append(data)
+                $("[id$='SelectDataNameId'] select").append('<option value="' + graphValue + '">' + graphValue + '</option>')
             }
-        });
+        })
     }
 }
 
 function deleteDataName(dataNameId) {
-    $("#" + dataNameId).remove();
+    $("#" + dataNameId).remove()
 }
 
 function deleteGraph(graphId, graphValue) {
@@ -65,20 +71,20 @@ function deleteGraph(graphId, graphValue) {
         processData: false,
         contentType: false,
         success: function(data) {
-            $("#" + graphId).remove();
+            $("#" + graphId).remove()
             $("[id$='SelectDataNameId'] option[value='" + graphValue + "']").each(function() {
-                $(this).remove();
-            });
+                $(this).remove()
+            })
         }
-    });
+    })
 }
 
 function selectDisabled(selectId){
-    $("#" + selectId).hide();
+    $("#" + selectId).hide()
 }
 
 function selectEnabled(selectId){
-    $("#" + selectId).show();
+    $("#" + selectId).show()
 }
 
 function restoreDefaultValues() {
@@ -95,10 +101,10 @@ function restoreDefaultValues() {
 
 function createTest() {
     resetValuesCreateTestType()
-    let isError = checkErrorCreateTestType();
+    let isError = checkErrorCreateTestType()
     if (!isError) {
         let createTestDTO = generateTestTypeDTO()
-        sendTestTypeDTO(createTestDTO);
+        sendTestTypeDTO(createTestDTO)
     }
 }
 
@@ -115,25 +121,25 @@ function resetValuesCreateTestType() {
 }
 
 function checkErrorCreateTestType() {
-    let isError = false;
+    let isError = false
     if($('#createTestName').val() === '') {
         $('#createTestNameLiId').addClass("was-validated")
         $('#invalidFeedbackNameTestId').show()
-        isError = true;
+        isError = true
     } else {
         $('#createTestNameLiId').removeClass("was-validated")
     }
     if($('#createTestFileInput').val() === '') {
         $('#fileCreateTestLiId').addClass("was-validated")
         $('#invalidFeedbackFiledId').show()
-        isError = true;
+        isError = true
     } else {
         $('#fileCreateTestLiId').removeClass("was-validated")
     }
     if($('#outputDataRow').children().length <= 1) {
         $('#invalidFeedbackFieldId').show()
         $('#outputDataRow').children(":first").addClass("was-validated")
-        isError = true;
+        isError = true
     } else {
         $('#outputDataRow').children(":first").removeClass("was-validated")
     }
@@ -147,44 +153,44 @@ function checkErrorCreateTestType() {
                     $('#'+ id + 'InvalidFeedbackEmptyGraphic').show()
                     $('#outputDataRow').children(":first").addClass("was-validated")
                 }
-            });
+            })
         }
-    });
+    })
 
-    return isError;
+    return isError
 }
 
 function getAllFieldsCreateTestType() {
-    let fields = [];
+    let fields = []
     $("#outputDataRow .toast-body").each(function() {
-        let name = $(this).attr('name');
-        let data_type = $('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val();
-        let graph;
+        let name = $(this).attr('name')
+        let data_type = $('input[name=' + $(this).attr('name') + 'RadioButtonName]:checked').val()
+        let graph
         if ($('#' + $(this).attr('name') + 'SelectDataNameId').is(':visible')) {
-            graph = $('#' + $(this).attr('name') + 'SelectDataNameId').val();
+            graph = $('#' + $(this).attr('name') + 'SelectDataNameId').val()
         }
         let field = {
             name: name,
             dataType: data_type,
             graph: graph
         }
-        fields.push(field);
-    });
-    return fields;
+        fields.push(field)
+    })
+    return fields
 }
 
 function generateTestTypeDTO() {
-    let fields = getAllFieldsCreateTestType();
+    let fields = getAllFieldsCreateTestType()
     let CreateTestDTO = {
         nameTest: $('#createTestName').val(),
         fields: fields
     }
-    return CreateTestDTO;
+    return CreateTestDTO
 }
 
 function sendTestTypeDTO(createTestDTO) {
-    var file = document.getElementById("createTestFileInput").files[0];
-    var formData = new FormData();
+    var file = document.getElementById("createTestFileInput").files[0]
+    var formData = new FormData()
     formData.append('createTest', JSON.stringify(createTestDTO))
     formData.append('fileTest', file)
     $.ajax({
@@ -197,11 +203,11 @@ function sendTestTypeDTO(createTestDTO) {
             $("#closeCreateTestId").click()
             restoreDefaultValues()
         }
-    });
+    })
 }
 
 function deleteTestType() {
-    let testType = $("#removeTestTypeSelectId").val();
+    let testType = $("#removeTestTypeSelectId").val()
     $.ajax({
         url: '/test-type/delete?testType=' + testType,
         type: 'DELETE',
@@ -210,14 +216,14 @@ function deleteTestType() {
         success: function(data) {
             $("#closeDeleteTestTypeModal").click()
             $("#removeTestTypeSelectId option[value='" + testType + "']").each(function() {
-                $(this).remove();
-            });
+                $(this).remove()
+            })
 
             $("[id$='testTypeSelectId'] option[value='" + testType + "']").each(function() {
-                $(this).remove();
-            });
+                $(this).remove()
+            })
         }
-    });
+    })
 }
 
 function getAllGraphs() {
@@ -227,7 +233,7 @@ function getAllGraphs() {
         processData: false,
         contentType: false,
         success: function(data) {
-            $("#graphicRow").append(data);
+            $("#graphicRow").append(data)
         }
-    });
+    })
 }

@@ -32,7 +32,7 @@
                         Upload test file
                     </a>
                     <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
-                       data-bs-target="#exampleModalFullscreen" href="#">
+                       data-bs-target="#exampleModalFullscreen" href="#" onclick="getAllGraphs()">
                         Create test type
                     </a>
                     <a class="nav-link active" aria-current="page" data-bs-toggle="modal"
@@ -292,26 +292,24 @@
 <div class="modal fade" id="deleteTestTypeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" enctype="multipart/form-data" action="/">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteTestTypeModalLabel">Select test type</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <select class="form-select" aria-label="Default select example" id="removeTestTypeSelectId">
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            id="closeDeleteTestTypeModal">
-                        Cancel
-                    </button>
-                    <button type="button" class="btn btn-danger" id="deleteTestTypeModalButton"
-                            onclick="deleteTestType()">
-                        Delete
-                    </button>
-                </div>
-            </form>
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteTestTypeModalLabel">Select test type</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <select class="form-select" aria-label="Default select example" id="removeTestTypeSelectId">
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="closeDeleteTestTypeModal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-danger" id="deleteTestTypeModalButton"
+                        onclick="deleteTestType()">
+                    Delete
+                </button>
+            </div>
         </div>
     </div>
 </div>

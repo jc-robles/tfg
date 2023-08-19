@@ -2,16 +2,7 @@ const accelerometerGraphic = ['Accelerometer X', 'Accelerometer Y', 'Acceleromet
 const gyroscopeGraphic = ['Gyroscope X', 'Gyroscope Y','Gyroscope Z']
 const quaternionGraphic = ['Quaternion W', 'Quaternion X', 'Quaternion Y','Quaternion Z']
 
-function sendSplit() {
-    /* validate */
-    let checkName = false
-    let checkStart = false
-    let checkEnd = false
-
-    let start = $('#inputStartSplit').val()
-    let end = $('#inputEndSplit').val()
-    let name = $('#inputNameSplit').val()
-
+function resetSendSplit() {
     $('#inputNameSplit').removeClass("is-invalid")
     $('#inputStartSplit').removeClass("is-invalid")
     $('#inputEndSplit').removeClass("is-invalid")
@@ -25,66 +16,94 @@ function sendSplit() {
     $('#invalidFeedbackEmptyEndTest').hide()
     $('#invalidFeedbackNegativeEndTest').hide()
     $('#invalidFeedbackGreaterThanEndTest').hide()
+}
 
+function checkNameErrorSendSplit() {
+    let name = $('#inputNameSplit').val()
     if (name) {
-        checkName = true
         if ($('#listTest #' + name).length > 0) {
             $('#invalidFeedbackDuplicateTest').show()
             $('#invalidFeedbackEmptyNameTest').hide()
-            checkName = false
+            $('#inputNameSplit').addClass("is-invalid")
+            return true
         }
-    } else {
-        $('#invalidFeedbackEmptyNameTest').show()
-        $('#invalidFeedbackDuplicateTest').hide()
+        return false
     }
 
+    $('#invalidFeedbackEmptyNameTest').show()
+    $('#invalidFeedbackDuplicateTest').hide()
+    $('#inputNameSplit').addClass("is-invalid")
+    return true
+}
+
+function checkStartErrorSendSplit() {
+    let start = $('#inputStartSplit').val()
     if (start == '') {
         $('#invalidFeedbackNegativeStartTest').hide()
         $('#invalidFeedbackEmptyStartTest').show()
+        $('#inputStartSplit').addClass("is-invalid")
+        return true
     } else if (parseInt(start) < 0 ) {
         $('#invalidFeedbackNegativeStartTest').show()
         $('#invalidFeedbackEmptyStartTest').hide()
-    }  else {
-        checkStart = true
+        $('#inputStartSplit').addClass("is-invalid")
+        return true
     }
+    return false
+}
 
+function checkEndErrorSendSplit() {
+    let end = $('#inputEndSplit').val()
+    let start = $('#inputStartSplit').val()
     if (end == '') {
         $('#invalidFeedbackEmptyEndTest').show()
         $('#invalidFeedbackNegativeEndTest').hide()
         $('#invalidFeedbackGreaterThanEndTest').hide()
+        $('#inputEndSplit').addClass("is-invalid")
+        return true
     } else if (parseInt(end)<=parseInt(start)) {
         $('#invalidFeedbackEmptyEndTest').hide()
         $('#invalidFeedbackNegativeEndTest').hide()
         $('#invalidFeedbackGreaterThanEndTest').show()
+        $('#inputEndSplit').addClass("is-invalid")
+         return true
     } else if (parseInt(end)<1) {
         $('#invalidFeedbackEmptyEndTest').hide()
         $('#invalidFeedbackNegativeEndTest').show()
         $('#invalidFeedbackGreaterThanEndTest').hide()
-    } else {
-        checkEnd = true
+        $('#inputEndSplit').addClass("is-invalid")
+         return true
     }
+    return false
+}
 
-    if (checkName && checkStart && checkEnd) {
-        $('#inputNameSplit').val("")
-        $('#inputStartSplit').val("")
-        $('#inputEndSplit').val("")
+function resetInputsSendSplit() {
+    $('#inputNameSplit').val("")
+    $('#inputStartSplit').val("")
+    $('#inputEndSplit').val("")
+}
 
+function showSuccessToastSendSplit() {
+    $("#liveToast1 .toast-body").empty()
+    $("#liveToast1 .toast-body").append("The " + name + " test was created successfully.")
+    $("#splitTestSuccess").click()
+}
+
+function sendSplit() {
+    let start = $('#inputStartSplit').val()
+    let end = $('#inputEndSplit').val()
+    let name = $('#inputNameSplit').val()
+
+    resetSendSplit()
+    let checkName = checkNameErrorSendSplit();
+    let checkStart = checkStartErrorSendSplit();
+    let checkEnd = checkEndErrorSendSplit();
+
+    if (!checkName && !checkStart && !checkEnd) {
+        resetInputsSendSplit()
         generateHtmlSplit(name)
         generateGraphicsSplit(name, start, end)
-
-        $("#splitTestSuccess").click()
-        $("#liveToast1 .toast-body").empty()
-        $("#liveToast1 .toast-body").append("The " + name + " test was created successfully.")
-    } else {
-        if (!checkName) {
-            $('#inputNameSplit').addClass("is-invalid")
-        }
-        if (!checkStart) {
-            $('#inputStartSplit').addClass("is-invalid")
-        }
-        if (!checkEnd) {
-            $('#inputEndSplit').addClass("is-invalid")
-        }
+        showSuccessToastSendSplit()
     }
 }
 
@@ -371,7 +390,7 @@ function setAllDataMainTest() {
 
 function showAccordionMainData() {
     $("#spinner").hide()
-    $("#accordionPanelsStayOpenExample").show()
+    $("#accordionPanelsStayOpenMainTest").show()
 }
 
 function setMainGraphics(data) {
