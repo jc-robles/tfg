@@ -84,6 +84,7 @@ function resetInputsSendSplit() {
 }
 
 function showSuccessToastSendSplit() {
+    name = $('#inputNameSplit').val()
     $("#liveToast1 .toast-body").empty()
     $("#liveToast1 .toast-body").append("The " + name + " test was created successfully.")
     $("#splitTestSuccess").click()
@@ -98,8 +99,8 @@ function sendSplit() {
     if (!checkName && !checkStart && !checkEnd) {
         generateHtmlSplit()
         generateGraphicsSplit()
-        resetInputsSendSplit()
         showSuccessToastSendSplit()
+        resetInputsSendSplit()
     }
 }
 
