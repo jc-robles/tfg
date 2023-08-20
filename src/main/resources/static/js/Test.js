@@ -90,25 +90,26 @@ function showSuccessToastSendSplit() {
 }
 
 function sendSplit() {
-    let start = $('#inputStartSplit').val()
-    let end = $('#inputEndSplit').val()
-    let name = $('#inputNameSplit').val()
-
     resetSendSplit()
     let checkName = checkNameErrorSendSplit();
     let checkStart = checkStartErrorSendSplit();
     let checkEnd = checkEndErrorSendSplit();
 
     if (!checkName && !checkStart && !checkEnd) {
+        generateHtmlSplit()
+        generateGraphicsSplit()
         resetInputsSendSplit()
-        generateHtmlSplit(name)
-        generateGraphicsSplit(name, start, end)
         showSuccessToastSendSplit()
     }
 }
 
-function generateHtmlSplit(name) {
+function addTabInMainTable(name) {
     $('#listTest').append('<li class="nav-item"><a class="nav-link text-body" id="' + name + '" onclick="selectTest(\'' + name + '\')">' + name + '</a></li>')
+}
+
+function generateHtmlSplit() {
+    let name = $('#inputNameSplit').val()
+    addTabInMainTable(name)
     $.ajax({
         url: '/generate-split-test?idTest=' + name,
         type: 'GET',
@@ -123,12 +124,16 @@ function generateHtmlSplit(name) {
     })
 }
 
-function generateGraphicsSplit(name, start, end) {
-    let f = $('#formSplitId')[0]
-    f.start.value = start
-    f.end.value = end
-    f.fileName.value = name
-    createGraphics('/split-file', new FormData(f), name)
+function generateGraphicsSplit() {
+    let start = $('#inputStartSplit').val()
+    let end = $('#inputEndSplit').val()
+    let name = $('#inputNameSplit').val()
+
+    let form = new FormData()
+    form.append('start', parseInt(start))
+    form.append('end', parseInt(end))
+    form.append('fileName', name)
+    createGraphics('/split-file', form, name)
 }
 
 function selectTest(idTest) {
