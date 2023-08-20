@@ -39,7 +39,8 @@ public class ProcessTestControllerImpl implements ProcessTestController {
 
     @Override
     @GetMapping("/generate-process-test")
-    public String processTest(final Model model, final @RequestParam("idTest") String idTest, final @RequestParam("testTypeName") String testTypeName) throws IOException {
+    public String processTest(final Model model, final @RequestParam("idTest") String idTest,
+                              final @RequestParam("testTypeName") String testTypeName) throws IOException {
         final Optional<ProgramConfiguration> programConfiguration = this.testTypeService.findByTestName(testTypeName);
         final List<String> graphList = programConfiguration
                 .map(programConfiguration1 -> programConfiguration1.getDataResult().stream()

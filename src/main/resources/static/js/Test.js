@@ -285,9 +285,14 @@ function hideSpinnerTestProcessed(nameTestProcessed) {
     $("#" + nameTestProcessed + "Spinner").hide()
 }
 
+function showAlphanumericTestProcessed(name) {
+    $("#" + name + "AlphanumericDataId").show()
+}
+
 function insertAlphanumericData(data, nameTestProcessed) {
     if (Object.keys(data.alphanumericDataList).length != 0){
         createAlphanumeric(nameTestProcessed, data.alphanumericDataList)
+        showAlphanumericTestProcessed(name)
     }
 }
 
@@ -296,25 +301,36 @@ function showDownloadProcessTestButton(nameTest) {
     $("#" + nameTest + "DownloadTestButton").show()
 }
 
+function groupingByGraphic(data) {
+    return data.arrayDataList.reduce(function (r, a) {
+        r[a.graph] = r[a.graph] || []
+        r[a.graph].push(a)
+        return r
+    }, Object.create(null))
+}
+
+function createAllGraphics(nameTestProcessed, graphics) {
+    for (let graph in graphics) {
+        let names = []
+        let values = []
+
+        graphics[graph].forEach(item => {
+            names.push(item.name)
+            values.push(item.value)
+        })
+        newGraphic(nameTestProcessed + graph + 'ProcessedGraphic',names,values)
+    }
+}
+
+function showAccordionTestProcessed(nameTestProcessed) {
+    $("#" + nameTestProcessed + "AccordionPanelsStayOpen").show()
+}
+
 function insertArrayData(data, nameTestProcessed) {
    if (Object.keys(data.arrayDataList).length != 0){
-        let result = data.arrayDataList.reduce(function (r, a) {
-            r[a.graph] = r[a.graph] || []
-            r[a.graph].push(a)
-            return r
-        }, Object.create(null))
-
-        for (let category in result) {
-            let names = []
-            let values = []
-            result[category].forEach(item => {
-                names.push(item.name)
-                values.push(item.value)
-            })
-            newGraphic(nameTestProcessed + category + 'ProcessedGraphic',names,values)
-        }
-
-        $("#" + nameTestProcessed + "AccordionPanelsStayOpen").show()
+        let graphics = groupingByGraphic(data)
+        createAllGraphics(nameTestProcessed, graphics)
+        showAccordionTestProcessed(nameTestProcessed)
     }
 }
 
@@ -341,7 +357,6 @@ function createAlphanumeric(name, alphanumericDataList) {
         "</div>"
         $("#" + name + "AlphanumericDataId").append(data)
     })
-    $("#" + name + "AlphanumericDataId").show()
 }
 
 function createGraphics(url, form, name) {
