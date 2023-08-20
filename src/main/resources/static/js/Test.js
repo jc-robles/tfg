@@ -178,21 +178,38 @@ function deleteAllTest() {
     })
 }
 
-function processTest(nameTest) {
+function disabledButtonProcessTest(nameTest) {
     $("#" + nameTest + "ProcessTestButton").children().attr('disabled', 'disabled')
-    $("#" + nameTest + "testTypeSelectId").attr('disabled', 'disabled')
-    let name = nameTest + "Processed"
-    let testTypeName = $("#" + nameTest + "testTypeSelectId").val()
+}
 
+function enabledButtonProcessTest(nameTest) {
+    $("#" + nameTest + "ProcessTestButton").children().removeAttr('disabled')
+}
+
+function disabledSelectProcessTest(nameTest) {
+    $("#" + nameTest + "testTypeSelectId").attr('disabled', 'disabled')
+}
+
+function enabledSelectProcessTest(nameTest) {
+    $("#" + nameTest + "testTypeSelectId").removeAttr('disabled')
+}
+
+function clearTableProcessTest(nameTest) {
     if ($("#" + nameTest + "TableGraphic").children().length > 2) {
         $("#" + nameTest + "TableGraphic").children().last().remove()
     }
-
-    generateHtmlProcessedTest(nameTest, testTypeName)
-    generateGraphicsProcessedTest(nameTest, name, testTypeName)
 }
 
-function generateHtmlProcessedTest(nameTest, testTypeName) {
+function processTest(nameTest) {
+    disabledButtonProcessTest(nameTest)
+    disabledSelectProcessTest(nameTest)
+    clearTableProcessTest(nameTest)
+    generateHtmlProcessedTest(nameTest)
+    generateGraphicsProcessedTest(nameTest)
+}
+
+function generateHtmlProcessedTest(nameTest) {
+    let testTypeName = $("#" + nameTest + "testTypeSelectId").val()
     let name = nameTest + "Processed"
     $.ajax({
         url: '/generate-process-test?idTest=' + name + "&testTypeName=" + testTypeName,
@@ -207,11 +224,27 @@ function generateHtmlProcessedTest(nameTest, testTypeName) {
     })
 }
 
-function generateGraphicsProcessedTest(nameTest, nameTestProcessed, testTypeName) {
-    let form = new FormData()
-    form.append('fileName', nameTestProcessed)
-    form.append('testTypeName', testTypeName)
-    generateOutput('/process-test', form, nameTest, nameTestProcessed)
+function generateGraphicsProcessedTest(nameTest) {
+    let nameTestProcessed = nameTest + "Processed"
+    $.ajax({
+        url: '/process-test',
+        type: 'POST',
+        data: generateForm(nameTest, nameTestProcessed),
+        processData: false,
+        contentType: false,
+        success: function(data) {
+            hideSpinnerTestProcessed(nameTestProcessed)
+            insertAlphanumericData(data, nameTestProcessed)
+            insertArrayData(data, nameTestProcessed)
+            showDownloadProcessTestButton(nameTest)
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            hideSpinnerTestProcessed(nameTestProcessed)
+            showProcessDataError(nameTestProcessed)
+            enabledButtonProcessTest(nameTest)
+            enabledSelectProcessTest(nameTest)
+        }
+    })
 }
 
 function download(id) {
@@ -248,48 +281,53 @@ function downloadRawTest(id) {
     xhr.send()
 }
 
-function generateOutput(url, form, nameTest, nameTestProcessed) {
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: form,
-        processData: false,
-        contentType: false,
-        success: function(data) {
-            $("#" + nameTestProcessed + "Spinner").hide()
-            if (Object.keys(data.alphanumericDataList).length != 0){
-                createAlphanumeric(nameTestProcessed, data.alphanumericDataList)
-            }
-            if (Object.keys(data.arrayDataList).length != 0){
-                let result = data.arrayDataList.reduce(function (r, a) {
-                    r[a.graph] = r[a.graph] || []
-                    r[a.graph].push(a)
-                    return r
-                }, Object.create(null))
+function hideSpinnerTestProcessed(nameTestProcessed) {
+    $("#" + nameTestProcessed + "Spinner").hide()
+}
 
-                for (let category in result) {
-                    let names = []
-                    let values = []
-                    result[category].forEach(item => {
-                        names.push(item.name)
-                        values.push(item.value)
-                    })
-                    newGraphic(nameTestProcessed + category + 'ProcessedGraphic',names,values)
-                }
+function insertAlphanumericData(data, nameTestProcessed) {
+    if (Object.keys(data.alphanumericDataList).length != 0){
+        createAlphanumeric(nameTestProcessed, data.alphanumericDataList)
+    }
+}
 
-                $("#" + nameTestProcessed + "AccordionPanelsStayOpen").show()
-            }
+function showDownloadProcessTestButton(nameTest) {
+    $("#" + nameTest + "ProcessTestButton").hide()
+    $("#" + nameTest + "DownloadTestButton").show()
+}
 
-            $("#" + nameTest + "ProcessTestButton").hide()
-            $("#" + nameTest + "DownloadTestButton").show()
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-            $("#" + nameTestProcessed + "Spinner").hide()
-            $("#" + nameTestProcessed + "ErrorProcessDataId").show()
-            $("#" + nameTest + "ProcessTestButton").children().removeAttr('disabled')
-            $("#" + nameTest + "testTypeSelectId").removeAttr('disabled')
+function insertArrayData(data, nameTestProcessed) {
+   if (Object.keys(data.arrayDataList).length != 0){
+        let result = data.arrayDataList.reduce(function (r, a) {
+            r[a.graph] = r[a.graph] || []
+            r[a.graph].push(a)
+            return r
+        }, Object.create(null))
+
+        for (let category in result) {
+            let names = []
+            let values = []
+            result[category].forEach(item => {
+                names.push(item.name)
+                values.push(item.value)
+            })
+            newGraphic(nameTestProcessed + category + 'ProcessedGraphic',names,values)
         }
-    })
+
+        $("#" + nameTestProcessed + "AccordionPanelsStayOpen").show()
+    }
+}
+
+function showProcessDataError(nameTestProcessed) {
+    $("#" + nameTestProcessed + "ErrorProcessDataId").show()
+}
+
+function generateForm(nameTest, nameTestProcessed) {
+    let testTypeName = $("#" + nameTest + "testTypeSelectId").val()
+    let form = new FormData()
+    form.append('fileName', nameTestProcessed)
+    form.append('testTypeName', testTypeName)
+    return form
 }
 
 function createAlphanumeric(name, alphanumericDataList) {
