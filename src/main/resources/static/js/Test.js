@@ -21,7 +21,7 @@ function resetSendSplit() {
 function checkNameErrorSendSplit() {
     let name = $('#inputNameSplit').val()
     if (name) {
-        if ($('#listTest #' + name).length > 0) {
+        if ($('#listTest #' + name.split("_").join("__").split(" ").join("_")).length > 0) {
             $('#invalidFeedbackDuplicateTest').show()
             $('#invalidFeedbackEmptyNameTest').hide()
             $('#inputNameSplit').addClass("is-invalid")
@@ -105,7 +105,7 @@ function sendSplit() {
 }
 
 function addTabInMainTable(name) {
-    $('#listTest').append('<li class="nav-item"><a class="nav-link text-body" id="' + name + '" onclick="selectTest(\'' + name + '\')">' + name + '</a></li>')
+    $('#listTest').append('<li class="nav-item"><a class="nav-link text-body" id="' + name.split("_").join("__").split(" ").join("_") + '" onclick="selectTest(\'' + name.split("_").join("__").split(" ").join("_") + '\')">' + name + '</a></li>')
 }
 
 function generateHtmlSplit() {
@@ -133,8 +133,8 @@ function generateGraphicsSplit() {
     let form = new FormData()
     form.append('start', parseInt(start))
     form.append('end', parseInt(end))
-    form.append('fileName', name)
-    createGraphics('/split-file', form, name)
+    form.append('fileName', name.split("_").join("__").split(" ").join("_"))
+    createGraphics('/split-file', form, name.split("_").join("__").split(" ").join("_"))
 }
 
 function selectTest(idTest) {
@@ -318,7 +318,7 @@ function createAllGraphics(nameTestProcessed, graphics) {
             names.push(item.name)
             values.push(item.value)
         })
-        newGraphic(nameTestProcessed + graph + 'ProcessedGraphic',names,values)
+        newGraphic(nameTestProcessed + graph.split("_").join("__").split(" ").join("_") + 'ProcessedGraphic',names,values)
     }
 }
 

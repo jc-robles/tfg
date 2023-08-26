@@ -33,7 +33,7 @@ public class ProcessTestControllerImpl implements ProcessTestController {
     public String generateSplitTest(final Model model, final @RequestParam("idTest") String idTest) throws IOException {
         final List<String> nameTests = this.testTypeService.getAllNameTest();
         model.addAttribute("nameTests", nameTests);
-        this.setValues(model, idTest);
+        this.setValues(model, idTest.replace("_", "__").replace(" ", "_"));
         return "test/split/split_test";
     }
 

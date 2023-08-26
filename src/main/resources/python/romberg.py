@@ -1,60 +1,59 @@
+import json
 import numpy as np
+import pandas as pd
+import sys
 from scipy import signal
 
-def romberg (accx1, accz1, Fs):
-  Fs = 50
-  Ti = 1/Fs
-  order=4;
-  fc = 2;
-  
-  accx = np.array(accx1)
-  accx = accx.reshape(len(accx),1)
-  accz = np.array(accz1)
-  accz = accz.reshape(len(accz),1)
-  
-  
-  b,a = signal.butter(order, fc/(Fs/2), 'high')
-  acc_fx = signal.lfilter(b, a, accx, axis=0)
-  # acc_fy = signal.lfilter(b, a, accy, axis=0)
-  acc_fz = signal.lfilter(b, a, accz, axis=0)
-  acc_i=np.array(acc_fx);
-  LeW = int(5/Ti);
-  P = np.zeros(len(acc_i)-LeW)
-  idx=0
-  for i in range(LeW, len(acc_i)-1):
-    P[idx]=abs(acc_i[i+1]-acc_i[i]);
-    idx = idx+1
-  t = (len(acc_i)*0.01) - 5;
-  NPL_AP = (sum(P))/t;
-  
-  acc_pi=np.array(acc_fz);
-  P2 = np.zeros(len(acc_pi)-LeW)
-  idx=0
-  for i in range(LeW, len(acc_pi)-1):
-    P2[idx]=abs(acc_pi[i+1]-acc_pi[i]);
-    idx = idx+1
-  NPL_ML = (sum(P2))/t;
-  
-  
-  NPL_ML = np.around(NPL_ML, decimals = 2)
-  NPL_AP = np.around(NPL_AP, decimals = 2)
-  
-  return NPL_ML, NPL_AP
+
+def romberg(accx1, accz1, Fs):
+    Fs = 50
+    Ti = 1 / Fs
+    order = 4;
+    fc = 2;
+
+    accx = np.array(accx1)
+    accx = accx.reshape(len(accx), 1)
+    accz = np.array(accz1)
+    accz = accz.reshape(len(accz), 1)
+
+    b, a = signal.butter(order, fc / (Fs / 2), 'high')
+    acc_fx = signal.lfilter(b, a, accx, axis=0)
+    # acc_fy = signal.lfilter(b, a, accy, axis=0)
+    acc_fz = signal.lfilter(b, a, accz, axis=0)
+    acc_i = np.array(acc_fx);
+    LeW = int(5 / Ti);
+    P = np.zeros(len(acc_i) - LeW)
+    idx = 0
+    for i in range(LeW, len(acc_i) - 1):
+        P[idx] = abs(acc_i[i + 1] - acc_i[i]);
+        idx = idx + 1
+    t = (len(acc_i) * 0.01) - 5;
+    NPL_AP = (sum(P)) / t;
+
+    acc_pi = np.array(acc_fz);
+    P2 = np.zeros(len(acc_pi) - LeW)
+    idx = 0
+    for i in range(LeW, len(acc_pi) - 1):
+        P2[idx] = abs(acc_pi[i + 1] - acc_pi[i]);
+        idx = idx + 1
+    NPL_ML = (sum(P2)) / t;
+
+    NPL_ML = np.around(NPL_ML, decimals=2)
+    NPL_AP = np.around(NPL_AP, decimals=2)
+
+    return NPL_ML, NPL_AP
+
 
 # Execution Example
-Fs=100
+Fs = 100
 np.set_printoptions(threshold=np.inf, linewidth=np.nan)
-df=np.array(pd.read_csv(sys.argv[1], sep=";"))
-gyrx = df[2:,4].astype(float)
-gyry = df[2:,5].astype(float)
-gyrz = df[2:,6].astype(float)
+df = np.array(pd.read_csv(sys.argv[1], sep=";"))
+accx = df[2:, 1].astype(float)
+accz = df[2:, 3].astype(float)
 
-NPL_ML, NPL_AP = romberg (accx1, accz1, Fs)
+NPL_ML, NPL_AP = romberg(accx, accz, Fs)
 result = {
-  "NPL_ML": NPL_ML.tolist(),
-  "NPL_AP": NPL_AP.tolist()
+    "Normalized path length medio-lateral": str(NPL_ML),
+    "Normalized path length anteroposterior": str(NPL_AP)
 }
 print(json.dumps(result, indent=4))
-  
-  
-  

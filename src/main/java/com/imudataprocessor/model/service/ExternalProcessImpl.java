@@ -31,6 +31,12 @@ public class ExternalProcessImpl implements ExternalProcess {
     @Value("${tests-processed-path}")
     private String testsProcessedPath;
 
+    @Value("${test_processed_extension}")
+    private String testProcessedExtension;
+
+    @Value("${test_extension}")
+    private String testExtension;
+
     @Override
     public void execute(final String testTypeName, final String nameTest) throws Exception {
         final Optional<ProgramConfiguration> programConfiguration = this.testTypeService.findByTestName(testTypeName);
@@ -44,18 +50,31 @@ public class ExternalProcessImpl implements ExternalProcess {
     private ProcessBuilder createProcess(final ProgramConfiguration programConfiguration, final String nameTest) {
         final ProcessBuilder processBuilder = new ProcessBuilder("python",
                 this.filePythonProgramPath + "/" + programConfiguration.getNameFile(),
-                this.testsNotProcessedPath + "/" + nameTest.replace("Processed", "") + ".csv");
+                this.testsNotProcessedPath + "/" + nameTest.replace("Processed", "") + this.testExtension);
         processBuilder.redirectErrorStream(true);
         return processBuilder;
     }
 
     private void configureOutputProcess(final ProcessBuilder processBuilder, final String nameTest) throws IOException {
+        this.createDirectoryIfNotExist();
+        this.removeFileIfExists(nameTest);
+        final File file = this.createNewFile(nameTest);
+        processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(file));
+    }
+
+    private void createDirectoryIfNotExist() throws IOException {
         final Path path = Paths.get(Objects.requireNonNull(this.testsProcessedPath));
         if (Files.notExists(path)) {
             Files.createDirectories(path);
         }
-        final File file = new File(this.testsProcessedPath + "/" + nameTest + ".json");
-        processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(file));
+    }
+
+    private void removeFileIfExists(final String nameTest) throws IOException {
+        Files.deleteIfExists(Paths.get(this.testsProcessedPath + "/" + nameTest + this.testProcessedExtension));
+    }
+
+    private File createNewFile(final String nameTest) {
+        return new File(this.testsProcessedPath + "/" + nameTest + this.testProcessedExtension);
     }
 
     private void runProcess(final ProcessBuilder processBuilder) throws Exception {

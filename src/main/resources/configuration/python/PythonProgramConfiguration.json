@@ -5,11 +5,11 @@
       "nameTest": "Sit",
       "dataResult": [
         {
-          "nameField": "numSit",
+          "nameField": "Number of sits",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "slope",
+          "nameField": "Slope",
           "dataType": "ALPHANUMERIC"
         }
       ]
@@ -19,11 +19,11 @@
       "nameTest": "Walk",
       "dataResult": [
         {
-          "nameField": "numSteps",
+          "nameField": "Number of Steps",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "gait_sym",
+          "nameField": "Gait symmetric",
           "dataType": "ALPHANUMERIC"
         }
       ]
@@ -33,11 +33,11 @@
       "nameTest": "Romberg",
       "dataResult": [
         {
-          "nameField": "NPL_ML",
+          "nameField": "Normalized path length medio-lateral",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "NPL_AP",
+          "nameField": "Normalized path length anteroposterior",
           "dataType": "ALPHANUMERIC"
         }
       ]
@@ -47,11 +47,11 @@
       "nameTest": "Climb",
       "dataResult": [
         {
-          "nameField": "numSteps",
+          "nameField": "Number of steps",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "gait_sym",
+          "nameField": "Gait symmetric",
           "dataType": "ALPHANUMERIC"
         }
       ]
@@ -61,27 +61,27 @@
       "nameTest": "2 min walk",
       "dataResult": [
         {
-          "nameField": "JerkSw",
+          "nameField": "Jerk",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "gait_sym",
+          "nameField": "Gait symmetric",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "step_reg_even",
+          "nameField": "Regularity of even steps",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "step_reg_odd",
+          "nameField": "Regularity of odd steps",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "step_reg",
+          "nameField": "Regularity of steps",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "St_tv",
+          "nameField": "Step velocity",
           "dataType": "ALPHANUMERIC"
         },
         {
@@ -89,18 +89,18 @@
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "numSteps",
+          "nameField": "Number of steps",
           "dataType": "ALPHANUMERIC"
         },
         {
-          "nameField": "HR_AP",
+          "nameField": "Harmonic ratio antero-posterior",
           "dataType": "DATA_ARRAY",
-          "graph": "HR_AP"
+          "graph": "Harmonic ratio antero-posterior"
         },
         {
-          "nameField": "HR_ML",
+          "nameField": "Harmonic ratio medio-lateral",
           "dataType": "DATA_ARRAY",
-          "graph": "HR_ML"
+          "graph": "Harmonic ratio medio-lateral"
         }
       ]
     }

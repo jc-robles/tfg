@@ -6,7 +6,6 @@ import com.imudataprocessor.api.controller.testtype.TestTypeController;
 import com.imudataprocessor.api.service.JsonService;
 import com.imudataprocessor.api.service.TestGraphService;
 import com.imudataprocessor.api.service.TestTypeService;
-import com.imudataprocessor.model.mapper.ProgramConfigurationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +32,6 @@ public class TestTypeControllerImpl implements TestTypeController {
 
     @Autowired
     private JsonService jsonService;
-
-    @Autowired
-    private ProgramConfigurationMapper programConfigurationMapper;
 
     @Override
     @PostMapping("/test-type/create")
