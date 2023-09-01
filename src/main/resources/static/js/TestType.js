@@ -114,7 +114,6 @@ function resetValuesCreateTestType() {
     $('#invalidFeedbackFieldId').hide()
     $('#invalidFeedbackNameTestId').hide()
     $('#invalidFeedbackFiledId').hide()
-    $('#invalidFeedbackEmptyGraphic').hide()
     $("[id$='InvalidFeedbackEmptyGraphic']").each(function() {
         $(this).hide()
     })
@@ -151,7 +150,8 @@ function checkErrorCreateTestType() {
                     let parentId = $(this).parent().attr('id')
                     let id = parentId.split("SelectDataNameId")[0]
                     $('#'+ id + 'InvalidFeedbackEmptyGraphic').show()
-                    $('#outputDataRow').children(":first").addClass("was-validated")
+                    $(this).addClass("is-invalid")
+                    isError = true
                 }
             })
         }

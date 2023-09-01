@@ -105,7 +105,8 @@ function sendSplit() {
 }
 
 function addTabInMainTable(name) {
-    $('#listTest').append('<li class="nav-item"><a class="nav-link text-body" id="' + name.split("_").join("__").split(" ").join("_") + '" onclick="selectTest(\'' + name.split("_").join("__").split(" ").join("_") + '\')">' + name + '</a></li>')
+    $('#listTest').append('<li class="nav-item"><a class="nav-link text-body" id="' + name.split("_").join("__").split(" ").join("_")
+    + '" onclick="selectTest(\'' + name.split("_").join("__").split(" ").join("_") + '\')">' + name + '</a></li>')
 }
 
 function generateHtmlSplit() {

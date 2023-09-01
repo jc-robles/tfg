@@ -37,6 +37,12 @@ public class FileControllerImpl implements FileController {
     @Value("${split-tests-not-processed-path}")
     private String splitTestsNotProcessedPath;
 
+    @Value("${test_extension}")
+    private String testExtension;
+
+    @Value("${test_processed_extension}")
+    private String testProcessedExtension;
+
     @Override
     @PostMapping("/upload-file")
     public ResponseEntity<DataDTO> uploadFile(final @RequestParam("file") MultipartFile multipartFile,
@@ -78,18 +84,18 @@ public class FileControllerImpl implements FileController {
     @Override
     @GetMapping("/download-processed-test")
     public ResponseEntity<FileSystemResource> downloadProcessedTest(final @RequestParam("nameTest") String nameTest) {
-        final String pathFile = this.testsProcessedPath + "/" + nameTest + ".json";
+        final String pathFile = this.testsProcessedPath + "/" + nameTest + this.testProcessedExtension;
         final HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + nameTest + ".json");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + nameTest + this.testProcessedExtension);
         return ResponseEntity.ok().headers(headers).body(new FileSystemResource(pathFile));
     }
 
     @Override
     @GetMapping("/download-raw-test")
     public ResponseEntity<FileSystemResource> downloadRawTest(final @RequestParam("nameTest") String nameTest) {
-        final String pathFile = this.splitTestsNotProcessedPath + "/" + nameTest + ".csv";
+        final String pathFile = this.splitTestsNotProcessedPath + "/" + nameTest + this.testExtension;
         final HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + nameTest + ".csv");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + nameTest + this.testExtension);
         return ResponseEntity.ok().headers(headers).body(new FileSystemResource(pathFile));
     }
 }
